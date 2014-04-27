@@ -98,12 +98,11 @@ RGB_BLACK = RGB(*((0,) * 3))
 IDEAL_RGB_COLOURS = [RGB_WHITE, RGB_MAGENTA, RGB_RED, RGB_YELLOW, RGB_GREEN, RGB_CYAN, RGB_BLUE, RGB_BLACK]
 IDEAl_COLOUR_NAMES = ['WHITE', 'MAGENTA', 'RED', 'YELLOW', 'GREEN', 'CYAN', 'BLUE', 'BLACK']
 
-class HCVW(object):
+class HCV(object):
     def __init__(self, rgb):
         self.rgb = RGB(*rgb)
         self.value = self.rgb.get_value()
         xy = rgbh.XY.from_rgb(self.rgb)
-        self.warmth = fractions.Fraction.from_float(xy.x / RGB.ONE)
         self.hue = Hue.from_angle(xy.get_angle())
         self.chroma = xy.get_hypot() * self.hue.get_chroma_correction() / RGB.ONE
     def hue_rgb_for_value(self, value=None):
@@ -122,7 +121,7 @@ class HCVW(object):
         Return a copy of our rgb rotated by the given amount but with
         the same value and without unavoidable chroma change.
         import utils
-        >>> HCVW((10, 10, 0)).get_rotated_rgb(-utils.PI_60)
+        >>> HCV((10, 10, 0)).get_rotated_rgb(-utils.PI_60)
         RGB(red=20, green=0, blue=0)
         '''
         if RGB.ncomps(self.rgb) == 2:
@@ -136,7 +135,6 @@ class HCVW(object):
         string = '(HUE = {0}, '.format(self.hue.rgb)
         string += 'VALUE = {0}, '.format(round(self.value, 2))
         string += 'CHROMA = {0}, '.format(round(self.chroma, 2))
-        string += 'WARMTH = {0})'.format(round(self.warmth, 2))
         return string
 
 RATING = collections.namedtuple('RATING', ['abbrev', 'descr', 'rval'])
@@ -217,7 +215,7 @@ class Transparency(MappedFloat):
 
 class Colour(object):
     def __init__(self, rgb, transparency=None, finish=None):
-        self.hcvw = HCVW(rgb)
+        self.hcv = HCV(rgb)
         if transparency is None:
             transparency = Transparency('O')
         if finish is None:
@@ -226,48 +224,43 @@ class Colour(object):
         self.finish = finish if isinstance(finish, Finish) else Finish(finish)
     def __str__(self):
         string = 'RGB: {0} Transparency: {1} Finish: {2} '.format(self.rgb, self.transparency, self.finish)
-        return string + str(self.hcvw)
+        return string + str(self.hcv)
     def __repr__(self):
         fmt_str = 'Colour(rgb={0}, transparency={1}, finish={2})'
         return fmt_str.format(self.rgb, self.transparency, self.finish)
     def __getitem__(self, i):
-        return self.hcvw.rgb[i]
+        return self.hcv.rgb[i]
     def __iter__(self):
         """
         Iterate over colour's rgb values
         """
         for i in range(3):
-            yield self.hcvw.rgb[i]
+            yield self.hcv.rgb[i]
     @property
     def rgb(self):
-        return self.hcvw.rgb
+        return self.hcv.rgb
     @property
     def hue_angle(self):
-        return self.hcvw.hue.angle
+        return self.hcv.hue.angle
     @property
     def hue(self):
-        return self.hcvw.hue
+        return self.hcv.hue
     @property
     def hue_rgb(self):
-        return RGB(*self.hcvw.hue.rgb)
+        return RGB(*self.hcv.hue.rgb)
     @property
     def value(self):
-        return self.hcvw.value
+        return self.hcv.value
     def value_rgb(self):
-        return RGB_WHITE * self.hcvw.value
+        return RGB_WHITE * self.hcv.value
     @property
     def chroma(self):
-        return self.hcvw.chroma
-    @property
-    def warmth(self):
-        return self.hcvw.warmth
-    def warmth_rgb(self):
-        return (RGB_CYAN * (1 - self.hcvw.warmth) + RGB_RED * (1 + self.hcvw.warmth)) / 2
+        return self.hcv.chroma
     def set_rgb(self, rgb):
         """
         Change this colours RGB values
         """
-        self.hcvw = HCVW(rgb)
+        self.hcv = HCV(rgb)
     def set_finish(self, finish):
         """
         Change this colours finish value

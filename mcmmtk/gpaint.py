@@ -365,23 +365,10 @@ class ChromaDisplay(ValueDisplay):
         """
         Set values that only change when the colour changes
         """
-        self.start_colour = self.colour.hcvw.chroma_side()
+        self.start_colour = self.colour.hcv.chroma_side()
         self.end_colour = colour.hue_rgb
         self.fg_colour = self.get_colormap().alloc_color(gtkpwx.best_foreground(self.start_colour))
         self.indicator_val = colour.chroma
-
-class WarmthDisplay(ValueDisplay):
-    LABEL = _('Warmth')
-    def __init__(self, colour=None, size=(100, 15)):
-        GenericAttrDisplay.__init__(self, colour=colour, size=size)
-        self.start_colour = paint.CYAN
-        self.end_colour = paint.RED
-    def _set_colour(self, colour):
-        """
-        Set values that only change when the colour changes
-        """
-        self.fg_colour = self.get_colormap().alloc_color(gtkpwx.best_foreground(colour.warmth_rgb()))
-        self.indicator_val = (1 + colour.warmth) / 2
 
 class HCVDisplay(gtk.VBox):
     def __init__(self, colour=paint.WHITE, size=(256, 120), stype = gtk.SHADOW_ETCHED_IN):
@@ -399,17 +386,6 @@ class HCVDisplay(gtk.VBox):
         self.chroma.set_colour(new_colour)
         self.hue.set_colour(new_colour)
         self.value.set_colour(new_colour)
-
-class HCVWDisplay(HCVDisplay):
-    def __init__(self, colour=paint.WHITE, size=(256, 120), stype = gtk.SHADOW_ETCHED_IN):
-        HCVDisplay.__init__(self, colour=colour, size=size, stype=stype)
-        w, h = size
-        self.warmth = WarmthDisplay(colour=colour, size=(w, h / 4))
-        self.pack_start(gtkpwx.wrap_in_frame(self.warmth, stype), expand=False)
-        self.show()
-    def set_colour(self, new_colour):
-        HCVDisplay.set_colour(self, new_colour)
-        self.warmth.set_colour(new_colour)
 
 class HueWheelNotebook(gtk.Notebook):
     def __init__(self):
@@ -550,7 +526,7 @@ class ColourWheel(gtk.DrawingArea):
             self.colour_angle = self.colour.hue.angle if not self.colour.hue.is_grey() else utils.Angle(math.pi / 2)
             self.fg_colour = self.parent.new_colour(self.colour.rgb)
             self.value_colour = self.parent.new_colour(paint.BLACK)
-            self.chroma_colour = self.parent.new_colour(self.colour.hcvw.chroma_side())
+            self.chroma_colour = self.parent.new_colour(self.colour.hcv.chroma_side())
             self.choose_radius_attribute()
         def range_from(self, x, y):
             dx = x - self.x
@@ -632,8 +608,6 @@ def paint_cell_data_func(column, cell, model, model_iter, attribute):
         cell.set_property('foreground', gtkpwx.best_foreground(colour.value_rgb()))
     elif attribute == 'hue':
         cell.set_property('background', gtk.gdk.Color(*colour.hue_rgb))
-    elif attribute == 'warmth':
-        cell.set_property('background', gtk.gdk.Color(*colour.warmth_rgb()))
     elif attribute == 'finish':
         cell.set_property('text', str(colour.finish))
     elif attribute == 'transparency':
@@ -667,7 +641,6 @@ COLOUR_ATTRS = [
     TNS(_('Colour Name'), 'name', {'resizable' : True}, lambda row: row.colour.name),
     TNS(_('Value'), 'value', {}, lambda row: row.colour.value),
     TNS(_('Hue'), 'hue', {}, lambda row: row.colour.hue),
-    TNS(_('Warmth'), 'warmth', {}, lambda row: row.colour.warmth),
     TNS(_('T.'), 'transparency', {}, lambda row: row.colour.transparency),
     TNS(_('F.'), 'finish', {}, lambda row: row.colour.finish),
 ]

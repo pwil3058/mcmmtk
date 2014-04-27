@@ -486,31 +486,31 @@ class ColourSampleMatcher(gtk.VBox):
             gtkpwx.ColouredButton.__init__(self, label='->')
         def set_colour(self, colour):
             if options.get('colour_wheel', 'red_to_yellow_clockwise'):
-                new_colour = colour.hcvw.get_rotated_rgb(ColourSampleMatcher.HUE_DISPLAY_SPAN)
+                new_colour = colour.hcv.get_rotated_rgb(ColourSampleMatcher.HUE_DISPLAY_SPAN)
             else:
-                new_colour = colour.hcvw.get_rotated_rgb(-ColourSampleMatcher.HUE_DISPLAY_SPAN)
+                new_colour = colour.hcv.get_rotated_rgb(-ColourSampleMatcher.HUE_DISPLAY_SPAN)
             gtkpwx.ColouredButton.set_colour(self, new_colour)
     class HueAntiClockwiseButton(gtkpwx.ColouredButton):
         def __init__(self):
             gtkpwx.ColouredButton.__init__(self, label='<-')
         def set_colour(self, colour):
             if options.get('colour_wheel', 'red_to_yellow_clockwise'):
-                new_colour = colour.hcvw.get_rotated_rgb(-ColourSampleMatcher.HUE_DISPLAY_SPAN)
+                new_colour = colour.hcv.get_rotated_rgb(-ColourSampleMatcher.HUE_DISPLAY_SPAN)
             else:
-                new_colour = colour.hcvw.get_rotated_rgb(ColourSampleMatcher.HUE_DISPLAY_SPAN)
+                new_colour = colour.hcv.get_rotated_rgb(ColourSampleMatcher.HUE_DISPLAY_SPAN)
             gtkpwx.ColouredButton.set_colour(self, new_colour)
     class IncrValueButton(gtkpwx.ColouredButton):
         def __init__(self):
             gtkpwx.ColouredButton.__init__(self, label=_('Value')+'++')
         def set_colour(self, colour):
-            value = min(colour.hcvw.value + ColourSampleMatcher.VALUE_DISPLAY_INCR, fractions.Fraction(1))
-            gtkpwx.ColouredButton.set_colour(self, colour.hcvw.hue_rgb_for_value(value))
+            value = min(colour.hcv.value + ColourSampleMatcher.VALUE_DISPLAY_INCR, fractions.Fraction(1))
+            gtkpwx.ColouredButton.set_colour(self, colour.hcv.hue_rgb_for_value(value))
     class DecrValueButton(gtkpwx.ColouredButton):
         def __init__(self):
             gtkpwx.ColouredButton.__init__(self, label=_('Value')+'--')
         def set_colour(self, colour):
-            value = max(colour.hcvw.value - ColourSampleMatcher.VALUE_DISPLAY_INCR, fractions.Fraction(0))
-            gtkpwx.ColouredButton.set_colour(self, colour.hcvw.hue_rgb_for_value(value))
+            value = max(colour.hcv.value - ColourSampleMatcher.VALUE_DISPLAY_INCR, fractions.Fraction(0))
+            gtkpwx.ColouredButton.set_colour(self, colour.hcv.hue_rgb_for_value(value))
     class IncrGraynessButton(gtkpwx.ColouredButton):
         def __init__(self):
             gtkpwx.ColouredButton.__init__(self, label=_('Grayness') + '++')
@@ -520,7 +520,7 @@ class ColourSampleMatcher(gtk.VBox):
         def __init__(self):
             gtkpwx.ColouredButton.__init__(self, label=_('Grayness') + '--')
         def set_colour(self, colour):
-            gtkpwx.ColouredButton.set_colour(self, colour.hcvw.hue_rgb_for_value())
+            gtkpwx.ColouredButton.set_colour(self, colour.hcv.hue_rgb_for_value())
     def __init__(self):
         gtk.VBox.__init__(self)
         self._delta = 256 # must be a power of two
@@ -604,7 +604,7 @@ class ColourSampleMatcher(gtk.VBox):
         if raw:
             self.set_colour(rgb)
         else:
-            self.set_colour(paint.HCVW(rgb).hue_rgb_for_value())
+            self.set_colour(paint.HCV(rgb).hue_rgb_for_value())
     def auto_match_sample(self, raw):
         samples = self.sample_display.get_samples()
         if samples:
@@ -714,17 +714,17 @@ class ColourSampleMatcher(gtk.VBox):
             gtk.gdk.beep()
             return
         if not options.get('colour_wheel', 'red_to_yellow_clockwise'):
-            self.set_colour(self.colour.hcvw.get_rotated_rgb(self.DELTA_HUE))
+            self.set_colour(self.colour.hcv.get_rotated_rgb(self.DELTA_HUE))
         else:
-            self.set_colour(self.colour.hcvw.get_rotated_rgb(-self.DELTA_HUE))
+            self.set_colour(self.colour.hcv.get_rotated_rgb(-self.DELTA_HUE))
     def modify_hue_cw_cb(self, button):
         if self.colour.hue.is_grey():
             gtk.gdk.beep()
             return
         if not options.get('colour_wheel', 'red_to_yellow_clockwise'):
-            self.set_colour(self.colour.hcvw.get_rotated_rgb(-self.DELTA_HUE))
+            self.set_colour(self.colour.hcv.get_rotated_rgb(-self.DELTA_HUE))
         else:
-            self.set_colour(self.colour.hcvw.get_rotated_rgb(self.DELTA_HUE))
+            self.set_colour(self.colour.hcv.get_rotated_rgb(self.DELTA_HUE))
 
 class PaintColourNotebook(gpaint.HueWheelNotebook):
     class ColourListView(gpaint.ColourListView):
