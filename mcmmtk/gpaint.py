@@ -392,8 +392,8 @@ class HueWheelNotebook(gtk.Notebook):
         gtk.Notebook.__init__(self)
         self.hue_chroma_wheel = HueChromaWheel(nrings=5)
         self.hue_value_wheel = HueValueWheel()
-        self.append_page(self.hue_chroma_wheel, gtk.Label(_('Hue/Chroma Wheel')))
         self.append_page(self.hue_value_wheel, gtk.Label(_('Hue/Value Wheel')))
+        self.append_page(self.hue_chroma_wheel, gtk.Label(_('Hue/Chroma Wheel')))
     def add_colour(self, new_colour):
         self.hue_chroma_wheel.add_colour(new_colour)
         self.hue_value_wheel.add_colour(new_colour)
