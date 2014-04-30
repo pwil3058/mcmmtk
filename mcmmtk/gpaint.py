@@ -194,6 +194,57 @@ class ColourSampleArea(gtk.DrawingArea, actions.CAGandUIManager):
         return True
 gobject.signal_new('samples-changed', ColourSampleArea, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_INT,))
 
+class ColourMatchArea(gtk.DrawingArea):
+    """
+    A coloured drawing area for comparing two colours.
+    """
+    def __init__(self, target_colour=None, default_bg=None):
+        gtk.DrawingArea.__init__(self)
+
+        self.set_size_request(200, 200)
+        self._ptr_x = self._ptr_y = 100
+        self.default_bg_colour = self.bg_colour = self.new_colour(paint.RGB_WHITE) if default_bg is None else self.new_colour(default_bg)
+        self.target_colour = self.new_colour(target_colour) if target_colour is not None else None
+        self.add_events(gtk.gdk.POINTER_MOTION_MASK|gtk.gdk.BUTTON_PRESS_MASK)
+        self.connect('expose-event', self.expose_cb)
+    def new_colour(self, arg):
+        if isinstance(arg, paint.Colour):
+            colour = gtk.gdk.Color(*arg.rgb)
+        else:
+            colour = gtk.gdk.Color(*arg)
+        return self.get_colormap().alloc_color(colour)
+    def set_bg_colour(self, colour):
+        """
+        Set the drawing area to the specified colour
+        """
+        self.bg_colour = self.new_colour(colour)
+        self.queue_draw()
+    def set_target_colour(self, colour):
+        """
+        Set the drawing area to the specified colour
+        """
+        self.target_colour = self.new_colour(colour)
+        self.queue_draw()
+    def expose_cb(self, _widget, _event):
+        """
+        Repaint the drawing area
+        """
+        self.gc = self.window.new_gc()
+        self.gc.copy(self.get_style().fg_gc[gtk.STATE_NORMAL])
+        self.gc.set_background(self.bg_colour)
+        self.window.set_background(self.bg_colour)
+        self.window.clear()
+        if self.target_colour is not None:
+            self.gc.set_foreground(self.target_colour)
+            width, height = self.window.get_size()
+            self.window.draw_rectangle(self.gc, True, width / 4, height / 4, width / 2, height /2)
+        return True
+    def clear(self):
+        self.bg_colour = self.default_bg_colour
+        self.target_colour = None
+        self.queue_draw()
+
+
 def generate_spectral_rgb_buf(hue, spread, width, height, backwards=False):
     """
     Generate a rectangular RGB buffer filled with the specified spectrum

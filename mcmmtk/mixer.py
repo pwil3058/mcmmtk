@@ -20,6 +20,7 @@ Mix paint colours
 import os
 import cgi
 import time
+import collections
 
 import gtk
 import gobject
@@ -33,6 +34,8 @@ from mcmmtk import paint
 from mcmmtk import printer
 from mcmmtk import icons
 from mcmmtk import iview
+from mcmmtk import data
+from mcmmtk import editor
 
 def pango_rgb_str(rgb, bits_per_channel=16):
     """
@@ -61,30 +64,34 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
     </ui>
     '''
     AC_HAVE_MIXTURE, AC_MASK = actions.ActionCondns.new_flags_and_mask(1)
+    AC_HAVE_TARGET, AC_DONT_HAVE_TARGET, AC_TARGET_MASK = actions.ActionCondns.new_flags_and_mask(2)
     def __init__(self):
         gtk.VBox.__init__(self)
         actions.CAGandUIManager.__init__(self)
+        self.action_groups.update_condns(actions.MaskedCondns(self.AC_DONT_HAVE_TARGET, self.AC_TARGET_MASK))
         self._last_dir = None
         # Components
         self.notes = gtk.Entry()
-        self.mixpanel = gpaint.ColourSampleArea()
+        self.next_name_label = gtk.Label(_("#???:"))
+        self.current_target_colour = None
+        self.current_colour_description = gtkpwx.TextEntryAutoComplete(data.COLOUR_NAME_LEXICON)
+        self.mixpanel = gpaint.ColourMatchArea()
         self.mixpanel.set_size_request(360, 240)
         self.hcvw_display = gpaint.HCVDisplay()
         self.paint_colours = ColourPartsSpinButtonBox()
         self.paint_colours.connect('remove-colour', self._remove_paint_colour_cb)
         self.paint_colours.connect('contributions-changed', self._contributions_changed_cb)
-        self.mixed_colours = PartsColourListStore()
-        self.mixed_colours.connect('contributions-changed', self._mixed_contributions_changed_cb)
-        self.mixed_colours_view = PartsColourListView(self.mixed_colours)
+        self.mixed_colours = MatchedColourListStore()
+        self.mixed_colours_view = MatchedColourListView(self.mixed_colours)
         self.mixed_colours_view.action_groups.connect_activate('remove_selected_colours', self._remove_mixed_colours_cb)
         self.mixed_count = 0
         self.wheels = gpaint.HueWheelNotebook()
         self.wheels.set_size_request(360, 360)
         self.buttons = self.action_groups.create_action_button_box([
-            'add_mixed_colour',
+            'new_mixed_colour',
+            'accept_mixed_colour',
             'reset_contributions',
-            'remove_unused_paints',
-            'take_screen_sample'
+            'remove_unused_paints'
         ])
         menubar = self.ui_manager.get_widget('/mixer_menubar')
         # Lay out components
@@ -96,6 +103,10 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         hbox = gtk.HBox()
         hbox.pack_start(self.wheels, expand=False, fill=True)
         vbox = gtk.VBox()
+        vhbox = gtk.HBox()
+        vhbox.pack_start(self.next_name_label, expand=False)
+        vhbox.pack_start(self.current_colour_description, expand=True)
+        vbox.pack_start(vhbox, expand=False)
         vbox.pack_start(self.hcvw_display, expand=False)
         vbox.pack_start(gtkpwx.wrap_in_frame(self.mixpanel, gtk.SHADOW_ETCHED_IN), expand=True, fill=True)
         hbox.pack_start(vbox, expand=True, fill=True)
@@ -134,20 +145,22 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
             ('print_mixer', gtk.STOCK_PRINT, None, None,
             _('Print a text description of the mixer.'),
             self._print_mixer_cb),
-            ('take_screen_sample', None, _('Take Screen Sample'), None,
-            _('Take a sample of an arbitrary selected section of the screen and add it to the clipboard.'),
-            gtkpwx.take_screen_sample),
         ])
-        self.action_groups[self.AC_HAVE_MIXTURE].add_actions([
-            ('add_mixed_colour', None, _('Add'), None,
-            _('Add this colour to the mixer as a mixed colour.'),
-            self._add_mixed_colour_cb),
+        self.action_groups[self.AC_HAVE_MIXTURE|self.AC_HAVE_TARGET].add_actions([
+            ('accept_mixed_colour', None, _('Accept'), None,
+            _('Accept/finalise this colour and add it to the list of  mixed colours.'),
+            self._accept_mixed_colour_cb),
+        ])
+        self.action_groups[self.AC_DONT_HAVE_TARGET].add_actions([
+            ('new_mixed_colour', None, _('New'), None,
+            _('Start working on a new mixed colour.'),
+            self._new_mixed_colour_cb),
         ])
     def __str__(self):
         paint_colours = self.paint_colours.get_colours()
         if len(paint_colours) == 0:
-            return _('Empty Palette')
-        string = _('Tube Colours:\n')
+            return _('Empty Mix/Match Description')
+        string = _('Paint Colours:\n')
         for pcol in paint_colours:
             string += '{0}: {1}: {2}\n'.format(pcol.name, pcol.series.series_id.maker, pcol.series.series_id.name)
         num_mixed_colours = len(self.mixed_colours)
@@ -158,7 +171,7 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         for mc in self.mixed_colours.get_colours():
             string += '{0}: {1}\n'.format(mc.name, round(mc.value, 2))
             for cc, parts in mc.blobs:
-                if isinstance(cc, paint.TubeColour):
+                if isinstance(cc, paint.PaintColour):
                     string += '\t {0}:\t{1}: {2}: {3}\n'.format(parts, cc.name, cc.series.series_id.maker, cc.series.series_id.name)
                 else:
                     string += '\t {0}:\t{1}\n'.format(parts, cc.name)
@@ -169,23 +182,29 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         """
         paint_colours = self.paint_colours.get_colours()
         if len(paint_colours) == 0:
-            return [cgi.escape(_('Empty Palette'))]
+            return [cgi.escape(_('Empty Mix/Match Description'))]
         # TODO: add paint series data in here
-        string = '<b>' + cgi.escape(_('Palette:')) + '</b> '
+        string = '<b>' + cgi.escape(_('Mix/Match Description:')) + '</b> '
         string += cgi.escape(time.strftime('%X: %A %x')) + '\n'
         if self.notes.get_text_length() > 0:
             string += '\n{0}\n'.format(cgi.escape(self.notes.get_text()))
         chunks = [string]
-        string = '<b>' + cgi.escape(_('Tube Colours:')) + '</b>\n\n'
+        string = '<b>' + cgi.escape(_('Paint Colours:')) + '</b>\n\n'
         for pcol in paint_colours:
             string += '<span background="{0}">\t</span> '.format(pango_rgb_str(pcol))
             string += '{0}\n'.format(cgi.escape(pcol.name))
         chunks.append(string)
         string = '<b>' + cgi.escape(_('Mixed Colours:')) + '</b>\n\n'
-        for mc in self.mixed_colours.get_colours():
-            string += '<span background="{0}">\t</span> {1}: {2}\n'.format(pango_rgb_str(mc), cgi.escape(mc.name), cgi.escape(mc.notes))
+        for tmc in self.mixed_colours.named():
+            mc = tmc.colour
+            tc = tmc.target_colour
+            string += '<span background="{0}">\t</span>'.format(pango_rgb_str(mc))
             string += '<span background="{0}">\t</span>'.format(pango_rgb_str(mc.value_rgb()))
-            string += '<span background="{0}">\t</span>\n'.format(pango_rgb_str(mc.hue_rgb))
+            string += '<span background="{0}">\t</span>'.format(pango_rgb_str(mc.hue_rgb))
+            string += ' {0}: {1}\n'.format(cgi.escape(mc.name), cgi.escape(mc.notes))
+            string += '<span background="{0}">\t</span>'.format(pango_rgb_str(tc.rgb))
+            string += '<span background="{0}">\t</span>'.format(pango_rgb_str(tc.value_rgb()))
+            string += '<span background="{0}">\t</span> Target Colour\n'.format(pango_rgb_str(tc.hue.rgb))
             for blob in mc.blobs:
                 string += '{0: 7d}:'.format(blob.parts)
                 string += '<span background="{0}">\t</span>'.format(pango_rgb_str(blob.colour))
@@ -194,35 +213,45 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
             string = '' # Necessary because we put header in the first chunk
         return chunks
     def _contributions_changed_cb(self, _widget, contributions):
-        self.recalculate_colour(contributions + self.mixed_colours.get_contributions())
-    def _mixed_contributions_changed_cb(self, _treemodel, contributions):
-        self.recalculate_colour(contributions + self.paint_colours.get_contributions())
+        self.recalculate_colour(contributions)
     def recalculate_colour(self, contributions):
         new_colour = paint.MixedColour(contributions)
         self.mixpanel.set_bg_colour(new_colour.rgb)
         self.hcvw_display.set_colour(new_colour)
-        if len(contributions) > 1:
+        if len(contributions) > 0:
             self.action_groups.update_condns(actions.MaskedCondns(self.AC_HAVE_MIXTURE, self.AC_MASK))
         else:
             self.action_groups.update_condns(actions.MaskedCondns(0, self.AC_MASK))
-    def _add_mixed_colour_cb(self,_action):
+    def _accept_mixed_colour_cb(self,_action):
         paint_contribs = self.paint_colours.get_contributions()
-        mixed_contribs = self.mixed_colours.get_contributions()
-        if len(paint_contribs) + len(mixed_contribs) < 2:
+        if len(paint_contribs) < 1:
             return
-        name = _('Mix #{:03d}').format(self.mixed_count + 1)
-        dlg = gtkpwx.TextEntryDialog(title='', prompt= _('Notes for "{0}" :').format(name))
-        if dlg.run() == gtk.RESPONSE_OK:
-            self.mixed_count += 1
-            notes = dlg.entry.get_text()
-            new_colour = paint.NamedMixedColour(blobs=paint_contribs + mixed_contribs, name=name, notes=notes)
-            self.mixed_colours.append_colour(new_colour)
-            self.wheels.add_colour(new_colour)
-            self.reset_parts()
+        self.mixed_count += 1
+        name = _('Mix #{:03d}').format(self.mixed_count)
+        notes = self.current_colour_description.get_text()
+        new_colour = paint.NamedMixedColour(blobs=paint_contribs, name=name, notes=notes)
+        self.mixed_colours.append_colour(new_colour, self.current_target_colour.hcv)
+        self.wheels.add_colour(new_colour)
+        self.reset_parts()
+        self.paint_colours.set_sensitive(False)
+        self.mixpanel.clear()
+        self.current_target_colour = None
+        self.action_groups.update_condns(actions.MaskedCondns(self.AC_DONT_HAVE_TARGET, self.AC_TARGET_MASK))
+        self.next_name_label.set_text(_("#???:"))
+    def _new_mixed_colour_cb(self,_action):
+        dlg = NewMixedColourDialogue(self.mixed_count + 1, self.get_parent())
+        if dlg.run() == gtk.RESPONSE_ACCEPT:
+            descr = dlg.colour_description.get_text()
+            assert len(descr) > 0
+            self.mixpanel.set_target_colour(dlg.colour_specifier.colour)
+            self.current_colour_description.set_text(descr)
+            self.current_target_colour = dlg.colour_specifier.colour
+            self.action_groups.update_condns(actions.MaskedCondns(self.AC_HAVE_TARGET, self.AC_TARGET_MASK))
+            self.next_name_label.set_text(_("#{:03d}:").format(self.mixed_count + 1))
+            self.paint_colours.set_sensitive(True)
         dlg.destroy()
     def reset_parts(self):
         self.paint_colours.reset_parts()
-        self.mixed_colours.reset_parts()
     def _reset_contributions_cb(self, _action):
         self.reset_parts()
     def add_paint(self, paint_colour):
@@ -273,7 +302,7 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
             dlg.run()
             dlg.destroy()
     def _remove_unused_paints_cb(self, _action):
-        colours = self.paint_colours.get_colours()
+        colours = self.paint_colours.get_colours_with_zero_parts()
         for colour in colours:
             if len(self.mixed_colours.get_colour_users(colour)) == 0:
                 self.del_paint(colour)
@@ -347,7 +376,7 @@ class ColourPartsSpinButton(gtk.EventBox, actions.CAGandUIManager):
             </popup>
         </ui>
         '''
-    def __init__(self, colour, *kwargs):
+    def __init__(self, colour, sensitive=False, *kwargs):
         gtk.EventBox.__init__(self)
         actions.CAGandUIManager.__init__(self, popup='/colour_spinner_popup')
         self.add_events(gtk.gdk.BUTTON_PRESS_MASK|gtk.gdk.BUTTON_RELEASE_MASK)
@@ -370,6 +399,7 @@ class ColourPartsSpinButton(gtk.EventBox, actions.CAGandUIManager):
         hbox.pack_start(gpaint.ColouredRectangle(self.colour, (5, -1)), expand=False)
         frame.add(hbox)
         self.add(frame)
+        self.set_sensitive(sensitive)
         self.show_all()
     def populate_action_groups(self):
         """
@@ -392,6 +422,8 @@ class ColourPartsSpinButton(gtk.EventBox, actions.CAGandUIManager):
         return self.entry.set_value(parts)
     def get_blob(self):
         return paint.BLOB(self.colour, self.get_parts())
+    def set_sensitive(self, sensitive):
+        self.entry.set_sensitive(sensitive)
     def _paint_colour_info_cb(self, _action):
         PaintColourInformationDialogue(self.colour).show()
 
@@ -405,11 +437,16 @@ class ColourPartsSpinButtonBox(gtk.VBox):
         self.__hboxes = []
         self.__count = 0
         self.__ncols = 8
+        self.__sensitive = False
+    def set_sensitive(self, sensitive):
+        self.__sensitive = sensitive
+        for sb in self.__spinbuttons:
+            sb.set_sensitive(sensitive)
     def add_colour(self, colour):
         """
         Add a spinner for the given colour to the box
         """
-        spinbutton = ColourPartsSpinButton(colour)
+        spinbutton = ColourPartsSpinButton(colour, self.__sensitive)
         spinbutton.action_groups.connect_activate('remove_me', self._remove_me_cb, spinbutton)
         spinbutton.entry.connect('value-changed', self._spinbutton_value_changed_cb)
         self.__spinbuttons.append(spinbutton)
@@ -453,6 +490,8 @@ class ColourPartsSpinButtonBox(gtk.VBox):
         self.show_all()
     def get_colours(self):
         return [spinbutton.colour for spinbutton in self.__spinbuttons]
+    def get_colours_with_zero_parts(self):
+        return [spinbutton.colour for spinbutton in self.__spinbuttons if spinbutton.get_parts() == 0]
     def has_colour(self, colour):
         """
         Do we already contain the given colour?
@@ -631,6 +670,115 @@ class PartsColourListView(gpaint.ColourListView):
         else:
             PaintColourInformationDialogue(colour).show()
 
+MATCH = collections.namedtuple('MATCH', ['colour', 'target_colour'])
+
+class MatchedColourListStore(gpaint.ColourListStore):
+    Row = MATCH
+    types = Row(colour=object, target_colour=object)
+
+    def append_colour(self, colour, target_colour):
+        self.append(self.Row(target_colour=target_colour, colour=colour))
+    def get_colour_users(self, colour):
+        return [row.colour for row in self.named() if row.colour.contains_colour(colour)]
+
+def match_cell_data_func(column, cell, model, model_iter, attribute):
+    colour = model.get_value_named(model_iter, 'target_colour')
+    cell.set_property('background', gtk.gdk.Color(*colour.rgb))
+
+def generate_matched_colour_list_spec(model):
+    """
+    Generate the specification for a paint colour parts list
+    """
+    matched_col_spec = tlview.ColumnSpec(
+        title =_('Matched'),
+        properties={},
+        sort_key_function=lambda row: row.colour_matched.hue,
+        cells=[
+            tlview.CellSpec(
+                cell_renderer_spec=tlview.CellRendererSpec(
+                    cell_renderer=gtk.CellRendererText,
+                    expand=None,
+                    start=False
+                ),
+                properties=None,
+                cell_data_function_spec=tlview.CellDataFunctionSpec(
+                    function=match_cell_data_func,
+                ),
+                attributes={}
+            ),
+        ]
+    )
+    notes_col_spec = tlview.ColumnSpec(
+        title =_('Notes'),
+        properties={'resizable' : True},
+        sort_key_function=lambda row: row.colour.notes,
+        cells=[
+            tlview.CellSpec(
+                cell_renderer_spec=tlview.CellRendererSpec(
+                    cell_renderer=gtk.CellRendererText,
+                    expand=None,
+                    start=False
+                ),
+                properties={'editable' : True, },
+                cell_data_function_spec=tlview.CellDataFunctionSpec(
+                    function=notes_cell_data_func,
+                ),
+                attributes={}
+            ),
+        ]
+    )
+    name_col_spec = gpaint.colour_attribute_column_spec(gpaint.TNS(_('Name'), 'name', {}, lambda row: row.colour.name))
+    attr_cols_specs = [gpaint.colour_attribute_column_spec(tns) for tns in gpaint.COLOUR_ATTRS[1:]]
+    return tlview.ViewSpec(
+        properties={},
+        selection_mode=gtk.SELECTION_MULTIPLE,
+        columns=[name_col_spec, matched_col_spec, notes_col_spec] + attr_cols_specs
+    )
+
+class MatchedColourListView(gpaint.ColourListView):
+    UI_DESCR = '''
+    <ui>
+        <popup name='colour_list_popup'>
+            <menuitem action='show_colour_details'/>
+            <menuitem action='remove_selected_colours'/>
+        </popup>
+    </ui>
+    '''
+    Model = MatchedColourListStore
+    specification = generate_matched_colour_list_spec(MatchedColourListStore)
+    def __init__(self, *args, **kwargs):
+        gpaint.ColourListView.__init__(self, *args, **kwargs)
+        self._set_cell_connections()
+    def _set_cell_connections(self):
+        notes_cell = self.get_cell_with_title(_('Notes'))
+        notes_cell.connect('edited', self._notes_edited_cb, self.Model.col_index('colour'))
+    def _notes_edited_cb(self, cell, path, new_text, index):
+        self.get_model()[path][index].notes = new_text
+        self._notify_modification()
+    def populate_action_groups(self):
+        """
+        Populate action groups ready for UI initialization.
+        """
+        self.action_groups[actions.AC_SELN_UNIQUE].add_actions(
+            [
+                ('show_colour_details', gtk.STOCK_INFO, None, None,
+                 _('Show a detailed description of the selected colour.'),
+                self._show_colour_details_cb),
+            ],
+        )
+        self.action_groups[actions.AC_SELN_MADE].add_actions(
+            [
+                ('remove_selected_colours', gtk.STOCK_REMOVE, None, None,
+                 _('Remove the selected colours from the list.'), ),
+            ]
+        )
+    def _show_colour_details_cb(self, _action):
+        colour = self.get_selected_colours()[0]
+        if isinstance(colour, paint.NamedMixedColour):
+            MixedColourInformationDialogue(colour).show()
+        else:
+            PaintColourInformationDialogue(colour).show()
+
 class SelectColourListView(gpaint.ColourListView):
     UI_DESCR = '''
     <ui>
@@ -798,6 +946,31 @@ class ReferenceImageViewer(gtk.Window, actions.CAGandUIManager):
             dlg.destroy()
     def _close_reference_image_viewer_cb(self, _action):
         self.get_toplevel().destroy()
+
+class NewMixedColourDialogue(gtk.Dialog):
+    def __init__(self, number, parent=None):
+        gtk.Dialog.__init__(self, title=_("New Mixed Colour: #{:03d}").format(number),
+                            parent=parent,
+                            flags=gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
+                            buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT,
+                                     gtk.STOCK_OK, gtk.RESPONSE_ACCEPT)
+                            )
+        vbox = self.get_content_area()
+        self.colour_description = gtkpwx.TextEntryAutoComplete(data.COLOUR_NAME_LEXICON)
+        self.colour_description.connect('changed', self._description_changed_cb)
+        self.set_response_sensitive(gtk.RESPONSE_ACCEPT, len(self.colour_description.get_text()) > 0)
+        hbox = gtk.HBox()
+        hbox.pack_start(gtk.Label(_("Description:")), expand=False)
+        hbox.pack_start(self.colour_description, expand=True)
+        vbox.pack_start(hbox, expand=False)
+        self.colour_specifier = editor.ColourSampleMatcher(auto_match_on_paste=True)
+        vbox.pack_start(self.colour_specifier)
+        button = gtk.Button(_("Take Screen Sample"))
+        button.connect("clicked", gtkpwx.take_screen_sample)
+        vbox.pack_start(button, expand=False)
+        vbox.show_all()
+    def _description_changed_cb(self, widget):
+        self.set_response_sensitive(gtk.RESPONSE_ACCEPT, len(self.colour_description.get_text()) > 0)
 
 class PaintColourInformationDialogue(gtk.Dialog):
     """

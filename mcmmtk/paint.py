@@ -105,6 +105,8 @@ class HCV(object):
         xy = rgbh.XY.from_rgb(self.rgb)
         self.hue = Hue.from_angle(xy.get_angle())
         self.chroma = xy.get_hypot() * self.hue.get_chroma_correction() / RGB.ONE
+    def value_rgb(self):
+        return RGB_WHITE * self.value
     def hue_rgb_for_value(self, value=None):
         if value is None:
             # i.e. same hue and value but without any unnecessary grey
@@ -132,7 +134,7 @@ class HCV(object):
             # Simple rotation is the correct solution for 1 or 3 components
             return RGB.rotated(self.rgb, delta_hue_angle)
     def __str__(self):
-        string = '(HUE = {0}, '.format(self.hue.rgb)
+        string = '(HUE = {0}, '.format(str(self.hue.rgb))
         string += 'VALUE = {0}, '.format(round(self.value, 2))
         string += 'CHROMA = {0}, '.format(round(self.chroma, 2))
         return string
@@ -252,7 +254,7 @@ class Colour(object):
     def value(self):
         return self.hcv.value
     def value_rgb(self):
-        return RGB_WHITE * self.hcv.value
+        return self.hcv.value_rgb()
     @property
     def chroma(self):
         return self.hcv.chroma
