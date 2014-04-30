@@ -21,7 +21,7 @@ import math
 DELIMITERS = string.whitespace + string.punctuation.replace("'", '').replace('-', '')
 
 def find_start_last_word(text, before=None):
-    index = before if before is not None else len(text)
+    index = before if before is not None and before < len(text) else len(text)
     while index > 0:
         index -= 1
         if text[index] in DELIMITERS:
