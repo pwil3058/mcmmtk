@@ -235,7 +235,9 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         self.reset_parts()
         self.paint_colours.set_sensitive(False)
         self.mixpanel.clear()
+        self.wheels.add_target_colour(name, self.current_target_colour)
         self.current_target_colour = None
+        self.wheels.unset_crosshair()
         self.action_groups.update_condns(actions.MaskedCondns(self.AC_DONT_HAVE_TARGET, self.AC_TARGET_MASK))
         self.next_name_label.set_text(_("#???:"))
     def _new_mixed_colour_cb(self,_action):
@@ -246,6 +248,7 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
             self.mixpanel.set_target_colour(dlg.colour_specifier.colour)
             self.current_colour_description.set_text(descr)
             self.current_target_colour = dlg.colour_specifier.colour
+            self.wheels.set_crosshair(self.current_target_colour)
             self.action_groups.update_condns(actions.MaskedCondns(self.AC_HAVE_TARGET, self.AC_TARGET_MASK))
             self.next_name_label.set_text(_("#{:03d}:").format(self.mixed_count + 1))
             self.paint_colours.set_sensitive(True)
@@ -263,6 +266,7 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
     def del_mixed(self, mixed):
         self.mixed_colours.remove_colour(mixed)
         self.wheels.del_colour(mixed)
+        self.wheels.del_target_colour(mixed.name)
     def _add_colours_to_mixer_cb(self, selector, colours):
         for pcol in colours:
             if not self.paint_colours.has_colour(pcol):

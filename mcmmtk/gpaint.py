@@ -451,6 +451,18 @@ class HueWheelNotebook(gtk.Notebook):
     def del_colour(self, colour):
         self.hue_chroma_wheel.del_colour(colour)
         self.hue_value_wheel.del_colour(colour)
+    def add_target_colour(self, name, target_colour):
+        self.hue_chroma_wheel.add_target_colour(name, target_colour)
+        self.hue_value_wheel.add_target_colour(name, target_colour)
+    def del_target_colour(self, name):
+        self.hue_chroma_wheel.del_target_colour(name)
+        self.hue_value_wheel.del_target_colour(name)
+    def set_crosshair(self, target_colour):
+        self.hue_chroma_wheel.set_crosshair(target_colour)
+        self.hue_value_wheel.set_crosshair(target_colour)
+    def unset_crosshair(self):
+        self.hue_chroma_wheel.unset_crosshair()
+        self.hue_value_wheel.unset_crosshair()
 
 class ColourWheel(gtk.DrawingArea):
     def __init__(self, nrings=9):
@@ -465,6 +477,8 @@ class ColourWheel(gtk.DrawingArea):
         self.cy = 0.0
         self.paint_colours = {}
         self.mixed_colours = {}
+        self.target_colours = {}
+        self.crosshair = None
         self.nrings = nrings
         self.connect('expose-event', self.expose_cb)
         self.set_has_tooltip(True)
@@ -482,7 +496,7 @@ class ColourWheel(gtk.DrawingArea):
     def get_colour_nearest_to_xy(self, x, y):
         smallest = 0xFF
         nearest = None
-        for colour_set in [self.paint_colours.values(), self.mixed_colours.values()]:
+        for colour_set in [self.paint_colours.values(), self.mixed_colours.values(), self.target_colours.values()]:
             for colour in colour_set:
                 rng = colour.range_from(x, y)
                 if rng < smallest:
@@ -517,6 +531,23 @@ class ColourWheel(gtk.DrawingArea):
             self.mixed_colours.pop(colour)
         else:
             self.paint_colours.pop(colour)
+        # The data has changed so do a redraw
+        self.queue_draw()
+    def add_target_colour(self, name, target_colour):
+        dname = _("{0}: Target").format(name)
+        self.target_colours[name] = self.ColourDiamond(self, paint.NamedColour(dname, target_colour))
+        # The data has changed so do a redraw
+        self.queue_draw()
+    def del_target_colour(self, name):
+        self.target_colours.pop(name)
+        # The data has changed so do a redraw
+        self.queue_draw()
+    def set_crosshair(self, colour):
+        self.crosshair = self.ColourCrossHair(self, colour)
+        # The data has changed so do a redraw
+        self.queue_draw()
+    def unset_crosshair(self):
+        self.crosshair = None
         # The data has changed so do a redraw
         self.queue_draw()
     def new_colour(self, rgb):
@@ -557,10 +588,14 @@ class ColourWheel(gtk.DrawingArea):
             hue = paint.Hue.from_angle(angle)
             self.gc.set_foreground(self.new_colour(hue.rgb))
             self.window.draw_line(self.gc, self.cx, self.cy, *self.polar_to_cartesian(self.one * self.zoom, angle))
+        for target_colour in self.target_colours.values():
+            target_colour.draw()
         for paint_colour in self.paint_colours.values():
             paint_colour.draw()
         for mix in self.mixed_colours.values():
             mix.draw()
+        if self.crosshair is not None:
+            self.crosshair.draw()
         return True
     class ColourShape(object):
         def __init__(self, parent, colour):
@@ -595,6 +630,8 @@ class ColourWheel(gtk.DrawingArea):
             self.parent.window.draw_polygon(self.parent.gc, filled=True, points=square_pts)
             self.parent.gc.set_foreground(self.chroma_colour)
             self.parent.window.draw_polygon(self.parent.gc, filled=False, points=square_pts)
+    class ColourDiamond(ColourSquare):
+        polypoints = ((1.5, 0), (0, -1.5), (-1.5, 0), (0, 1.5))
     class ColourCircle(ColourShape):
         def draw(self):
             self.predraw_setup()
@@ -603,6 +640,16 @@ class ColourWheel(gtk.DrawingArea):
             self.parent.draw_circle(self.x, self.y, radius=self.parent.scaled_size, filled=True)
             self.parent.gc.set_foreground(self.chroma_colour)
             self.parent.draw_circle(self.x, self.y, radius=self.parent.scaled_size, filled=False)
+    class ColourCrossHair(ColourShape):
+        def draw(self):
+            self.predraw_setup()
+            self.x, self.y = self.parent.polar_to_cartesian(self.radius * self.parent.zoom, self.colour_angle)
+            self.parent.gc.set_foreground(self.fg_colour)
+            radius = self.parent.scaled_size
+            halflen = radius * 2
+            self.parent.draw_circle(self.x, self.y, radius=radius, filled=False)
+            self.parent.window.draw_line(self.parent.gc, int(self.x - halflen), int(self.y), int(self.x + halflen), int(self.y))
+            self.parent.window.draw_line(self.parent.gc, int(self.x), int(self.y - halflen), int(self.x), int(self.y + halflen))
 
 class HueChromaWheel(ColourWheel):
     class ColourSquare(ColourWheel.ColourSquare):
@@ -611,12 +658,24 @@ class HueChromaWheel(ColourWheel):
     class ColourCircle(ColourWheel.ColourCircle):
         def choose_radius_attribute(self):
             self.radius = self.parent.one * self.colour.chroma
+    class ColourDiamond(ColourWheel.ColourDiamond):
+        def choose_radius_attribute(self):
+            self.radius = self.parent.one * self.colour.chroma
+    class ColourCrossHair(ColourWheel.ColourCrossHair):
+        def choose_radius_attribute(self):
+            self.radius = self.parent.one * self.colour.chroma
 
 class HueValueWheel(ColourWheel):
     class ColourSquare(ColourWheel.ColourSquare):
         def choose_radius_attribute(self):
             self.radius = self.parent.one * self.colour.value
     class ColourCircle(ColourWheel.ColourCircle):
+        def choose_radius_attribute(self):
+            self.radius = self.parent.one * self.colour.value
+    class ColourDiamond(ColourWheel.ColourDiamond):
+        def choose_radius_attribute(self):
+            self.radius = self.parent.one * self.colour.value
+    class ColourCrossHair(ColourWheel.ColourCrossHair):
         def choose_radius_attribute(self):
             self.radius = self.parent.one * self.colour.value
 
