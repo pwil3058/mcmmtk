@@ -77,7 +77,7 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         self.current_colour_description = gtkpwx.TextEntryAutoComplete(data.COLOUR_NAME_LEXICON)
         self.mixpanel = gpaint.ColourMatchArea()
         self.mixpanel.set_size_request(360, 240)
-        self.hcvw_display = gpaint.HCVDisplay()
+        self.hcvw_display = gpaint.TargetedHCVDisplay()
         self.paint_colours = ColourPartsSpinButtonBox()
         self.paint_colours.connect('remove-colour', self._remove_paint_colour_cb)
         self.paint_colours.connect('contributions-changed', self._contributions_changed_cb)
@@ -237,6 +237,7 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         self.mixpanel.clear()
         self.wheels.add_target_colour(name, self.current_target_colour)
         self.current_target_colour = None
+        self.hcvw_display.set_target_colour(None)
         self.wheels.unset_crosshair()
         self.action_groups.update_condns(actions.MaskedCondns(self.AC_DONT_HAVE_TARGET, self.AC_TARGET_MASK))
         self.next_name_label.set_text(_("#???:"))
@@ -248,6 +249,7 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
             self.mixpanel.set_target_colour(dlg.colour_specifier.colour)
             self.current_colour_description.set_text(descr)
             self.current_target_colour = dlg.colour_specifier.colour
+            self.hcvw_display.set_target_colour(self.current_target_colour)
             self.wheels.set_crosshair(self.current_target_colour)
             self.action_groups.update_condns(actions.MaskedCondns(self.AC_HAVE_TARGET, self.AC_TARGET_MASK))
             self.next_name_label.set_text(_("#{:03d}:").format(self.mixed_count + 1))

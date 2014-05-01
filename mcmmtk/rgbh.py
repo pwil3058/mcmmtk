@@ -207,6 +207,13 @@ class HueNG(collections.namedtuple('Hue', ['io', 'other', 'angle'])):
         return not self.__le__(other.angle)
     def __ge__(self, other):
         return not self.__lt__(other.angle)
+    def __sub__(self, other):
+        diff = self.angle - other.angle
+        if diff > math.pi:
+            diff -= math.pi * 2
+        elif diff < -math.pi:
+            diff += math.pi * 2
+        return diff
     @property
     def rgb(self):
         if math.isnan(self.angle):

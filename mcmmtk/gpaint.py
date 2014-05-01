@@ -438,6 +438,208 @@ class HCVDisplay(gtk.VBox):
         self.hue.set_colour(new_colour)
         self.value.set_colour(new_colour)
 
+# Targetted attribute displays
+
+class GenericTargetedAttrDisplay(gtk.DrawingArea):
+    LABEL = None
+
+    def __init__(self, colour=None, size=(100, 15)):
+        gtk.DrawingArea.__init__(self)
+        self.set_size_request(size[0], size[1])
+        self.colour = colour
+        self.fg_colour = gtkpwx.best_foreground(colour)
+        self.indicator_val = 0.5
+        self.target_colour = colour
+        self.target_val = None
+        self.target_fg_colour = gtkpwx.best_foreground(colour)
+        self._set_target_colour(colour)
+        self._set_colour(colour)
+        self.connect('expose-event', self.expose_cb)
+        self.show()
+    @staticmethod
+    def indicator_top(x, y):
+        return [(ind[0] + x, ind[1] + y) for ind in ((0, 5), (-5, 0), (5, 0))]
+    @staticmethod
+    def indicator_bottom(x, y):
+        return [(ind[0] + x, ind[1] + y) for ind in ((0, -5), (-5, 0), (5, 0))]
+    def new_colour(self, arg):
+        if isinstance(arg, paint.Colour):
+            colour = gtk.gdk.Color(*arg.rgb)
+        else:
+            colour = gtk.gdk.Color(*arg)
+        return self.get_colormap().alloc_color(colour)
+    def draw_indicators(self, gc):
+        if self.indicator_val is None:
+            return
+        w, h = self.window.get_size()
+        indicator_x = int(w * self.indicator_val)
+        gc.set_foreground(self.fg_colour)
+        gc.set_background(self.fg_colour)
+        # TODO: fix bottom indicator
+        self.window.draw_polygon(gc, True, self.indicator_top(indicator_x, 0))
+        self.window.draw_polygon(gc, True, self.indicator_bottom(indicator_x, h - 1))
+    def draw_label(self, gc):
+        if self.LABEL is None:
+            return
+        w, h = self.window.get_size()
+        layout = self.create_pango_layout(self.LABEL)
+        tw, th = layout.get_pixel_size()
+        x, y = ((w - tw) / 2, (h - th) / 2)
+        gc.set_foreground(self.fg_colour)
+        self.window.draw_layout(gc, x, y, layout, self.fg_colour)
+    def draw_target(self, gc):
+        if self.target_val is None:
+            return
+        w, h = self.window.get_size()
+        target_x = int(w * self.target_val)
+        gc.set_foreground(self.target_fg_colour)
+        gc.set_background(self.target_fg_colour)
+        self.window.draw_line(gc, target_x, 0, target_x, int(h))
+    def expose_cb(self, _widget, _event):
+        pass
+    def _set_colour(self, colour):
+        """
+        Set values that only change when the colour changes.
+        Such as the location of the indicators.
+        """
+        pass
+    def set_colour(self, colour):
+        self.colour = colour
+        self._set_colour(colour)
+        self.queue_draw()
+    def _set_target_colour(self, colour):
+        """
+        Set values that only change when the colour changes.
+        Such as the location of the indicators.
+        """
+        pass
+    def set_target_colour(self, colour):
+        self.target_colour = colour
+        self._set_target_colour(colour)
+        self.queue_draw()
+
+class TargetedHueDisplay(GenericTargetedAttrDisplay):
+    LABEL = _('Hue')
+
+    def expose_cb(self, _widget, _event):
+        if self.colour is None and self.target_val is None:
+            self.window.set_background(gtk.gdk.Color(0, 0, 0))
+            return
+        gc = self.window.new_gc()
+        gc.copy(self.get_style().fg_gc[gtk.STATE_NORMAL])
+        #
+        if self.target_val is None:
+            if self.indicator_val is None:
+                self.window.set_background(self.new_colour(self.colour.hue_rgb))
+                self.draw_label(gc)
+                return
+            else:
+                centre_hue = self.colour.hue
+        else:
+            centre_hue = self.target_colour.hue
+        #
+        backwards = options.get('colour_wheel', 'red_to_yellow_clockwise')
+        w, h = self.window.get_size()
+        spectral_buf = generate_spectral_rgb_buf(centre_hue, 2 * math.pi, w, h, backwards)
+        self.window.draw_rgb_image(gc, x=0, y=0, width=w, height=h,
+            dith=gtk.gdk.RGB_DITHER_NONE,
+            rgb_buf=spectral_buf)
+
+        self.draw_target(gc)
+        self.draw_indicators(gc)
+        self.draw_label(gc)
+    def _set_colour(self, colour):
+        if colour is None:
+            self.indicator_val = None
+        elif colour.hue.is_grey():
+            self.indicator_val = None
+        else:
+            self.fg_colour = self.get_colormap().alloc_color(gtkpwx.best_foreground(colour.hue_rgb))
+            if self.target_val is None:
+                self.indicator_val = 0.5
+            elif options.get('colour_wheel', 'red_to_yellow_clockwise'):
+                self.indicator_val = 0.5 + 0.5 * (colour.hue - self.target_colour.hue) / math.pi
+            else:
+                self.indicator_val = 0.5 - 0.5 * (colour.hue - self.target_colour.hue) / math.pi
+    def _set_target_colour(self, colour):
+        if colour is None:
+            self.target_val = None
+        elif colour.hue.is_grey():
+            self.target_val = None
+        else:
+            self.target_fg_colour = self.get_colormap().alloc_color(gtkpwx.best_foreground(colour.hue_rgb))
+            self.target_val = 0.5
+            if self.indicator_val is not None:
+                offset = 0.5 * (self.colour.hue - colour.hue) / math.pi
+                if options.get('colour_wheel', 'red_to_yellow_clockwise'):
+                    self.indicator_val = 0.5 + offset
+                else:
+                    self.indicator_val = 0.5 - offset
+
+class TargetedValueDisplay(GenericTargetedAttrDisplay):
+    LABEL = _('Value')
+    def __init__(self, colour=None, size=(100, 15)):
+        GenericTargetedAttrDisplay.__init__(self, colour=colour, size=size)
+        self.start_colour = paint.BLACK
+        self.end_colour = paint.WHITE
+    def expose_cb(self, _widget, _event):
+        if self.colour is None:
+            self.window.set_background(gtk.gdk.Color(0, 0, 0))
+            return
+        gc = self.window.new_gc()
+        gc.copy(self.get_style().fg_gc[gtk.STATE_NORMAL])
+        w, h = self.window.get_size()
+
+        graded_buf = generate_graded_rgb_buf(self.start_colour, self.end_colour, w, h)
+        self.window.draw_rgb_image(gc, x=0, y=0, width=w, height=h,
+            dith=gtk.gdk.RGB_DITHER_NONE,
+            rgb_buf=graded_buf)
+
+        self.draw_indicators(gc)
+        self.draw_label(gc)
+    def _set_colour(self, colour):
+        """
+        Set values that only change when the colour changes
+        """
+        self.fg_colour = self.get_colormap().alloc_color(gtkpwx.best_foreground(colour))
+        self.indicator_val = colour.value
+
+class TargetedChromaDisplay(TargetedValueDisplay):
+    LABEL = _('Chroma')
+    def __init__(self, colour=None, size=(100, 15)):
+        TargetedValueDisplay.__init__(self, colour=colour, size=size)
+        if colour is not None:
+            self._set_colour(colour)
+    def _set_colour(self, colour):
+        """
+        Set values that only change when the colour changes
+        """
+        self.start_colour = self.colour.hcv.chroma_side()
+        self.end_colour = colour.hue_rgb
+        self.fg_colour = self.get_colormap().alloc_color(gtkpwx.best_foreground(self.start_colour))
+        self.indicator_val = colour.chroma
+
+class TargetedHCVDisplay(gtk.VBox):
+    def __init__(self, colour=paint.WHITE, size=(256, 120), stype = gtk.SHADOW_ETCHED_IN):
+        gtk.VBox.__init__(self)
+        #
+        w, h = size
+        self.hue = TargetedHueDisplay(colour=colour, size=(w, h / 4))
+        self.pack_start(gtkpwx.wrap_in_frame(self.hue, stype), expand=False)
+        self.value = TargetedValueDisplay(colour=colour, size=(w, h / 4))
+        self.pack_start(gtkpwx.wrap_in_frame(self.value, stype), expand=False)
+        self.chroma = TargetedChromaDisplay(colour=colour, size=(w, h / 4))
+        self.pack_start(gtkpwx.wrap_in_frame(self.chroma, stype), expand=False)
+        self.show()
+    def set_colour(self, new_colour):
+        self.chroma.set_colour(new_colour)
+        self.hue.set_colour(new_colour)
+        self.value.set_colour(new_colour)
+    def set_target_colour(self, new_target_colour):
+        self.chroma.set_target_colour(new_target_colour)
+        self.hue.set_target_colour(new_target_colour)
+        self.value.set_target_colour(new_target_colour)
+
 class HueWheelNotebook(gtk.Notebook):
     def __init__(self):
         gtk.Notebook.__init__(self)
