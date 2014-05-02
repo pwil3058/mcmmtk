@@ -73,7 +73,6 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
             'accept_colour_changes',
             'reset_colour_editor',
             'take_screen_sample',
-            'automatch_sample_images',
             'automatch_sample_images_raw',
         ])
         self.paint_colours = PaintColourNotebook()
@@ -104,13 +103,8 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
         self.show_all()
     def populate_action_groups(self):
         self.action_groups[gpaint.ColourSampleArea.AC_SAMPLES_PASTED].add_actions([
-            ('automatch_sample_images', None, _('Auto Match (A)'), None,
-            _('Auto matically match the colour to the sample images adjusted to minimise greyness.'
-              'This is appropriate for matching Artists\' Paints which tend to be pure pigments intended for mixing.'),
-            self._automatch_sample_images_cb),
-            ('automatch_sample_images_raw', None, _('Auto Match (M)'), None,
-            _('Auto matically match the colour to the sample images assuming colour has been produced by mixing.'
-              'This is appropriate for matching Modellers\' Paints which tend to be already mixed to match commonly used colours.'),
+            ('automatch_sample_images_raw', None, _('Auto Match'), None,
+            _('Auto matically match the colour to the sample images.'),
             self._automatch_sample_images_raw_cb),
         ])
         self.action_groups[PaintEditor.AC_READY|self.AC_NOT_HAS_COLOUR].add_actions([
@@ -296,8 +290,6 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
         else:
             self.paint_colours.add_colour(new_colour)
             self.set_current_colour(new_colour)
-    def _automatch_sample_images_cb(self, _widget):
-        self.paint_editor.auto_match_sample()
     def _automatch_sample_images_raw_cb(self, _widget):
         self.paint_editor.auto_match_sample(raw=True)
     def report_io_error(self, edata):
