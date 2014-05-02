@@ -509,8 +509,7 @@ class GenericTargetedAttrDisplay(gtk.DrawingArea):
         self.queue_draw()
     def _set_target_colour(self, colour):
         """
-        Set values that only change when the colour changes.
-        Such as the location of the indicators.
+        Set values that only change when the target colour changes.
         """
         pass
     def set_target_colour(self, colour):
@@ -579,11 +578,11 @@ class TargetedHueDisplay(GenericTargetedAttrDisplay):
 class TargetedValueDisplay(GenericTargetedAttrDisplay):
     LABEL = _('Value')
     def __init__(self, colour=None, size=(100, 15)):
-        GenericTargetedAttrDisplay.__init__(self, colour=colour, size=size)
         self.start_colour = paint.BLACK
         self.end_colour = paint.WHITE
+        GenericTargetedAttrDisplay.__init__(self, colour=colour, size=size)
     def expose_cb(self, _widget, _event):
-        if self.colour is None:
+        if self.colour is None and self.target_colour is None:
             self.window.set_background(gtk.gdk.Color(0, 0, 0))
             return
         gc = self.window.new_gc()
@@ -595,29 +594,63 @@ class TargetedValueDisplay(GenericTargetedAttrDisplay):
             dith=gtk.gdk.RGB_DITHER_NONE,
             rgb_buf=graded_buf)
 
+        self.draw_target(gc)
         self.draw_indicators(gc)
         self.draw_label(gc)
     def _set_colour(self, colour):
         """
         Set values that only change when the colour changes
         """
-        self.fg_colour = self.get_colormap().alloc_color(gtkpwx.best_foreground(colour))
-        self.indicator_val = colour.value
+        if colour is None:
+            self.indicator_val = None
+        else:
+            self.fg_colour = self.get_colormap().alloc_color(gtkpwx.best_foreground(colour))
+            self.indicator_val = colour.value
+    def _set_target_colour(self, colour):
+        """
+        Set values that only change when the target colour changes
+        """
+        if colour is None:
+            self.target_val = None
+        else:
+            self.target_fg_colour = self.get_colormap().alloc_color(gtkpwx.best_foreground(colour))
+            self.target_val = colour.value
 
 class TargetedChromaDisplay(TargetedValueDisplay):
     LABEL = _('Chroma')
     def __init__(self, colour=None, size=(100, 15)):
         TargetedValueDisplay.__init__(self, colour=colour, size=size)
-        if colour is not None:
-            self._set_colour(colour)
     def _set_colour(self, colour):
         """
         Set values that only change when the colour changes
         """
-        self.start_colour = self.colour.hcv.chroma_side()
-        self.end_colour = colour.hue_rgb
-        self.fg_colour = self.get_colormap().alloc_color(gtkpwx.best_foreground(self.start_colour))
-        self.indicator_val = colour.chroma
+        if colour is None:
+            self.indicator_val = None
+            if self.target_colour is None:
+                self.start_colour = start.end_colour = paint.WHITE
+                self.fg_colour = self.target_fg_colour = paint.BLACK
+        else:
+            if self.target_colour is None:
+                self.start_colour = self.colour.hcv.chroma_side()
+                self.end_colour = colour.hue_rgb
+            self.fg_colour = self.get_colormap().alloc_color(gtkpwx.best_foreground(self.start_colour))
+            self.indicator_val = colour.chroma
+    def _set_target_colour(self, colour):
+        """
+        Set values that only change when the target colour changes
+        """
+        if colour is None:
+            self.target_val = None
+            if self.colour is None:
+                self.start_colour = start.end_colour = paint.WHITE
+                self.fg_colour = self.target_fg_colour = paint.BLACK
+            else:
+                self._set_colour(self.colour)
+        else:
+            self.start_colour = colour.hcv.chroma_side()
+            self.end_colour = colour.hue_rgb
+            self.target_fg_colour = self.get_colormap().alloc_color(gtkpwx.best_foreground(self.start_colour))
+            self.target_val = colour.chroma
 
 class TargetedHCVDisplay(gtk.VBox):
     def __init__(self, colour=paint.WHITE, size=(256, 120), stype = gtk.SHADOW_ETCHED_IN):
