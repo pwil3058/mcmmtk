@@ -647,7 +647,7 @@ class TargetedChromaDisplay(TargetedValueDisplay):
             else:
                 self._set_colour(self.colour)
         else:
-            self.start_colour = colour.hcv.chroma_side()
+            self.start_colour = colour.hcv.zero_chroma_rgb()
             self.end_colour = colour.hue_rgb
             self.target_fg_colour = self.get_colormap().alloc_color(gtkpwx.best_foreground(self.start_colour))
             self.target_val = colour.chroma

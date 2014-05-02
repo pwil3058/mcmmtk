@@ -112,6 +112,20 @@ class HCV(object):
             # i.e. same hue and value but without any unnecessary grey
             value = self.value
         return RGB(*self.hue.rgb_with_value(value))
+    def zero_chroma_rgb(self):
+        # get the rgb for the grey which would result from this colour
+        # having white or black (whichever is quicker) added until the
+        # chroma value is zero (useful for displaying chroma values)
+        if self.hue.is_grey():
+            return self.value_rgb()
+        mcv = self.hue.max_chroma_value()
+        dc = 1.0 - self.chroma
+        if dc != 0.0:
+            return RGB_WHITE * ((self.value - mcv * self.chroma) / dc)
+        elif mcv < 0.5:
+            return RGB_BLACK
+        else:
+            return RGB_WHITE
     def chroma_side(self):
         # Is it darker or lighter than max chroma for the hue?
         if sum(self.rgb) > sum(self.hue.rgb):

@@ -20,6 +20,7 @@ Implement types to represent red/green/blue data as a tuple and hue angle as a f
 import collections
 import math
 import array
+import fractions
 
 from mcmmtk import utils
 
@@ -222,6 +223,8 @@ class HueNG(collections.namedtuple('Hue', ['io', 'other', 'angle'])):
         result[self.io[0]] = self.ONE
         result[self.io[1]] = self.other
         return result
+    def max_chroma_value(self):
+        return fractions.Fraction(self.ONE + self.other, self.THREE)
     def rgb_with_total(self, req_total):
         '''
         return the RGB for this hue with the specified component total
