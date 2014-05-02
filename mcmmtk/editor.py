@@ -234,6 +234,7 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
         self.file_path = file_path
         condns = 0 if file_path is None else self.AC_HAS_FILE
         self.action_groups.update_condns(actions.MaskedCondns(condns, self.AC_HAS_FILE))
+        self.emit("file_changed", self.file_path)
     def _edit_selected_colour_cb(self, _action):
         """
         Load the selected paint colour into the editor
@@ -412,6 +413,7 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
         if not self.unsaved_changes_ok():
             return
         gtk.main_quit()
+gobject.signal_new('file_changed', PaintSeriesEditor, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))
 
 class PaintEditor(gtk.VBox):
     AC_READY, AC_NOT_READY, AC_MASK = actions.ActionCondns.new_flags_and_mask(2)
@@ -798,9 +800,10 @@ class TopLevelWindow(gtk.Window):
     def __init__(self):
         gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
         self.set_icon_from_file(icons.APP_ICON_FILE)
-        self.set_title('mcmmtk: Paint Series Editor')
         self.editor = PaintSeriesEditor()
         self.editor.action_groups.get_action('close_colour_editor').set_visible(False)
+        self.editor.connect("file_changed", self._file_changed_cb)
+        self.editor.set_file_path(None)
         self._menubar = self.editor.ui_manager.get_widget('/paint_series_editor_menubar')
         self.connect("destroy", self.editor._exit_colour_editor_cb)
         vbox = gtk.VBox()
@@ -808,6 +811,8 @@ class TopLevelWindow(gtk.Window):
         vbox.pack_start(self.editor, expand=True, fill=True)
         self.add(vbox)
         self.show_all()
+    def _file_changed_cb(self, widget, file_path):
+        self.set_title(_('mcmmtk: Paint Series Editor: {0}').format(file_path))
 
 class SampleViewer(gtk.Window, actions.CAGandUIManager):
     """
