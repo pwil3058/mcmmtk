@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Name=mcmmtk: Paint Series Editor
+Name[en_AU]=mcmmtk: Paint Series Editor
+Exec=mcmmtk_editor.py
+Comment=Modeller's Colour Matching/Matching Tool Kit Paint Series Editor
+Comment[en_AU]=Modeller's Colour Matching/Matching Tool Kit Paint Series Editor
+Icon=mcmmtk
+Categories=GNOME;GTK;Graphics;X-Modelling;

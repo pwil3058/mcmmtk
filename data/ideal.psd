@@ -1,0 +1,10 @@
+Manufacturer: Imaginary
+Series: Ideal Paint Colours Series
+NamedColour(name="Black", rgb=RGB(0, 0, 0), transparency="O", finish="G")
+NamedColour(name="White", rgb=RGB(65535, 65535, 65535), transparency="O", finish="G")
+NamedColour(name="Red", rgb=RGB(65535, 0, 0), transparency="O", finish="G")
+NamedColour(name="Green", rgb=RGB(0, 65535, 0), transparency="O", finish="G")
+NamedColour(name="Blue", rgb=RGB(0, 0, 65535), transparency="O", finish="G")
+NamedColour(name="Yellow", rgb=RGB(65535, 65535, 0), transparency="O", finish="G")
+NamedColour(name="Cyan", rgb=RGB(0, 65535, 65535), transparency="O", finish="G")
+NamedColour(name="Magenta", rgb=RGB(65535, 0, 65535), transparency="O", finish="G")
