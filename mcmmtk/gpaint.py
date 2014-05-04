@@ -322,6 +322,8 @@ class GenericAttrDisplay(gtk.DrawingArea):
             colour = gtk.gdk.Color(*arg)
         return self.get_colormap().alloc_color(colour)
     def draw_indicators(self, gc):
+        if self.indicator_val is None:
+            return
         w, h = self.window.get_size()
         indicator_x = int(w * self.indicator_val)
         gc.set_foreground(self.fg_colour)
@@ -440,53 +442,15 @@ class HCVDisplay(gtk.VBox):
 
 # Targetted attribute displays
 
-class GenericTargetedAttrDisplay(gtk.DrawingArea):
+class GenericTargetedAttrDisplay(GenericAttrDisplay):
     LABEL = None
 
     def __init__(self, colour=None, size=(100, 15)):
-        gtk.DrawingArea.__init__(self)
-        self.set_size_request(size[0], size[1])
-        self.colour = colour
-        self.fg_colour = gtkpwx.best_foreground(colour)
-        self.indicator_val = 0.5
-        self.target_colour = colour
+        self.target_colour = None
         self.target_val = None
         self.target_fg_colour = gtkpwx.best_foreground(colour)
+        GenericAttrDisplay.__init__(self, colour=colour, size=size)
         self._set_target_colour(colour)
-        self._set_colour(colour)
-        self.connect('expose-event', self.expose_cb)
-        self.show()
-    @staticmethod
-    def indicator_top(x, y):
-        return [(ind[0] + x, ind[1] + y) for ind in ((0, 5), (-5, 0), (5, 0))]
-    @staticmethod
-    def indicator_bottom(x, y):
-        return [(ind[0] + x, ind[1] + y) for ind in ((0, -5), (-5, 0), (5, 0))]
-    def new_colour(self, arg):
-        if isinstance(arg, paint.Colour):
-            colour = gtk.gdk.Color(*arg.rgb)
-        else:
-            colour = gtk.gdk.Color(*arg)
-        return self.get_colormap().alloc_color(colour)
-    def draw_indicators(self, gc):
-        if self.indicator_val is None:
-            return
-        w, h = self.window.get_size()
-        indicator_x = int(w * self.indicator_val)
-        gc.set_foreground(self.fg_colour)
-        gc.set_background(self.fg_colour)
-        # TODO: fix bottom indicator
-        self.window.draw_polygon(gc, True, self.indicator_top(indicator_x, 0))
-        self.window.draw_polygon(gc, True, self.indicator_bottom(indicator_x, h - 1))
-    def draw_label(self, gc):
-        if self.LABEL is None:
-            return
-        w, h = self.window.get_size()
-        layout = self.create_pango_layout(self.LABEL)
-        tw, th = layout.get_pixel_size()
-        x, y = ((w - tw) / 2, (h - th) / 2)
-        gc.set_foreground(self.fg_colour)
-        self.window.draw_layout(gc, x, y, layout, self.fg_colour)
     def draw_target(self, gc):
         if self.target_val is None:
             return
@@ -495,18 +459,6 @@ class GenericTargetedAttrDisplay(gtk.DrawingArea):
         gc.set_foreground(self.target_fg_colour)
         gc.set_background(self.target_fg_colour)
         self.window.draw_line(gc, target_x, 0, target_x, int(h))
-    def expose_cb(self, _widget, _event):
-        pass
-    def _set_colour(self, colour):
-        """
-        Set values that only change when the colour changes.
-        Such as the location of the indicators.
-        """
-        pass
-    def set_colour(self, colour):
-        self.colour = colour
-        self._set_colour(colour)
-        self.queue_draw()
     def _set_target_colour(self, colour):
         """
         Set values that only change when the target colour changes.
