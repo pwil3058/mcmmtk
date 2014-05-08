@@ -26,13 +26,12 @@ NAME = 'ModellersColourMatcherMixer'
 
 VERSION = '0.07'
 
-DESCRIPTION = 'A set of tools for painters to experiment with mixing colours.'
+DESCRIPTION = 'A set of tools for modellers to experiment with mixing colours.'
 
 LONG_DESCRIPTION =\
 '''
-This software is a set of tools for painters who wish to experiment with
-mixing paints and plan palettes (electronically) before beginning a
-painting.
+This software is a set of tools for modellers who wish to experiment with
+mixing paints to match a specified colour.
 '''
 
 LICENSE = 'GNU General Public License (GPL) Version 2.0'
@@ -52,11 +51,11 @@ AUTHOR = 'Peter Williams'
 
 AUTHOR_EMAIL = 'pwil3058@bigpond.net.au'
 
-URL = 'http://sourceforge.net/projects/pcatk/'
+URL = 'http://sourceforge.net/projects/mcmmtk/'
 
-SCRIPTS = ['pcatk_palette.py', 'pcatk_editor.py']
+SCRIPTS = ['mcmmtk_mixer.py', 'mcmmtk_editor.py']
 
-PACKAGES = ['pcatk']
+PACKAGES = ['mcmmtk']
 
 tubes = glob.glob('data/*.tsd')
 
@@ -69,10 +68,10 @@ SAMPLES = [(os.path.join('share', NAME, 'samples'), samples)]
 if for_windows:
     SCRIPTS.append('win_post_install.py')
     DESKTOP = []
-    PIXMAPS = [('share/pixmaps', ['pixmaps/pcatk.png', 'pixmaps/pcatk.ico'])]
+    PIXMAPS = [('share/pixmaps', ['pixmaps/mcmmtk.png', 'pixmaps/mcmmtk.ico'])]
 else:
-    DESKTOP = [('share/applications', ['pcatk_editor.desktop', 'pcatk_palette.desktop'])]
-    PIXMAPS = [('share/pixmaps', ['pixmaps/pcatk.png'])]
+    DESKTOP = [('share/applications', ['mcmmtk_editor.desktop', 'mcmmtk_mixer.desktop'])]
+    PIXMAPS = [('share/pixmaps', ['pixmaps/mcmmtk.png'])]
 
 setup(
     name = NAME,

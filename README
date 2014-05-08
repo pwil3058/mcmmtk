@@ -26,7 +26,7 @@ USAGE:
 
 This software has a number of components:
 
-1. The Mixer (mcmmtk_palette.py) is a GUI that (once the user
+1. The Mixer (mcmmtk_mixer.py) is a GUI that (once the user
 has specified a colour to be matched and selected some paints for use)
 enables the modeller to mix paints by specifying the number of "parts"
 of each paint to be used in mixing a colour to match the specified
