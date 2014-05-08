@@ -454,16 +454,7 @@ class ScreenSampler(gtk.Window):
                 return
             self.set_rect_size(event)
             if not self.rgba_supported:
-                width, height = self.get_size()
-                mask = gtk.gdk.Pixmap(None, width, height, 1)
-                gc = mask.new_gc()
-                # draw the rectangle
-                gc.foreground = gtk.gdk.Color(0, 0, 0, 1)
-                mask.draw_rectangle(gc, True, 0, 0, width, height)
-                # and clear the background
-                gc.foreground = gtk.gdk.Color(0, 0, 0, 0)
-                mask.draw_rectangle(gc, True, 2, 2, width-4, height-4)
-                self.shape_combine_mask(mask, 0, 0)
+                self._draw()
             if self.width > 3 and self.height > 3:
                 self.resize(self.width, self.height)
                 self.move(self.x, self.y)
@@ -496,7 +487,18 @@ class ScreenSampler(gtk.Window):
         self.area.window.draw_rectangle(white_gc, True, 0, 0, width, height)
         self.area.window.draw_rectangle(black_gc, True, 1, 1, width-2, height-2)
         if not self.rgba_supported:
-            self.draw()
+            self._draw()
+    def _draw(self):
+        width, height = self.get_size()
+        mask = gtk.gdk.Pixmap(None, width, height, 1)
+        gc = mask.new_gc()
+        # draw the rectangle
+        gc.foreground = gtk.gdk.Color(0, 0, 0, 1)
+        mask.draw_rectangle(gc, True, 0, 0, width, height)
+        # and clear the background
+        gc.foreground = gtk.gdk.Color(0, 0, 0, 0)
+        mask.draw_rectangle(gc, True, 2, 2, width-4, height-4)
+        self.shape_combine_mask(mask, 0, 0)
 
 
 def take_screen_sample(action=None):
