@@ -454,7 +454,16 @@ class ScreenSampler(gtk.Window):
                 return
             self.set_rect_size(event)
             if not self.rgba_supported:
-                self.draw()
+                width, height = self.get_size()
+                mask = gtk.gdk.Pixmap(None, width, height, 1)
+                gc = mask.new_gc()
+                # draw the rectangle
+                gc.foreground = gtk.gdk.Color(0, 0, 0, 1)
+                mask.draw_rectangle(gc, True, 0, 0, width, height)
+                # and clear the background
+                gc.foreground = gtk.gdk.Color(0, 0, 0, 0)
+                mask.draw_rectangle(gc, True, 2, 2, width-4, height-4)
+                self.shape_combine_mask(mask, 0, 0)
             if self.width > 3 and self.height > 3:
                 self.resize(self.width, self.height)
                 self.move(self.x, self.y)
