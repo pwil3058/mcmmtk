@@ -16,6 +16,7 @@
 '''
 Widgets the work with paint colours
 '''
+import sys
 
 import collections
 import math
@@ -136,6 +137,8 @@ class ColourSampleArea(gtk.DrawingArea, actions.CAGandUIManager):
         Paste from the clipboard
         """
         cbd = gtk.clipboard_get()
+        # WORKAROUND: clipboard bug on Windows
+        if sys.platform.startswith("win"): cbd.request_targets(lambda a, b, c: None)
         cbd.request_image(self._image_from_clipboard_cb, (self._ptr_x, self._ptr_y))
     def _image_from_clipboard_cb(self, cbd, img, posn):
         if img is None:
