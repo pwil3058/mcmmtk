@@ -465,7 +465,7 @@ class ScreenSampler(gtk.Window):
             self.set_rect_size(event)
             gtk.gdk.pointer_ungrab()
             self.hide()
-            gobject.timeout_add(100, self.take_sample)
+            gobject.timeout_add(120, self.take_sample)
         else:
             gtk.main_do_event(event)
     def grab_mouse(self):
