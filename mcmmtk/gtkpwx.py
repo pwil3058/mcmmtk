@@ -349,6 +349,12 @@ class ScrolledMessageDialog(gtk.Dialog):
         self.show_all()
         self.set_resizable(True)
 
+def inform_user(msg, parent=None):
+    dlg = ScrolledMessageDialog(parent=parent, message_format=msg)
+    gtk.gdk.beep()
+    dlg.run()
+    dlg.destroy()
+
 class CancelOKDialog(gtk.Dialog):
     def __init__(self, title=None, parent=None):
         flags = gtk.DIALOG_MODAL|gtk.DIALOG_DESTROY_WITH_PARENT
@@ -502,4 +508,7 @@ class ScreenSampler(gtk.Window):
 
 
 def take_screen_sample(action=None):
-    ScreenSampler()
+    if sys.platform.startswith("win"):
+        inform_user("Functionality NOT available on Windows. Use built in Clipping Tool.")
+    else:
+        ScreenSampler()
