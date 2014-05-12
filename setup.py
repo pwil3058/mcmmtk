@@ -24,7 +24,7 @@ for_windows = sys.platform in ['win32', 'cygwin'] or 'bdist_wininst' in sys.argv
 
 NAME = 'ModellersColourMatcherMixer'
 
-VERSION = '0.07'
+VERSION = '0.01'
 
 DESCRIPTION = 'A set of tools for modellers to experiment with mixing colours.'
 
@@ -57,12 +57,12 @@ SCRIPTS = ['mcmmtk_mixer.py', 'mcmmtk_editor.py']
 
 PACKAGES = ['mcmmtk']
 
-tubes = glob.glob('data/*.tsd')
-
-TUBES = [(os.path.join('share', NAME, 'data'), tubes)]
-
-samples = glob.glob('samples/*.jpg')
-
+paints = glob.glob('data/*.psd')
+print "paints:", paints
+PAINTS = [(os.path.join('share', NAME, 'data'), paints)]
+print "PAINTS:", PAINTS
+samples = glob.glob('samples/*.jpg') + glob.glob('samples/*.png')
+print "samples:", samples
 SAMPLES = [(os.path.join('share', NAME, 'samples'), samples)]
 
 if for_windows:
@@ -85,5 +85,5 @@ setup(
     url = URL,
     scripts = SCRIPTS,
     packages = PACKAGES,
-    data_files = DESKTOP + PIXMAPS + TUBES + SAMPLES
+    data_files = DESKTOP + PIXMAPS + PAINTS + SAMPLES
 )
