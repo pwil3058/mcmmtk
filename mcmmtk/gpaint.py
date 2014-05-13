@@ -657,6 +657,7 @@ class HueWheelNotebook(gtk.Notebook):
 class ColourWheel(gtk.DrawingArea):
     def __init__(self, nrings=9):
         gtk.DrawingArea.__init__(self)
+        self.BLACK = self.new_colour([0, 0, 0])
         self.set_size_request(400, 400)
         self.scale = 1.0
         self.zoom = 1.0
@@ -834,9 +835,11 @@ class ColourWheel(gtk.DrawingArea):
         def draw(self):
             self.predraw_setup()
             self.x, self.y = self.parent.polar_to_cartesian(self.radius * self.parent.zoom, self.colour_angle)
-            self.parent.gc.set_foreground(self.fg_colour)
             radius = self.parent.scaled_size
             halflen = radius * 2
+            self.parent.gc.set_foreground(self.fg_colour)
+            self.parent.draw_circle(self.x, self.y, radius=radius, filled=True)
+            self.parent.gc.set_foreground(self.parent.BLACK)
             self.parent.draw_circle(self.x, self.y, radius=radius, filled=False)
             self.parent.window.draw_line(self.parent.gc, int(self.x - halflen), int(self.y), int(self.x + halflen), int(self.y))
             self.parent.window.draw_line(self.parent.gc, int(self.x), int(self.y - halflen), int(self.x), int(self.y + halflen))
