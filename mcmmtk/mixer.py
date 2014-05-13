@@ -36,6 +36,7 @@ from mcmmtk import icons
 from mcmmtk import iview
 from mcmmtk import data
 from mcmmtk import editor
+from mcmmtk import utils
 
 def pango_rgb_str(rgb, bits_per_channel=16):
     """
@@ -90,6 +91,7 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         self.buttons = self.action_groups.create_action_button_box([
             'new_mixed_colour',
             'accept_mixed_colour',
+            'simplify_contributions',
             'reset_contributions',
             'remove_unused_paints'
         ])
@@ -127,9 +129,6 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
             ('mixer_file_menu', None, _('File')),
             ('paint_series_menu', None, _('Paint Colour Series')),
             ('reference_resource_menu', None, _('Reference Resources')),
-            ('reset_contributions', None, _('Reset'), None,
-            _('Reset all paint contributions to zero.'),
-            self._reset_contributions_cb),
             ('remove_unused_paints', None, _('Remove Unused Paints'), None,
             _('Remove all unused paints from the mixer.'),
             self._remove_unused_paints_cb),
@@ -145,6 +144,14 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
             ('print_mixer', gtk.STOCK_PRINT, None, None,
             _('Print a text description of the mixer.'),
             self._print_mixer_cb),
+        ])
+        self.action_groups[self.AC_HAVE_MIXTURE].add_actions([
+            ('simplify_contributions', None, _('Simplify'), None,
+            _('Simplify all paint contributions (by dividing by their greatest common divisor).'),
+            self._simplify_contributions_cb),
+            ('reset_contributions', None, _('Reset'), None,
+            _('Reset all paint contributions to zero.'),
+            self._reset_contributions_cb),
         ])
         self.action_groups[self.AC_HAVE_MIXTURE|self.AC_HAVE_TARGET].add_actions([
             ('accept_mixed_colour', None, _('Accept'), None,
@@ -259,6 +266,10 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         self.paint_colours.reset_parts()
     def _reset_contributions_cb(self, _action):
         self.reset_parts()
+    def simplify_parts(self):
+        self.paint_colours.simplify_parts()
+    def _simplify_contributions_cb(self, _action):
+        self.simplify_parts()
     def add_paint(self, paint_colour):
         self.paint_colours.add_colour(paint_colour)
         self.wheels.add_colour(paint_colour)
@@ -426,6 +437,8 @@ class ColourPartsSpinButton(gtk.EventBox, actions.CAGandUIManager):
         return self.entry.get_value_as_int()
     def set_parts(self, parts):
         return self.entry.set_value(parts)
+    def divide_parts(self, divisor):
+        return self.entry.set_value(self.entry.get_value_as_int() / divisor)
     def get_blob(self):
         return paint.BLOB(self.colour, self.get_parts())
     def set_sensitive(self, sensitive):
@@ -444,6 +457,7 @@ class ColourPartsSpinButtonBox(gtk.VBox):
         self.__count = 0
         self.__ncols = 8
         self.__sensitive = False
+        self.__suppress_change_notification = False
     def set_sensitive(self, sensitive):
         self.__sensitive = sensitive
         for sb in self.__spinbuttons:
@@ -483,7 +497,8 @@ class ColourPartsSpinButtonBox(gtk.VBox):
         """
         Signal those interested that our contributions have changed
         """
-        self.emit('contributions-changed', self.get_contributions())
+        if not self.__suppress_change_notification:
+            self.emit('contributions-changed', self.get_contributions())
     def del_colour(self, colour):
         # do this the easy way by taking them all out and putting back
         # all but the one to be deleted
@@ -511,12 +526,23 @@ class ColourPartsSpinButtonBox(gtk.VBox):
         Return a list of paint colours with non zero parts
         """
         return [spinbutton.get_blob() for spinbutton in self.__spinbuttons if spinbutton.get_parts() > 0]
+    def simplify_parts(self):
+        gcd = utils.gcd(*[sb.get_parts() for sb in self.__spinbuttons])
+        if gcd is not None and gcd > 1:
+            self.__suppress_change_notification = True
+            for spinbutton in self.__spinbuttons:
+                spinbutton.divide_parts(gcd)
+            self.__suppress_change_notification = False
+            self.emit('contributions-changed', self.get_contributions())
     def reset_parts(self):
         """
         Reset all spinbutton values to zero
         """
+        self.__suppress_change_notification = True
         for spinbutton in self.__spinbuttons:
             spinbutton.set_parts(0)
+        self.__suppress_change_notification = False
+        self.emit('contributions-changed', self.get_contributions())
 gobject.signal_new('remove-colour', ColourPartsSpinButtonBox, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))
 gobject.signal_new('contributions-changed', ColourPartsSpinButtonBox, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))
 
