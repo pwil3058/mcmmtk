@@ -230,7 +230,7 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         name = _('Mix #{:03d}').format(self.mixed_count)
         notes = self.current_colour_description.get_text()
         new_colour = paint.NamedMixedColour(blobs=paint_contribs, name=name, notes=notes)
-        self.mixed_colours.append_colour(new_colour, self.current_target_colour.hcv)
+        self.mixed_colours.append_colour(new_colour, self.current_target_colour)
         self.wheels.add_colour(new_colour)
         self.reset_parts()
         self.paint_colours.set_sensitive(False)
@@ -671,10 +671,7 @@ class PartsColourListView(gpaint.ColourListView):
         model.process_parts_change(paint.BLOB(colour=row.colour, parts=new_parts))
     def _show_colour_details_cb(self, _action):
         colour = self.get_selected_colours()[0]
-        if isinstance(colour, paint.NamedMixedColour):
-            MixedColourInformationDialogue(colour).show()
-        else:
-            PaintColourInformationDialogue(colour).show()
+        PaintColourInformationDialogue(colour).show()
 
 MATCH = collections.namedtuple('MATCH', ['colour', 'target_colour'])
 
@@ -779,9 +776,10 @@ class MatchedColourListView(gpaint.ColourListView):
             ]
         )
     def _show_colour_details_cb(self, _action):
-        colour = self.get_selected_colours()[0]
+        selected_rows = tlview.NamedTreeModel.get_selected_rows(self.get_selection())
+        colour = selected_rows[0].colour
         if isinstance(colour, paint.NamedMixedColour):
-            MixedColourInformationDialogue(colour).show()
+            MixedColourInformationDialogue(colour, selected_rows[0].target_colour).show()
         else:
             PaintColourInformationDialogue(colour).show()
 
@@ -1041,12 +1039,15 @@ class MixedColourInformationDialogue(gtk.Dialog):
     A dialog to display the detailed information for a mixed colour
     """
 
-    def __init__(self, colour, parent=None):
+    def __init__(self, colour, target_colour, parent=None):
         gtk.Dialog.__init__(self, title=_('Mixed Colour: {}').format(colour.name), parent=parent)
         vbox = self.get_content_area()
         vbox.pack_start(gtkpwx.ColouredLabel(colour.name, colour), expand=False)
         vbox.pack_start(gtkpwx.ColouredLabel(colour.notes, colour), expand=False)
-        vbox.pack_start(gpaint.HCVDisplay(colour), expand=False)
+        vbox.pack_start(gtkpwx.ColouredLabel(_("Target"), target_colour.rgb), expand=False)
+        thcvd = gpaint.TargetedHCVDisplay(colour)
+        thcvd.set_target_colour(target_colour)
+        vbox.pack_start(thcvd, expand=False)
         vbox.pack_start(gtk.Label(colour.transparency.description()), expand=False)
         vbox.pack_start(gtk.Label(colour.finish.description()), expand=False)
         self.cview = ComponentsListView()
