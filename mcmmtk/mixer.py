@@ -70,7 +70,6 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         gtk.VBox.__init__(self)
         actions.CAGandUIManager.__init__(self)
         self.action_groups.update_condns(actions.MaskedCondns(self.AC_DONT_HAVE_TARGET, self.AC_TARGET_MASK))
-        self._last_dir = None
         # Components
         self.notes = gtk.Entry()
         self.next_name_label = gtk.Label(_("#???:"))
@@ -356,12 +355,14 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
             action=gtk.FILE_CHOOSER_ACTION_OPEN,
             buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK)
         )
-        if self._last_dir:
-            dlg.set_current_folder(self._last_dir)
+        last_paint_file = recollect.get('paint_series_selector', 'last_file')
+        last_paint_dir = None if last_paint_file is None else os.path.dirname(last_paint_file)
+        if last_paint_dir:
+            dlg.set_current_folder(last_paint_dir)
         if dlg.run() == gtk.RESPONSE_OK:
             filepath = dlg.get_filename()
             if self.launch_selector(filepath):
-                self._last_dir = os.path.dirname(filepath)
+                recollect.set('paint_series_selector', 'last_file', filepath)
         dlg.destroy()
     def _print_mixer_cb(self, _action):
         """

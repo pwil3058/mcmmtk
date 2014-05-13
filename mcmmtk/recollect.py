@@ -87,6 +87,8 @@ def set(section, oname, val):
     RECOLLECTIONS.write(open(_RECOLLECTIONS_PATH, 'w'))
 
 define('sample_viewer', 'last_file', Defn(str, os.path.join(options.get_sys_samples_dir(), 'example.jpg')))
+define('paint_series_selector', 'last_file', Defn(str, os.path.join(options.get_sys_data_dir(), 'ideal.psd')))
+define('paint_series_editor', 'last_file', Defn(str, os.path.join(options.get_sys_data_dir(), 'ideal.psd')))
 define('reference_image_viewer', 'last_file', Defn(str, ''))
 
 load_recollections()
