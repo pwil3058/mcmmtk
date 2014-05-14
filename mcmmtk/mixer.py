@@ -229,6 +229,7 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         else:
             self.action_groups.update_condns(actions.MaskedCondns(0, self.AC_MASK))
     def _accept_mixed_colour_cb(self,_action):
+        self.simplify_parts()
         paint_contribs = self.paint_colours.get_contributions()
         if len(paint_contribs) < 1:
             return
