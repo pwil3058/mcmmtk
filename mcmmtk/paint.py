@@ -359,7 +359,10 @@ class Series(object):
                 rgb = [channel << 8 for channel in eval(match.group(2))]
                 colours.append(NamedColour(match.group(1), rgb, eval(match.group(3)), eval(match.group(4))))
         else:
-            colours = [eval(line) for line in lines[2:]]
+            try:
+                colours = [eval(line) for line in lines[2:]]
+            except TypeError as edata:
+                raise Series.ParseError(_('Badly formed definition: {0}. ({1})').format(line, str(edata)))
         return Series(maker=mfkr_name, name=series_name, colours=colours)
 
 BLOB = collections.namedtuple('BLOB', ['colour', 'parts'])

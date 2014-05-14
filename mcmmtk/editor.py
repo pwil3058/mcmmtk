@@ -228,6 +228,8 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
         self.file_path = file_path
         condns = 0 if file_path is None else self.AC_HAS_FILE
         self.action_groups.update_condns(actions.MaskedCondns(condns, self.AC_HAS_FILE))
+        if condns:
+            recollect.set('paint_series_editor', 'last_file', file_path)
         self.emit("file_changed", self.file_path)
     def _edit_selected_colour_cb(self, _action):
         """
@@ -309,7 +311,7 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
         try:
             series = paint.Series.fm_definition(text)
         except paint.Series.ParseError as edata:
-            return self.report_format_error(edata)
+            return self.report_format_error(str(edata))
         # All OK so clear the paint editor and ditch the current colours
         self.paint_editor.reset()
         self.set_current_colour(None)
@@ -337,6 +339,11 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
         if self.file_path:
             lastdir = os.path.dirname(self.file_path)
             dlg.set_current_folder(lastdir)
+        else:
+            last_file = recollect.get('paint_series_editor', 'last_file')
+            if last_file:
+                lastdir = os.path.dirname(last_file)
+                dlg.set_current_folder(lastdir)
         if dlg.run() == gtk.RESPONSE_OK:
             filepath = dlg.get_filename()
             self.load_fm_file(filepath)
@@ -387,6 +394,11 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
         if self.file_path:
             lastdir = os.path.dirname(self.file_path)
             dlg.set_current_folder(lastdir)
+        else:
+            last_file = recollect.get('paint_series_editor', 'last_file')
+            if last_file:
+                lastdir = os.path.dirname(last_file)
+                dlg.set_current_folder(lastdir)
         if dlg.run() == gtk.RESPONSE_OK:
             filepath = dlg.get_filename()
             self.save_to_file(filepath)
