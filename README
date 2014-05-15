@@ -41,13 +41,13 @@ modeller create sets of paintas for use in the mixer.
 The recommended method is to produce a "sampler" of the actual paints
 to be used on a suitable medium (preferably airbrushed), take a digital
 photograph (or scan) and then cut and paste from that photograph into
-the tube series editor where its buttons can be used to match the colour.
+the paint series editor where its buttons can be used to match the colour.
 A Colour Sample Viewer is included as part of the editor. An example
 colour sampler file has been added and should be loaded by the viewer
 the first time it is launched (and after that it should remember the
 last file used).
 NB although manufacturer's digital colour charts can be used for a
-sample source they are not necessarily accurate as they were produced
+sample source they are not necessarily accurate as they were NOT produced
 with this use in mind and colours are frequently modified to accentuate
 the difference between colours.
 NB the provided sample is hand painted and should make it clear why an
@@ -55,7 +55,7 @@ air brushed version is preferred.
 
 PAINT SERIES:
 
-At this time, the only tube series data included in the distribution is
+At this time, the only paint series data included in the distribution is
 for an imaginary set of paints known as the "Ideal Paint Colours Series"
 which features six colours equally spaced around the colour circle
 (at maximim chroma) together with black and white. This series can be
