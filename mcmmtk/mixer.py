@@ -85,6 +85,7 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         self.mixed_colours_view = MatchedColourListView(self.mixed_colours)
         self.mixed_colours_view.action_groups.connect_activate('remove_selected_colours', self._remove_mixed_colours_cb)
         self.mixed_count = 0
+        self.selectors = list()
         self.wheels = gpaint.HueWheelNotebook()
         self.wheels.set_size_request(360, 360)
         self.buttons = self.action_groups.create_action_button_box([
@@ -246,6 +247,8 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         self.current_target_colour = None
         self.hcvw_display.set_target_colour(None)
         self.wheels.unset_crosshair()
+        for selector in self.selectors:
+            selector.wheels.unset_crosshair()
         self.action_groups.update_condns(actions.MaskedCondns(self.AC_DONT_HAVE_TARGET, self.AC_TARGET_MASK))
         self.next_name_label.set_text(_("#???:"))
     def _new_mixed_colour_cb(self,_action):
@@ -258,6 +261,8 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
             self.current_target_colour = dlg.colour_specifier.colour
             self.hcvw_display.set_target_colour(self.current_target_colour)
             self.wheels.set_crosshair(self.current_target_colour)
+            for selector in self.selectors:
+                selector.wheels.set_crosshair(self.current_target_colour)
             self.action_groups.update_condns(actions.MaskedCondns(self.AC_HAVE_TARGET, self.AC_TARGET_MASK))
             self.next_name_label.set_text(_("#{:03d}:").format(self.mixed_count + 1))
             self.paint_colours.set_sensitive(True)
@@ -337,13 +342,20 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         # All OK so we can launch the selector
         selector = PaintColourSelector(series)
         selector.connect('add-paint-colours', self._add_colours_to_mixer_cb)
+        self.selectors.append(selector)
+        if self.current_target_colour:
+            selector.wheels.set_crosshair(self.current_target_colour)
         window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         window.set_icon_from_file(icons.APP_ICON_FILE)
         window.set_title(_('Paint Series: {}').format(os.path.relpath(filepath)))
-        window.connect('destroy', lambda w: w.destroy())
         window.add(selector)
+        window.connect('destroy', self._destroy_selector_cb)
         window.show()
         return True
+    def _destroy_selector_cb(self, widget):
+        selector = widget.get_child()
+        self.selectors.remove(selector)
+        widget.destroy()
     def _open_paint_series_selector_cb(self, _action):
         """
         Open a tool for adding paint colours to the mixer
@@ -844,13 +856,13 @@ class PaintColourSelector(gtk.VBox):
     def __init__(self, paint_series):
         gtk.VBox.__init__(self)
         # components
-        wheels = gpaint.HueWheelNotebook()
+        self.wheels = gpaint.HueWheelNotebook()
         self.paint_colours_view = SelectColourListView()
         self.paint_colours_view.set_size_request(480, 360)
         model = self.paint_colours_view.get_model()
         for colour in paint_series.paint_colours.values():
             model.append_colour(colour)
-            wheels.add_colour(colour)
+            self.wheels.add_colour(colour)
         maker = gtk.Label(_('Manufacturer: {0}'.format(paint_series.series_id.maker)))
         sname = gtk.Label(_('Series Name: {0}'.format(paint_series.series_id.name)))
         # make connections
@@ -860,7 +872,7 @@ class PaintColourSelector(gtk.VBox):
         self.pack_start(sname, expand=False)
         self.pack_start(maker, expand=False)
         hbox = gtk.HBox()
-        hbox.pack_start(wheels, expand=True, fill=True)
+        hbox.pack_start(self.wheels, expand=True, fill=True)
         hbox.pack_start(gtkpwx.wrap_in_scrolled_window(self.paint_colours_view), expand=True, fill=True)
         self.pack_start(hbox, expand=True, fill=True)
         self.show_all()
