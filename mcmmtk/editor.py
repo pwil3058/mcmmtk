@@ -927,22 +927,3 @@ def get_avg_rgb_for_samples(samples):
                     total[i] += data[offset + i]
         npixels += width * n_rows
     return paint.RGB(*((total[i] / npixels) << 8 for i in range(3)))
-
-def get_avg_rgb_for_samples(samples):
-    total = [0, 0, 0]
-    npixels = 0
-    for sample in samples:
-        assert sample.get_bits_per_sample() == 8
-        nc = sample.get_n_channels()
-        rs = sample.get_rowstride()
-        width = sample.get_width()
-        n_rows = sample.get_height()
-        data = [ord(b) for b in sample.get_pixels()]
-        for row_num in range(n_rows):
-            row_start = row_num * rs
-            for j in range(width):
-                offset = row_start + j * nc
-                for i in range(3):
-                    total[i] += data[offset + i]
-        npixels += width * n_rows
-    return paint.RGB(*((total[i] / npixels) << 8 for i in range(3)))
