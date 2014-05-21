@@ -306,23 +306,15 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
             self.del_paint(colour)
     def _remove_mixed_colours_cb(self, _action):
         colours = self.mixed_colours_view.get_selected_colours()
-        being_used = {}
+        if len(colours) == 0:
+            return
+        msg = _("The following mixed colours are about to be deleted:\n")
         for colour in colours:
-            users = self.mixed_colours.get_colour_users(colour)
-            if len(users) > 0:
-                being_used[colour] = users
-            else:
+            msg += "\t{0}: {1}\n".format(colour.name, colour.notes)
+        msg += _("and will not be recoverable.")
+        if gtkpwx.ask_user_to_confirm(msg):
+            for colour in colours:
                 self.del_mixed(colour)
-        if being_used:
-            string = ''
-            for colour, users in being_used.items():
-                string += _('Colour: "{0}" is used in:\n').format(colour.name)
-                for user in users:
-                    string += '\t{0}\n'.format(user.name)
-            dlg = gtkpwx.ScrolledMessageDialog(message_format=string)
-            gtk.gdk.beep()
-            dlg.run()
-            dlg.destroy()
     def _remove_unused_paints_cb(self, _action):
         colours = self.paint_colours.get_colours_with_zero_parts()
         for colour in colours:

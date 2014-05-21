@@ -368,6 +368,13 @@ def report_error(msg, parent=None):
     dlg.run()
     dlg.destroy()
 
+def ask_user_to_confirm(msg, parent=None):
+    dlg = ScrolledMessageDialog(parent=parent, message_format=msg, type=gtk.MESSAGE_QUESTION, buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_OK))
+    gtk.gdk.beep()
+    response = dlg.run()
+    dlg.destroy()
+    return response == gtk.RESPONSE_OK
+
 class CancelOKDialog(gtk.Dialog):
     def __init__(self, title=None, parent=None):
         flags = gtk.DIALOG_MODAL|gtk.DIALOG_DESTROY_WITH_PARENT
