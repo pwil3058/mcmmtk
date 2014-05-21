@@ -530,6 +530,8 @@ class Key:
     ESCAPE = gtk.gdk.keyval_from_name("Escape")
     RETURN = gtk.gdk.keyval_from_name("Return")
     TAB = gtk.gdk.keyval_from_name("Tab")
+    UP_ARROW = gtk.gdk.keyval_from_name("Up")
+    DOWN_ARROW = gtk.gdk.keyval_from_name("Down")
 
 class ArrowButton(gtk.Button):
     def __init__(self, arrow_type, shadow_type, width=-1, height=-1):
@@ -540,7 +542,7 @@ class ArrowButton(gtk.Button):
 class HexSpinButton(gtk.HBox):
     OFF, INCR, DECR = range(3)
     PAUSE = 500
-    INTERVAL = 75
+    INTERVAL = 25
     def __init__(self, max_value, label=None):
         gtk.HBox.__init__(self)
         if label:
@@ -560,6 +562,7 @@ class HexSpinButton(gtk.HBox):
         self.pack_start(self.entry, expand=False)
         self._update_text()
         self.entry.connect("key-press-event", self._key_press_cb)
+        self.entry.connect("key-release-event", self._key_release_cb)
         ew, eh = self.entry.size_request()
         bw = eh * 2 / 3
         bh = eh / 2 -1
@@ -608,6 +611,10 @@ class HexSpinButton(gtk.HBox):
         return True
     def _update_text(self):
         self.entry.set_text(self.format_str.format(self.__value))
+    def _bump_current_step(self):
+        self.__current_step = min(self.__current_step * 2, self.__max_step)
+    def _reset_current_step(self):
+        self.__current_step = 1
     def _iterate_steps(self):
         keep_going = False
         if self.__dirn is self.INCR:
@@ -615,9 +622,9 @@ class HexSpinButton(gtk.HBox):
         elif self.__dirn is self.DECR:
             keep_going = self._decr_value(self.__current_step)
         if keep_going:
-            self.__current_step = min(self.__current_step * 2, self.__max_step)
+            self._bump_current_step()
         else:
-            self.__current_step = 1
+            self._reset_current_step()
         return keep_going
     def _key_press_cb(self, entry, event):
         if event.keyval in [Key.RETURN, Key.TAB]:
@@ -628,4 +635,16 @@ class HexSpinButton(gtk.HBox):
                 report_error(str(edata))
                 self._update_text()
             return True # NOTE: this will nobble the "activate" signal
+        elif event.keyval == Key.UP_ARROW:
+            if self._incr_value(self.__current_step):
+                self._bump_current_step()
+            return True
+        elif event.keyval == Key.DOWN_ARROW:
+            if self._decr_value(self.__current_step):
+                self._bump_current_step()
+            return True
+    def _key_release_cb(self, entry, event):
+        if event.keyval in [Key.UP_ARROW, Key.DOWN_ARROW]:
+            self._reset_current_step()
+            return True
 gobject.signal_new("value-changed", HexSpinButton, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_BOOLEAN,))
