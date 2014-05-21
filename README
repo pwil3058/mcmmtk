@@ -32,12 +32,12 @@ enables the modeller to mix paints by specifying the number of "parts"
 of each paint to be used in mixing a colour to match the specified
 colour.  This mixed colour can then be saved to a list of mixed colours
 (along with notes about its intended use).  When the modeller has
-finished mixing the colours that the require they may print out a
+finished mixing the colours that they require they may print out a
 report to be used as a reference while painting the model for which the
 colours were mixed.
 
 2. The Paint Series Editor (mcmmtk_editor.py) is a GUI that enables the
-modeller create sets of paintas for use in the mixer.
+modeller create sets of paints for use in the mixer.
 The recommended method is to produce a "sampler" of the actual paints
 to be used on a suitable medium (preferably airbrushed), take a digital
 photograph (or scan) and then cut and paste from that photograph into
@@ -72,6 +72,9 @@ INTERNATIONALIZATION:
 The code is extensively hooked for i18n but (at the moment) there is no
 localization available for languages other than English.
 
+CHANGES:
+    V-0.02: adds target colour cross to colour series selector wheels
+
 BUGS:
 
 It would be greatly appreciated if any bugs encountered by users are
@@ -79,33 +82,12 @@ reported by creating an issue at:
 
 <http://sourceforge.net/p/mcmmtk/tickets/>
 
-or emailing:
-
-<mcmmtk-discussion@lists.sourceforge.net>
-
 FEATURE REQUESTS:
 
 Feature requests can be made by creating an issue at:
 
 <http://sourceforge.net/p/mcmmtk/tickets/>
 
-or emailing:
+or on the discussion list:
 
-<mcmmtk-discussion@lists.sourceforge.net>
-
-<https://sourceforge.net/tracker/?group_id=386122&atid=1604800>
-
-or emailing:
-
-<darning-discussion@lists.sourceforge.net>
-
-FEATURE REQUESTS:
-
-Feature requests can be made by creating an issue at:
-
-<https://sourceforge.net/tracker/?group_id=386122&atid=1604803>
-
-or emailing:
-
-<darning-discussion@lists.sourceforge.net>
-
+<https://sourceforge.net/p/mcmmtk/discussion/>
