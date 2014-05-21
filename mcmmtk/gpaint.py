@@ -997,7 +997,15 @@ class ColourListView(tlview.View, actions.CAGandUIManager):
         """
         Delete the currently selected colours
         """
-        self.model.remove_colours(self.get_selected_colours())
+        colours = self.get_selected_colours()
+        if len(colours) == 0:
+            return
+        msg = _("The following colours are about to be deleted:\n")
+        for colour in colours:
+            msg += "\t{0}\n".format(colour.name)
+        msg += _("and will not be recoverable.")
+        if gtkpwx.ask_user_to_confirm(msg):
+            self.model.remove_colours(colours)
     def get_selected_colours(self):
         """
         Return the currently selected colours as a list.
