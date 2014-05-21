@@ -272,6 +272,19 @@ def generate_spectral_rgb_buf(hue, spread, width, height, backwards=False):
     buf = row * height
     return buffer(buf)
 
+def gdk_color_to_rgb(colour):
+    return paint.RGB(*gtkpwx.gdk_color_to_rgb(colour))
+
+def get_rgb(colour):
+    if isinstance(colour, gtk.gdk.Color):
+        return gdk_color_to_rgb(colour)
+    elif isinstance(colour, paint.Colour) or isinstance(colour, paint.HCV):
+        return colour.rgb
+    elif isinstance(colour, paint.RGB):
+        return colour
+    else:
+        return paint.RGB(*colour)
+
 def generate_graded_rgb_buf(start_colour, end_colour, width, height):
     # TODO: deprecate this function in favour of the one in pixbuf
     """
@@ -282,13 +295,6 @@ def generate_graded_rgb_buf(start_colour, end_colour, width, height):
     width: the required width of the rectangle in pixels
     height: the required height of the rectangle in pixels
     """
-    def get_rgb(colour):
-        if isinstance(colour, gtk.gdk.Color):
-            return gdk_color_to_rgb(colour)
-        elif isinstance(colour, paint.Colour):
-            return colour.rgb
-        else:
-            return colour
     start_rgb = get_rgb(start_colour)
     end_rgb = get_rgb(end_colour)
     # Use Fraction() to eliminate rounding errors causing chr() range problems
@@ -997,6 +1003,37 @@ class ColourListView(tlview.View, actions.CAGandUIManager):
         Return the currently selected colours as a list.
         """
         return [row.colour for row in tlview.NamedTreeModel.get_selected_rows(self.get_selection())]
+
+class RGBEntryBox(gtk.HBox):
+    def __init__(self, initial_colour=paint.BLACK):
+        gtk.HBox.__init__(self)
+        self.red = gtkpwx.HexSpinButton(0xFFFF, gtkpwx.ColouredLabel(_("Red"), paint.RED))
+        self.red.connect("value-changed", self._spinners_changed_cb)
+        self.pack_start(self.red, expand=True)
+        self.green = gtkpwx.HexSpinButton(0xFFFF, gtkpwx.ColouredLabel(_("Green"), paint.GREEN))
+        self.green.connect("value-changed", self._spinners_changed_cb)
+        self.pack_start(self.green, expand=True)
+        self.blue = gtkpwx.HexSpinButton(0xFFFF, gtkpwx.ColouredLabel(_("Blue"), paint.BLUE))
+        self.blue.connect("value-changed", self._spinners_changed_cb)
+        self.pack_start(self.blue, expand=True)
+        self.set_colour(initial_colour)
+    def set_colour(self, colour):
+        rgb = get_rgb(colour)
+        self.red.set_value(rgb.red)
+        self.green.set_value(rgb.green)
+        self.blue.set_value(rgb.blue)
+    def get_colour(self):
+        return paint.RGB(self.red.get_value(), self.green.get_value(), self.blue.get_value())
+    def _spinners_changed_cb(self, spinner, was_tabbed):
+        self.emit("colour-changed")
+        if was_tabbed:
+            if spinner is self.red:
+                self.green.entry.grab_focus()
+            elif spinner is self.green:
+                self.blue.entry.grab_focus()
+            elif spinner is self.blue:
+                self.red.entry.grab_focus()
+gobject.signal_new("colour-changed", RGBEntryBox, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ())
 
 if __name__ == '__main__':
     doctest.testmod()

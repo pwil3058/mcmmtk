@@ -532,6 +532,10 @@ class ColourSampleMatcher(gtk.VBox):
         gtk.VBox.__init__(self)
         self._delta = 256 # must be a power of two
         self.auto_match_on_paste = auto_match_on_paste
+        # Add RGB entry field
+        self.rgb_entry = gpaint.RGBEntryBox()
+        self.rgb_entry.connect("colour-changed", self._rgb_entry_changed_cb)
+        self.pack_start(self.rgb_entry, expand=False)
         self.hcv_display = gpaint.HCVDisplay()
         self.pack_start(self.hcv_display, expand=False)
         # Add value modification buttons
@@ -591,6 +595,7 @@ class ColourSampleMatcher(gtk.VBox):
         self.incr_grayness_button.set_colour(self.colour)
         self.decr_grayness_button.set_colour(self.colour)
         self.hcv_display.set_colour(self.colour)
+        self.rgb_entry.set_colour(self.colour)
     def _auto_match_sample(self, samples, raw):
         total = [0, 0, 0]
         npixels = 0
@@ -620,6 +625,8 @@ class ColourSampleMatcher(gtk.VBox):
     def _sample_change_cb(self, widget, *args):
         if self.auto_match_on_paste:
             self.auto_match_sample(raw=self.DEFAULT_AUTO_MATCH_RAW)
+    def _rgb_entry_changed_cb(self, entry):
+        self.set_colour(entry.get_colour())
     # TODO: implement matcher's colour fiddler functions in paint module
     def _incr_channel(self, rgb, channel, denom=None, frac=None):
         assert frac is None or denom is None

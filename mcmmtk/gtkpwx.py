@@ -20,6 +20,7 @@ GTK extensions and wrappers
 import collections
 import fractions
 import sys
+import math
 
 import gtk
 import gobject
@@ -355,6 +356,18 @@ def inform_user(msg, parent=None):
     dlg.run()
     dlg.destroy()
 
+def warn_user(msg, parent=None):
+    dlg = ScrolledMessageDialog(parent=parent, message_format=msg, type=gtk.MESSAGE_WARNING)
+    gtk.gdk.beep()
+    dlg.run()
+    dlg.destroy()
+
+def report_error(msg, parent=None):
+    dlg = ScrolledMessageDialog(parent=parent, message_format=msg, type=gtk.MESSAGE_ERROR)
+    gtk.gdk.beep()
+    dlg.run()
+    dlg.destroy()
+
 class CancelOKDialog(gtk.Dialog):
     def __init__(self, title=None, parent=None):
         flags = gtk.DIALOG_MODAL|gtk.DIALOG_DESTROY_WITH_PARENT
@@ -512,3 +525,107 @@ def take_screen_sample(action=None):
         inform_user("Functionality NOT available on Windows. Use built in Clipping Tool.")
     else:
         ScreenSampler()
+
+class Key:
+    ESCAPE = gtk.gdk.keyval_from_name("Escape")
+    RETURN = gtk.gdk.keyval_from_name("Return")
+    TAB = gtk.gdk.keyval_from_name("Tab")
+
+class ArrowButton(gtk.Button):
+    def __init__(self, arrow_type, shadow_type, width=-1, height=-1):
+        gtk.Button.__init__(self)
+        self.set_size_request(width, height)
+        self.add(gtk.Arrow(arrow_type, shadow_type))
+
+class HexSpinButton(gtk.HBox):
+    OFF, INCR, DECR = range(3)
+    PAUSE = 500
+    INTERVAL = 75
+    def __init__(self, max_value, label=None):
+        gtk.HBox.__init__(self)
+        if label:
+            self.pack_start(label, expand=True)
+        self.__dirn = self.OFF
+        self.__value = 0
+        self.__max_value = max_value
+        self.__current_step = 1
+        self.__max_step = min(max(1, int(math.sqrt(max_value) * 4)), max_value / 16)
+        width = 0
+        while max_value:
+            width += 1
+            max_value /= 16
+        self.format_str = "0x{0:0>" + str(width) + "X}"
+        self.entry = gtk.Entry(width+2)
+        self.entry.set_width_chars(width+2)
+        self.pack_start(self.entry, expand=False)
+        self._update_text()
+        self.entry.connect("key-press-event", self._key_press_cb)
+        ew, eh = self.entry.size_request()
+        bw = eh * 2 / 3
+        bh = eh / 2 -1
+        vbox = gtk.VBox()
+        self.pack_start(vbox, expand=False)
+        self.up_arrow = ArrowButton(gtk.ARROW_UP, gtk.SHADOW_ETCHED_IN, bw, bh)
+        self.up_arrow.connect("button-press-event", self._arrow_pressed_cb, self.INCR)
+        self.up_arrow.connect("button-release-event", self._arrow_released_cb)
+        self.up_arrow.connect("leave-notify-event", self._arrow_released_cb)
+        vbox.pack_start(self.up_arrow, expand=True)
+        self.down_arrow = ArrowButton(gtk.ARROW_DOWN, gtk.SHADOW_ETCHED_IN, bw, bh - 1)
+        self.down_arrow.connect("button-press-event", self._arrow_pressed_cb, self.DECR)
+        self.down_arrow.connect("button-release-event", self._arrow_released_cb)
+        self.down_arrow.connect("leave-notify-event", self._arrow_released_cb)
+        vbox.pack_start(self.down_arrow, expand=True)
+    def get_value(self):
+        return self.__value
+    def set_value(self, value):
+        if value < 0 or value > self.__max_value:
+            raise ValueError("{0:#X}: NOT in range 0X0 to {1:#X}".format(value, self.__max_value))
+        self.__value = value
+        self._update_text()
+    def _arrow_pressed_cb(self, arrow, event, dirn):
+        self.__dirn = dirn
+        if self.__dirn is self.INCR:
+            if self._incr_value():
+                gobject.timeout_add(self.PAUSE, self._iterate_steps)
+        elif self.__dirn is self.DECR:
+            if self._decr_value():
+                gobject.timeout_add(self.PAUSE, self._iterate_steps)
+    def _arrow_released_cb(self, arrow, event):
+        self.__dirn = self.OFF
+    def _incr_value(self, step=1):
+        if self.__value >= self.__max_value:
+            return False
+        self.__value = min(self.__value + step, self.__max_value)
+        self._update_text()
+        self.emit("value-changed", False)
+        return True
+    def _decr_value(self, step=1):
+        if self.__value <= 0:
+            return False
+        self.__value = max(self.__value - step, 0)
+        self._update_text()
+        self.emit("value-changed", False)
+        return True
+    def _update_text(self):
+        self.entry.set_text(self.format_str.format(self.__value))
+    def _iterate_steps(self):
+        keep_going = False
+        if self.__dirn is self.INCR:
+            keep_going = self._incr_value(self.__current_step)
+        elif self.__dirn is self.DECR:
+            keep_going = self._decr_value(self.__current_step)
+        if keep_going:
+            self.__current_step = min(self.__current_step * 2, self.__max_step)
+        else:
+            self.__current_step = 1
+        return keep_going
+    def _key_press_cb(self, entry, event):
+        if event.keyval in [Key.RETURN, Key.TAB]:
+            try:
+                self.set_value(int(entry.get_text(), 16))
+                self.emit("value-changed", event.keyval == Key.TAB)
+            except ValueError as edata:
+                report_error(str(edata))
+                self._update_text()
+            return True # NOTE: this will nobble the "activate" signal
+gobject.signal_new("value-changed", HexSpinButton, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_BOOLEAN,))
