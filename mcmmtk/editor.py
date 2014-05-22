@@ -587,6 +587,7 @@ class ColourSampleMatcher(gtk.VBox):
             self._delta /= 2
     def set_colour(self, colour):
         self.colour = paint.Colour(colour) if colour is not None else self.DEFAULT_COLOUR
+        self.rgb_entry.set_colour(self.colour)
         self.sample_display.set_bg_colour(self.colour.rgb)
         self.hue_cw_button.set_colour(self.colour)
         self.hue_acw_button.set_colour(self.colour)
@@ -595,7 +596,6 @@ class ColourSampleMatcher(gtk.VBox):
         self.incr_grayness_button.set_colour(self.colour)
         self.decr_grayness_button.set_colour(self.colour)
         self.hcv_display.set_colour(self.colour)
-        self.rgb_entry.set_colour(self.colour)
     def _auto_match_sample(self, samples, raw):
         total = [0, 0, 0]
         npixels = 0

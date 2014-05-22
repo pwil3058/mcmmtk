@@ -549,7 +549,7 @@ class ArrowButton(gtk.Button):
 class HexSpinButton(gtk.HBox):
     OFF, INCR, DECR = range(3)
     PAUSE = 500
-    INTERVAL = 25
+    INTERVAL = 5
     def __init__(self, max_value, label=None):
         gtk.HBox.__init__(self)
         if label:
@@ -558,7 +558,7 @@ class HexSpinButton(gtk.HBox):
         self.__value = 0
         self.__max_value = max_value
         self.__current_step = 1
-        self.__max_step = min(max(1, int(math.sqrt(max_value) * 4)), max_value / 16)
+        self.__max_step = max(1, max_value / 32)
         width = 0
         while max_value:
             width += 1
@@ -575,12 +575,12 @@ class HexSpinButton(gtk.HBox):
         bh = eh / 2 -1
         vbox = gtk.VBox()
         self.pack_start(vbox, expand=False)
-        self.up_arrow = ArrowButton(gtk.ARROW_UP, gtk.SHADOW_ETCHED_IN, bw, bh)
+        self.up_arrow = ArrowButton(gtk.ARROW_UP, gtk.SHADOW_NONE, bw, bh)
         self.up_arrow.connect("button-press-event", self._arrow_pressed_cb, self.INCR)
         self.up_arrow.connect("button-release-event", self._arrow_released_cb)
         self.up_arrow.connect("leave-notify-event", self._arrow_released_cb)
         vbox.pack_start(self.up_arrow, expand=True)
-        self.down_arrow = ArrowButton(gtk.ARROW_DOWN, gtk.SHADOW_ETCHED_IN, bw, bh - 1)
+        self.down_arrow = ArrowButton(gtk.ARROW_DOWN, gtk.SHADOW_NONE, bw, bh)
         self.down_arrow.connect("button-press-event", self._arrow_pressed_cb, self.DECR)
         self.down_arrow.connect("button-release-event", self._arrow_released_cb)
         self.down_arrow.connect("leave-notify-event", self._arrow_released_cb)
@@ -618,8 +618,11 @@ class HexSpinButton(gtk.HBox):
         return True
     def _update_text(self):
         self.entry.set_text(self.format_str.format(self.__value))
-    def _bump_current_step(self):
-        self.__current_step = min(self.__current_step * 2, self.__max_step)
+    def _bump_current_step(self, exponential=True):
+        if exponential:
+            self.__current_step = min(self.__current_step * 2, self.__max_step)
+        else:
+            self.__current_step = min(self.__current_step + 1, self.__max_step)
     def _reset_current_step(self):
         self.__current_step = 1
     def _iterate_steps(self):
@@ -644,11 +647,11 @@ class HexSpinButton(gtk.HBox):
             return True # NOTE: this will nobble the "activate" signal
         elif event.keyval == Key.UP_ARROW:
             if self._incr_value(self.__current_step):
-                self._bump_current_step()
+                self._bump_current_step(False)
             return True
         elif event.keyval == Key.DOWN_ARROW:
             if self._decr_value(self.__current_step):
-                self._bump_current_step()
+                self._bump_current_step(False)
             return True
     def _key_release_cb(self, entry, event):
         if event.keyval in [Key.UP_ARROW, Key.DOWN_ARROW]:
