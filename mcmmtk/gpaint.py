@@ -1003,7 +1003,7 @@ class ColourListView(tlview.View, actions.CAGandUIManager):
         msg = _("The following colours are about to be deleted:\n")
         for colour in colours:
             msg += "\t{0}\n".format(colour.name)
-        msg += _("and will not be recoverable.")
+        msg += _("and will not be recoverable. OK?")
         if gtkpwx.ask_user_to_confirm(msg):
             self.model.remove_colours(colours)
     def get_selected_colours(self):

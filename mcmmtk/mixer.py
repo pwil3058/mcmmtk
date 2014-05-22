@@ -311,7 +311,7 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         msg = _("The following mixed colours are about to be deleted:\n")
         for colour in colours:
             msg += "\t{0}: {1}\n".format(colour.name, colour.notes)
-        msg += _("and will not be recoverable.")
+        msg += _("and will not be recoverable. OK?")
         if gtkpwx.ask_user_to_confirm(msg):
             for colour in colours:
                 self.del_mixed(colour)

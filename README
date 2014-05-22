@@ -64,8 +64,8 @@ distribution and in the directory "$ROOT/share/ModellersColourMatcherMixer/data"
 in installed distributions. On Linux $ROOT should be "/usr" and to
 facilitate finding the file on Windows the file selector should open in
 that directory when the "Paint Series/Open" menu option in the Mixer is
-invoked.  Although of no real use in practice this seto of paints is
-useful for assessing the Mixer's potential.
+invoked.  Although of no real use in practice this set of paints is
+useful for assessing the Mixer's potential and learning how to mix paints.
 
 INTERNATIONALIZATION:
 
@@ -73,7 +73,9 @@ The code is extensively hooked for i18n but (at the moment) there is no
 localization available for languages other than English.
 
 CHANGES:
-    V-0.02: adds target colour cross to colour series selector wheels
+    V-0.02: adds target colour crosshairs to colour series selector wheels
+    v-0.03: adds mechanisms for entering target/paint colour as RGB values
+            adds mechanisms to make accidentally deleting paints harder
 
 BUGS:
 
