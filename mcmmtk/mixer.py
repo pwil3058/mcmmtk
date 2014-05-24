@@ -251,6 +251,7 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
             selector.wheels.unset_crosshair()
         self.action_groups.update_condns(actions.MaskedCondns(self.AC_DONT_HAVE_TARGET, self.AC_TARGET_MASK))
         self.next_name_label.set_text(_("#???:"))
+        self.current_colour_description.set_text("")
     def _new_mixed_colour_cb(self,_action):
         dlg = NewMixedColourDialogue(self.mixed_count + 1, self.get_parent())
         if dlg.run() == gtk.RESPONSE_ACCEPT:
