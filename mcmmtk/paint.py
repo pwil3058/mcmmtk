@@ -329,7 +329,7 @@ class Series(object):
         # No i18n for these strings
         string = 'Manufacturer: {0}\n'.format(self.series_id.maker)
         string += 'Series: {0}\n'.format(self.series_id.name)
-        for colour in self.paint_colours.values():
+        for colour in sorted(self.paint_colours.values(), key=lambda x: x.name):
             string += '{0}\n'.format(repr(colour))
         return string
     @staticmethod
