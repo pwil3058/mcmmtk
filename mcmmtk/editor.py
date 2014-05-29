@@ -37,6 +37,35 @@ from mcmmtk import data
 from mcmmtk import icons
 from mcmmtk import iview
 
+class UnacceptedChangesDialogue(gtk.Dialog):
+    # TODO: make a better UnacceptedChangesDialogue()
+    ACCEPT_CHANGES_AND_CONTINUE, CONTINUE_DISCARDING_CHANGES = range(1, 3)
+    def __init__(self, parent, message):
+        buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
+        buttons += (_('Accept and Continue'), UnacceptedChangesDialogue.ACCEPT_CHANGES_AND_CONTINUE)
+        buttons += (_('Continue (Discarding Changes)'), UnacceptedChangesDialogue.CONTINUE_DISCARDING_CHANGES)
+        gtk.Dialog.__init__(self,
+            parent=parent,
+            flags=gtk.DIALOG_MODAL,
+            buttons=buttons,
+        )
+        self.vbox.pack_start(gtk.Label(message))
+        self.show_all()
+
+class UnaddedNewColourDialogue(gtk.Dialog):
+    # TODO: make a better UnaddedNewColourDialogue()
+    DISCARD_AND_CONTINUE = 1
+    def __init__(self, parent, message):
+        buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
+        buttons += (_('Discard and Continue'), UnaddedNewColourDialogue.DISCARD_AND_CONTINUE)
+        gtk.Dialog.__init__(self,
+            parent=parent,
+            flags=gtk.DIALOG_MODAL,
+            buttons=buttons,
+        )
+        self.vbox.pack_start(gtk.Label(message))
+        self.show_all()
+
 class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
     UI_DESCR = '''
     <ui>
@@ -63,6 +92,7 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
         self.set_file_path(None)
         self.set_current_colour(None)
         self.saved_hash = None
+        self.__closed = False
 
         # First assemble the parts
         self.paint_editor = PaintEditor()
@@ -231,6 +261,39 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
         if condns:
             recollect.set('paint_series_editor', 'last_file', file_path)
         self.emit("file_changed", self.file_path)
+    def colour_edit_state_ok(self):
+        if self.current_colour is None:
+            if self.paint_editor.colour_name.get_text_length() > 0:
+                parent = self.get_toplevel()
+                msg = _("New colour \"{0}\" has not been added to the series.").format(self.paint_editor.colour_name.get_text())
+                dlg = UnaddedNewColourDialogue(parent=parent if isinstance(parent, gtk.Window) else None,message=msg)
+                response = dlg.run()
+                dlg.destroy()
+                return response == UnaddedNewColourDialogue.DISCARD_AND_CONTINUE
+        else:
+            edit_colour = self.paint_editor.get_colour()
+            changed = False
+            if edit_colour.name != self.current_colour.name:
+                changed = True
+            elif edit_colour.rgb != self.current_colour.rgb:
+                changed = True
+            elif edit_colour.finish != self.current_colour.finish:
+                changed = True
+            elif edit_colour.transparency != self.current_colour.transparency:
+                changed = True
+            if changed:
+                print "changed"
+                parent = self.get_toplevel()
+                msg = _("Colour \"{0}\" has changes that have not been accepted.").format(edit_colour.name)
+                dlg = UnacceptedChangesDialogue(parent=parent if isinstance(parent, gtk.Window) else None,message=msg)
+                response = dlg.run()
+                dlg.destroy()
+                if response == UnacceptedChangesDialogue.ACCEPT_CHANGES_AND_CONTINUE:
+                    self._accept_colour_changes_cb()
+                    return True
+                else:
+                    return response == UnacceptedChangesDialogue.CONTINUE_DISCARDING_CHANGES
+        return True
     def _edit_selected_colour_cb(self, _action):
         """
         Load the selected paint colour into the editor
@@ -247,7 +310,7 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
         response = dlg.run()
         dlg.destroy()
         return response == gtk.RESPONSE_OK
-    def _accept_colour_changes_cb(self, _widget):
+    def _accept_colour_changes_cb(self, _widget=None):
         edited_colour = self.paint_editor.get_colour()
         if edited_colour.name != self.current_colour.name:
             # there's a name change so check for duplicate names
@@ -263,8 +326,9 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
         self.current_colour.set_transparency(edited_colour.transparency)
         self.paint_colours.queue_draw()
     def _reset_colour_editor_cb(self, _widget):
-        self.paint_editor.reset()
-        self.set_current_colour(None)
+        if self.colour_edit_state_ok():
+            self.paint_editor.reset()
+            self.set_current_colour(None)
     def _new_paint_series_cb(self, _action):
         """
         Throw away the current data and prepare to create a new series
@@ -409,12 +473,13 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
         """
         if not self.unsaved_changes_ok():
             return
+        self.__closed = True
         self.get_toplevel().destroy()
     def _exit_colour_editor_cb(self, _action):
         """
         Exit the Paint Series Editor
         """
-        if not self.unsaved_changes_ok():
+        if not self.__closed and not self.unsaved_changes_ok():
             return
         gtk.main_quit()
 gobject.signal_new('file_changed', PaintSeriesEditor, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))
