@@ -195,6 +195,8 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
         """
         Check that the last saved definition is up to date
         """
+        if not self.colour_edit_state_ok():
+            return False
         manl = self.manufacturer_name.get_text_length()
         serl = self.series_name.get_text_length()
         coll = len(self.paint_colours)
@@ -206,7 +208,7 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
         parent = self.get_toplevel()
         dlg = gtkpwx.UnsavedChangesDialogue(
             parent=parent if isinstance(parent, gtk.Window) else None,
-            message='There are unsaved changes.'
+            message=_("The series definition has unsaved changes.")
         )
         response = dlg.run()
         dlg.destroy()
