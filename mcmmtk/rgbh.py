@@ -37,6 +37,9 @@ class BPC8:
     THREE = ONE * 3
     SIX = ONE * 6
     TYPECODE = 'B'
+    @classmethod
+    def ROUND(cls, x):
+        return int(x + 0.5)
 
 # 16 bits per channel specific constants
 class BPC16:
@@ -47,6 +50,9 @@ class BPC16:
     THREE = ONE * 3
     SIX = ONE * 6
     TYPECODE = 'H'
+    @classmethod
+    def ROUND(cls, x):
+        return int(x + 0.5)
 
 class RGBNG:
     @staticmethod
@@ -145,7 +151,7 @@ class RGBNG:
             k1 = b / c
             k2 = a / c
             return (k1, k2)
-        f = lambda c1, c2: int((rgb[c1] * k1 + rgb[c2] * k2) + 0.5)
+        f = lambda c1, c2: cls.ROUND(rgb[c1] * k1 + rgb[c2] * k2)
         if delta_hue_angle > 0:
             if delta_hue_angle > utils.PI_120:
                 k1, k2 = calc_ks(delta_hue_angle - utils.PI_120)
@@ -177,7 +183,7 @@ class HueNG(collections.namedtuple('Hue', ['io', 'other', 'angle'])):
         assert abs(angle) <= math.pi
         def calc_other(oa):
             scale = math.sin(oa) / math.sin(utils.PI_120 - oa)
-            return int(cls.ONE * scale + 0.5)
+            return cls.ROUND(cls.ONE * scale)
         aha = abs(angle)
         if aha <= utils.PI_60:
             other = calc_other(aha)
@@ -219,7 +225,7 @@ class HueNG(collections.namedtuple('Hue', ['io', 'other', 'angle'])):
     def rgb(self):
         if math.isnan(self.angle):
             return array.array(self.TYPECODE, (self.ONE, self.ONE, self.ONE))
-        result = array.array(self.TYPECODE, [0, 0, 0])
+        result = array.array(self.TYPECODE, [self.ZERO, self.ZERO, self.ZERO])
         result[self.io[0]] = self.ONE
         result[self.io[1]] = self.other
         return result
@@ -234,11 +240,11 @@ class HueNG(collections.namedtuple('Hue', ['io', 'other', 'angle'])):
         as our rgb
         '''
         if math.isnan(self.angle):
-            val = int((req_total + 0.5) / 3)
+            val = self.ROUND(req_total / 3.0)
             return array.array(self.TYPECODE, (val, val, val))
         cur_total = self.ONE + self.other
         shortfall = req_total - cur_total
-        result = array.array(self.TYPECODE, [0, 0, 0])
+        result = array.array(self.TYPECODE, [self.ZERO, self.ZERO, self.ZERO])
         if shortfall == 0:
             result[self.io[0]] = self.ONE
             result[self.io[1]] = self.other
@@ -259,7 +265,7 @@ class HueNG(collections.namedtuple('Hue', ['io', 'other', 'angle'])):
         Return: a tuple with proportion components of the same type
         as our rgb
         '''
-        return self.rgb_with_total(int(value * max(self.rgb) * 3 + 0.5))
+        return self.rgb_with_total(self.ROUND(value * max(self.rgb) * 3))
     def get_chroma_correction(self):
         if math.isnan(self.angle):
             return 1.0
