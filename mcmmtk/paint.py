@@ -28,7 +28,7 @@ if __name__ == '__main__':
     import doctest
     _ = lambda x: x
 
-class RGB(collections.namedtuple('RGB', ['red', 'green', 'blue']), rgbh.RGB16):
+class RGB(rgbh.RGB16):
     __slots__ = ()
     def __add__(self, other):
         '''

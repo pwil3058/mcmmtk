@@ -28,6 +28,9 @@ if __name__ == '__main__':
     import doctest
     _ = lambda x: x
 
+def RGB_TUPLE(name):
+    return collections.namedtuple(name, ["red", "green", "blue"])
+
 # 8 bits per channel specific constants
 class BPC8:
     ZERO = 0
@@ -54,7 +57,22 @@ class BPC16:
     def ROUND(cls, x):
         return int(x + 0.5)
 
+# Proportion (i.e. real numbers in the range 0 to 1.0) channel constants
+class PROPN_CHANNELS:
+    ZERO = 0.0
+    BITS_PER_CHANNEL = None
+    ONE = 1.0
+    TWO = ONE * 2
+    THREE = ONE * 3
+    SIX = ONE * 6
+    TYPECODE = 'f'
+    @classmethod
+    def ROUND(cls, x):
+        return float(x)
+
 class RGBNG:
+    def get_value(self):
+        return fractions.Fraction(sum(self), self.THREE)
     @staticmethod
     def indices_value_order(rgb):
         '''
@@ -170,10 +188,22 @@ class RGBNG:
             return rgb
 
 class RGB8(RGBNG, BPC8):
-    pass
+    def __str__(self):
+        return 'RGB8(0x{0:X}, 0x{1:X}, 0x{2:X})'.format(*self)
+    def get_value(self):
+        return fractions.Fraction(sum(self), self.THREE)
 
-class RGB16(RGBNG, BPC16):
-    pass
+class RGB16(RGB_TUPLE("RGB16"), RGBNG, BPC16):
+    def __str__(self):
+        return 'RGB16(0x{0:X}, 0x{1:X}, 0x{2:X})'.format(*self)
+    def get_value(self):
+        return fractions.Fraction(sum(self), self.THREE)
+
+class RGBPN(RGB_TUPLE("RGBPN"), RGBNG, PROPN_CHANNELS):
+    def __str__(self):
+        return 'RGBPN({0:f}, {1:f}, {2:f})'.format(*self)
+    def get_value(self):
+        return sum(self) / self.THREE
 
 class HueNG(collections.namedtuple('Hue', ['io', 'other', 'angle'])):
     @classmethod
@@ -281,6 +311,9 @@ class Hue8(HueNG, BPC8):
     pass
 
 class Hue16(HueNG, BPC16):
+    pass
+
+class HuePN(HueNG, PROPN_CHANNELS):
     pass
 
 SIN_60 = math.sin(utils.PI_60)
