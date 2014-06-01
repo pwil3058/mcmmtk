@@ -73,6 +73,14 @@ class PROPN_CHANNELS:
 class RGBNG:
     def get_value(self):
         return fractions.Fraction(sum(self), self.THREE)
+    def has_underflows(self):
+        return min(self) < self.ZERO
+    def has_overflows(self):
+        return max(self) > self.ONE
+    def with_underflows_fixed(self):
+        return self.__class__(*[max(c, self.ZERO) for c in self])
+    def with_overflows_fixed(self):
+        return self.__class__(*[min(c, self.ONE) for c in self])
     @staticmethod
     def indices_value_order(rgb):
         '''
@@ -306,6 +314,12 @@ class HueNG(collections.namedtuple('Hue', ['io', 'other', 'angle'])):
         return a / math.sqrt(a * a + b * b - a * b)
     def is_grey(self):
         return math.isnan(self.angle)
+    def rotated_by(self, delta_angle):
+        return self.__class__.from_angle(self.angle + delta_angle)
+    def get_xy_for_chroma(self, chroma):
+        assert chroma > 0 and chroma <= 1.0
+        hypot = chroma * self.ONE / self.get_chroma_correction()
+        return XY(hypot * math.cos(self.angle), hypot * math.sin(self.angle))
 
 class Hue8(HueNG, BPC8):
     pass
@@ -319,6 +333,10 @@ class HuePN(HueNG, PROPN_CHANNELS):
 SIN_60 = math.sin(utils.PI_60)
 SIN_120 = math.sin(utils.PI_120)
 COS_120 = -0.5 # math.cos(utils.PI_120) is slightly out
+
+class FRGB(RGB_TUPLE("FRGB")):
+    def converted_to(self, rgbt):
+        return rgbt(*[rgbt.ROUND(c) for c in self])
 
 class XY(collections.namedtuple('XY', ['x', 'y'])):
     X_VECTOR = (1.0, COS_120, COS_120)
@@ -355,6 +373,127 @@ class XY(collections.namedtuple('XY', ['x', 'y'])):
         87.0
         """
         return math.hypot(self.x, self.y)
+    def get_frgb(self):
+        # get the RGB values for this XY point as floating point numbers
+        # the scale of these will be the same as those of self
+        a = self.x / COS_120
+        b = self.y / SIN_120
+        if self.y > 0.0:
+            if a > b:
+                return FRGB(red=0.0, green=((a + b) / 2), blue=((a - b) / 2))
+            else:
+                return FRGB(red=(self.x - b * COS_120), green=b, blue=0.0)
+        elif self.y < 0.0:
+            if a > -b:
+                return FRGB(red=0.0, green=((a + b) / 2), blue=((a - b) / 2))
+            else:
+                return FRGB(red=(self.x + b * COS_120), green=0.0, blue=-b)
+        elif self.x < 0.0:
+            ha = a / 2
+            return FRGB(red=0.0, green=ha, blue=ha)
+        else:
+            return FRGB(red=self.x, green=0.0, blue=0.0)
+
+class RGBManipulator(object):
+    def __init__(self, rgb=None, ONE=None):
+        self.set_rgb(rgb if rgb is not None else (0.0, 0.0, 0.0), ONE)
+    def set_rgb(self, rgb, ONE=None):
+        if isinstance(rgb, RGBNG):
+            rgb = [float(c) / rgb.ONE for c in rgb]
+        elif ONE is not None:
+            rgb = [float(c) / ONE for c in rgb]
+        self.__set_rgb(RGBPN(*rgb))
+    def __set_rgb(self, rgb):
+        self.__rgb = rgb
+        self.value = self.__rgb.get_value()
+        self.xy = XY.from_rgb(self.__rgb)
+        self.hue = HuePN.from_angle(self.xy.get_angle())
+        self.chroma = min(self.xy.get_hypot() * self.hue.get_chroma_correction(), 1.0)
+    def get_rgb(self, rgbt=None):
+        if rgbt is None:
+            return self.__rgb
+        else:
+            return rgbt(*[rgbt.ROUND(c * rgbt.ONE) for c in self.__rgb])
+    def decr_value(self, deltav):
+        base_rgb = self.xy.get_frgb()
+        min_value = sum(base_rgb) / 3.0
+        if self.value <= min_value:
+            # would change hue, chroma or both
+            return False
+        new_value = max(min_value, self.value - deltav)
+        if new_value == min_value:
+            self.__set_rgb(base_rgb.converted(RGBPN))
+        else:
+            delta = new_value - min_value
+            self.__set_rgb(RGBPN(*[c + delta for c in base_rgb]))
+        return True
+    def incr_value(self, deltav):
+        base_rgb = self.xy.get_frgb()
+        max_delta = 1.0 - max(base_rgb)
+        if max_delta <= 0.0:
+            # would change hue, chroma or both
+            return False
+        min_value = sum(base_rgb) / 3.0
+        new_value = min(min_value + max_delta, self.value + deltav)
+        if new_value <= self.value:
+            # No change
+            return False
+        delta = new_value - min_value
+        self.__set_rgb(RGBPN(*[c + delta for c in base_rgb]))
+        return True
+    def decr_chroma(self, deltac):
+        if self.chroma <= 0.0:
+            return False
+        new_chroma = self.chroma - deltac
+        if new_chroma <= 0.0:
+            self.__set_rgb(RGBPN(self.value, self.value, self.value))
+            return True
+        ratio = new_chroma / self.chroma
+        new_base_rgb = XY(*[c * ratio for c in self.xy]).get_frgb().converted_to(RGBPN)
+        delta = self.value - new_base_rgb.get_value()
+        if delta > 0.0:
+            self.__set_rgb(RGBPN(*[c + delta for c in new_base_rgb]))
+        else:
+            self.__set_rgb(new_base_rgb)
+        return True
+    def incr_chroma(self, deltac):
+        if self.chroma <= 0.0:
+            if self.value <= 0.0 or self.value >= 1.0:
+                return False
+            else:
+                # any old hue will do
+                delta = min(deltac, 1.0 - self.value)
+                self.__set_rgb(RGBPN(self.value + delta, self.value - delta, self.value))
+                return True
+        if self.rgb.count(0.0) > 0 or max(self.rgb) >= 1.0:
+            # value or hue would change
+            return False
+        max_chroma = min(1.0, sum(self.rgb) / (1.0 + self.hue.other))
+        ratio = min(max_chroma, self.chroma + deltac) / self.chroma
+        if new_chroma <= 0.0:
+            self.__set_rgb(RGBPN(self.value, self.value, self.value))
+            return True
+        ratio = new_chroma / self.chroma
+        new_base_rgb = XY(*[c * ratio for c in self.xy]).get_frgb().converted_to(RGBPN)
+        delta = self.value - new_base_rgb.get_value()
+        if delta > 0.0:
+            self.__set_rgb(RGBPN(*[c + delta for c in new_base_rgb]))
+        else:
+            self.__set_rgb(new_base_rgb)
+        return True
+    def rotate_hue(self, deltah):
+        if self.hue.is_grey():
+            return False # There is no hue to rotate
+        # keep same chroma
+        new_base_rgb = self.hue.rotated_by(deltah).get_xy_for_chroma(self.chroma).get_frgb().converted_to(RGBPN)
+        # keep same value if possible (otherwise as close as possible)
+        max_delta = 1.0 - max(new_base_rgb)
+        delta = min(max_delta, self.value - new_base_rgb.get_value())
+        if delta > 0.0:
+            self.__set_rgb(RGBPN(*[c + delta for c in new_base_rgb]))
+        else:
+            self.__set_rgb(new_base_rgb)
+        return True
 
 if __name__ == '__main__':
     doctest.testmod()
