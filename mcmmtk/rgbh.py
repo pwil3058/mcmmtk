@@ -213,11 +213,11 @@ class RGBPN(RGB_TUPLE("RGBPN"), RGBNG, PROPN_CHANNELS):
     def get_value(self):
         return sum(self) / self.THREE
 
-class HueNG(collections.namedtuple('Hue', ['io', 'other', 'angle'])):
+class HueNG(collections.namedtuple('Hue', ['io', 'other', 'angle', 'chroma_correction'])):
     @classmethod
     def from_angle(cls, angle):
         if math.isnan(angle):
-            return cls(io=None, other=cls.ONE, angle=angle)
+            return cls(io=None, other=cls.ONE, angle=angle, chroma_correction=1.0)
         assert abs(angle) <= math.pi
         def calc_other(oa):
             scale = math.sin(oa) / math.sin(utils.PI_120 - oa)
@@ -232,7 +232,11 @@ class HueNG(collections.namedtuple('Hue', ['io', 'other', 'angle'])):
         else:
             other = calc_other(aha - utils.PI_120)
             io = (1, 2, 0) if angle >= 0 else (2, 1, 0)
-        return cls(io=io, other=other, angle=utils.Angle(angle))
+        a = cls.ONE
+        b = other
+        # avoid floating point inaccuracies near 1
+        cc = 1.0 if a == b or b == 0 else a / math.sqrt(a * a + b * b - a * b)
+        return cls(io=io, other=other, angle=utils.Angle(angle), chroma_correction=cc)
     @classmethod
     def from_rgb(cls, rgb):
         return cls.from_angle(XY.from_rgb(rgb).get_angle())
@@ -304,21 +308,13 @@ class HueNG(collections.namedtuple('Hue', ['io', 'other', 'angle'])):
         as our rgb
         '''
         return self.rgb_with_total(self.ROUND(value * max(self.rgb) * 3))
-    def get_chroma_correction(self):
-        if math.isnan(self.angle):
-            return 1.0
-        a = self.ONE
-        b = self.other
-        if a == b or b == 0: # avoid floating point inaccuracies near 1
-            return 1.0
-        return a / math.sqrt(a * a + b * b - a * b)
     def is_grey(self):
         return math.isnan(self.angle)
     def rotated_by(self, delta_angle):
         return self.__class__.from_angle(self.angle + delta_angle)
     def get_xy_for_chroma(self, chroma):
         assert chroma > 0 and chroma <= 1.0
-        hypot = chroma * self.ONE / self.get_chroma_correction()
+        hypot = chroma * self.ONE / self.chroma_correction
         return XY(hypot * math.cos(self.angle), hypot * math.sin(self.angle))
 
 class Hue8(HueNG, BPC8):
@@ -408,7 +404,7 @@ class RGBManipulator(object):
         self.value = self.__rgb.get_value()
         self.xy = XY.from_rgb(self.__rgb)
         self.hue = HuePN.from_angle(self.xy.get_angle())
-        self.chroma = min(self.xy.get_hypot() * self.hue.get_chroma_correction(), 1.0)
+        self.chroma = min(self.xy.get_hypot() * self.hue.chroma_correction, 1.0)
     def get_rgb(self, rgbt=None):
         if rgbt is None:
             return self.__rgb

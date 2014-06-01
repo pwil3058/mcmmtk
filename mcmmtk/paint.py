@@ -104,7 +104,7 @@ class HCV(object):
         self.value = self.rgb.get_value()
         xy = rgbh.XY.from_rgb(self.rgb)
         self.hue = Hue.from_angle(xy.get_angle())
-        self.chroma = xy.get_hypot() * self.hue.get_chroma_correction() / RGB.ONE
+        self.chroma = xy.get_hypot() * self.hue.chroma_correction / RGB.ONE
     def value_rgb(self):
         return RGB_WHITE * self.value
     def hue_rgb_for_value(self, value=None):
