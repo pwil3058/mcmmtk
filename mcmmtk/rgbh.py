@@ -424,11 +424,6 @@ class RGBManipulator(object):
         return self.__base_rgb.get_value()
     def _max_value_for_current_HC(self):
         return self.__base_rgb.get_value() + 1.0 - max(self.__base_rgb)
-    def _max_chroma_for_current_HV(self):
-        if self.hue.is_grey() and not self.__last_hue.is_grey():
-            return self.__last_hue.max_chroma_for_value(self.value)
-        else:
-            return self.hue.max_chroma_for_value(self.value)
     def get_rgb(self, rgbt=None):
         if rgbt is None:
             return self.__rgb
@@ -477,23 +472,23 @@ class RGBManipulator(object):
     def incr_chroma(self, deltac):
         if self.hue.is_grey():
             if self.value <= 0.0 or self.value >= 1.0:
+                # no where to go without altering value
                 return False
-            elif self.__last_hue.is_grey():
+            max_chroma = self.__last_hue.max_chroma_for_value(self.value)
+            new_chroma = min(deltac, max_chroma)
+            if self.__last_hue.is_grey():
                 # any old hue will do
-                delta = min(deltac, 1.0 - self.value)
-                self.__set_rgb(RGBPN(self.value + delta, self.value - delta, self.value))
-                self.__last_hue = self.hue
-                return True
+                new_base_rgb = HuePN.from_angle(0.5).get_xy_for_chroma(new_chroma).get_frgb().converted_to(RGBPN)
             else:
                 new_base_rgb = self.__last_hue.get_xy_for_chroma(deltac).get_frgb().converted_to(RGBPN)
-                delta = self.value - new_base_rgb.get_value()
-                if delta < 0 and abs(delta) < (sum(new_base_rgb) - max(new_base_rgb)):
-                    # hue would be altered
-                    return False
-                self.__set_rgb(RGBPN(*[c + delta for c in new_base_rgb]))
-                self.__last_hue = self.hue
-                return True
-        max_chroma = self._max_chroma_for_current_HV()
+            delta = self.value - new_base_rgb.get_value()
+            if delta < 0 and abs(delta) < (sum(new_base_rgb) - max(new_base_rgb)):
+                # hue would be altered
+                return False
+            self.__set_rgb(RGBPN(*[c + delta for c in new_base_rgb]))
+            self.__last_hue = self.hue
+            return True
+        max_chroma = self.hue.max_chroma_for_value(self.value)
         if self.__rgb.count(0.0) > 0 or max_chroma <= self.chroma:
             # value or hue would change
             return False
