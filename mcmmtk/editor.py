@@ -36,6 +36,7 @@ from mcmmtk import gpaint
 from mcmmtk import data
 from mcmmtk import icons
 from mcmmtk import iview
+from mcmmtk import rgbh
 
 class UnacceptedChangesDialogue(gtk.Dialog):
     # TODO: make a better UnacceptedChangesDialogue()
@@ -284,7 +285,6 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
             elif edit_colour.transparency != self.current_colour.transparency:
                 changed = True
             if changed:
-                print "changed"
                 parent = self.get_toplevel()
                 msg = _("Colour \"{0}\" has changes that have not been accepted.").format(edit_colour.name)
                 dlg = UnacceptedChangesDialogue(parent=parent if isinstance(parent, gtk.Window) else None,message=msg)
@@ -554,6 +554,8 @@ class ColourSampleMatcher(gtk.VBox):
     VALUE_DISPLAY_INCR = fractions.Fraction(1, 10)
     DEFAULT_COLOUR = paint.Colour(paint.RGB_WHITE / 2)
     DELTA_HUE = utils.Angle(math.pi / 100)
+    DELTA_VALUE = 0.005
+    DELTA_CHROMA = 0.005
     DEFAULT_AUTO_MATCH_RAW = True
     class HueClockwiseButton(gtkpwx.ColouredButton):
         def __init__(self):
@@ -653,7 +655,13 @@ class ColourSampleMatcher(gtk.VBox):
         else:
             self._delta /= 2
     def set_colour(self, colour):
-        self.colour = paint.Colour(colour) if colour is not None else self.DEFAULT_COLOUR
+        colour = paint.Colour(colour) if colour is not None else self.DEFAULT_COLOUR
+        self.rgb_manipulator = rgbh.RGBManipulator(colour.rgb)
+        self._set_colour(colour)
+    def _set_colour_fm_manipulator(self):
+        self._set_colour(paint.Colour(self.rgb_manipulator.get_rgb(paint.RGB)))
+    def _set_colour(self, colour):
+        self.colour = colour
         self.rgb_entry.set_colour(self.colour)
         self.sample_display.set_bg_colour(self.colour.rgb)
         self.hue_cw_button.set_colour(self.colour)
@@ -713,103 +721,52 @@ class ColourSampleMatcher(gtk.VBox):
                 rgb[channel] = max(0, rgb[channel] - self._delta * frac.numerator / frac.denominator)
         else:
             rgb[channel] = max(0, rgb[channel] - self._delta * rgb[channel] / denom)
-    def incr_grayness_cb(self, event):
-        if self.colour.hue.is_grey():
+    def incr_grayness_cb(self, button, state):
+        if self.rgb_manipulator.decr_chroma(self.DELTA_CHROMA):
+            self._set_colour_fm_manipulator()
+        else:
+            # let the user know that we're at the limit
             gtk.gdk.beep()
-            return # we're already gray so nothing to do
-        ncomps, io = paint.RGB.ncomps_and_indices_value_order(self.colour.rgb)
-        new_colour = list(self.colour.rgb)
-        if ncomps == 1 or new_colour[io[1]] == new_colour[io[2]]:
-            if (new_colour[io[0]] - new_colour[io[2]]) > 1:
-                self._decr_channel(new_colour, io[0])
-            for i in io[1:]:
-                self._incr_channel(new_colour, i)
-        elif (new_colour[io[0]] - new_colour[io[2]]) > self._delta:
-            self._decr_channel(new_colour, io[0])
-            if new_colour[io[1]] > self.colour.value * paint.RGB.ONE:
-                # we're brighter than that required grey at our value
-                self._decr_channel(new_colour, io[1])
-            self._incr_channel(new_colour, io[2])
+    def decr_grayness_cb(self, button, state):
+        if self.rgb_manipulator.incr_chroma(self.DELTA_CHROMA):
+            self._set_colour_fm_manipulator()
         else:
-            value = sum(new_colour) / 3
-            new_colour = [value for i in range(3)]
-        self.set_colour(new_colour)
-    def decr_grayness_cb(self, event):
-        new_colour = list(self.colour.rgb)
-        if self.colour.hue.is_grey():
-            # we're colourless so a change to any channel will do
-            if new_colour[0] < paint.RGB.ONE:
-                self._incr_channel(new_colour, 0)
-                self._decr_channel(new_colour, 1, frac=fractions.Fraction(1, 2))
-                self._decr_channel(new_colour, 2, frac=fractions.Fraction(1, 2))
+            # let the user know that we're at the limit
+            gtk.gdk.beep()
+    def incr_value_cb(self, button, state):
+        if self.rgb_manipulator.incr_value(self.DELTA_VALUE):
+            self._set_colour_fm_manipulator()
+        else:
+            # let the user know that we're at the limit
+            gtk.gdk.beep()
+    def decr_value_cb(self, button, state):
+        if self.rgb_manipulator.decr_value(self.DELTA_VALUE):
+            self._set_colour_fm_manipulator()
+        else:
+            # let the user know that we're at the limit
+            gtk.gdk.beep()
+    def modify_hue_acw_cb(self, button, state):
+        if not options.get('colour_wheel', 'red_to_yellow_clockwise'):
+            if self.rgb_manipulator.rotate_hue(self.DELTA_HUE):
+                self._set_colour_fm_manipulator()
             else:
-                self._decr_channel(new_colour, 1, frac=fractions.Fraction(1, 2))
-                self._decr_channel(new_colour, 2, frac=fractions.Fraction(1, 2))
-        else:
-            ncomps, io = paint.RGB.ncomps_and_indices_value_order(self.colour.rgb)
-            if ncomps != 3:
-                # if we have less than 3 comps then we have no grayness
                 gtk.gdk.beep()
-                return
-            elif new_colour[io[1]] == new_colour[io[2]]:
-                for i in io[1:]:
-                    self._decr_channel(new_colour, i, frac=fractions.Fraction(1, 2))
-                self._incr_channel(new_colour, io[0])
+        else:
+            if self.rgb_manipulator.rotate_hue(-self.DELTA_HUE):
+                self._set_colour_fm_manipulator()
             else:
-                old_min = new_colour[io[2]]
-                self._decr_channel(new_colour, io[2])
-                delta_min = old_min - new_colour[io[2]]
-                for i in io[:2]:
-                    self._incr_channel(new_colour, i, frac=fractions.Fraction(delta_min, self._delta))
-        self.set_colour(new_colour)
-    def incr_value_cb(self, button):
-        denom = sum(self.colour.rgb)
-        if denom == paint.RGB.THREE:
-            # we're white and can't go any further
-            gtk.gdk.beep()
-            return
-        ncomps, io = paint.RGB.ncomps_and_indices_value_order(self.colour.rgb)
-        # try to maintain the same grayness and hue angle
-        if self.colour.rgb[io[0]] == paint.RGB.ONE:
-            # rgb_with_value() can only be used in this situation as
-            # it could incorrectly modify greyness in other cases
-            new_value = min(1.0, self.colour.value * (1 + fractions.Fraction(self._delta, paint.RGB.TWO)))
-            new_colour = self.colour.hue.rgb_with_value(new_value)
-        elif ncomps == 3:
-            new_colour = [min(comp + self._delta * comp / denom, paint.RGB.ONE) for comp in self.colour.rgb]
-        else:
-            new_colour = list(self.colour.rgb)
-            if ncomps == 1:
-                self._incr_channel(new_colour, io[0])
+                gtk.gdk.beep()
+    def modify_hue_cw_cb(self, button, state):
+        if not options.get('colour_wheel', 'red_to_yellow_clockwise'):
+            if self.rgb_manipulator.rotate_hue(-self.DELTA_HUE):
+                self._set_colour_fm_manipulator()
             else:
-                # denom should help maintain the hue angle
-                for i in io[:2]:
-                    self._incr_channel(new_colour, i, denom=denom)
-        self.set_colour(new_colour)
-    def decr_value_cb(self, button):
-        denom = sum(self.colour.rgb)
-        if denom == 0:
-            # we're black and can't go any further
-            gtk.gdk.beep()
-            return
-        new_colour = [max(comp - self._delta * comp / denom, 0) for comp in self.colour.rgb]
-        self.set_colour(new_colour)
-    def modify_hue_acw_cb(self, button):
-        if self.colour.hue.is_grey():
-            gtk.gdk.beep()
-            return
-        if not options.get('colour_wheel', 'red_to_yellow_clockwise'):
-            self.set_colour(self.colour.hcv.get_rotated_rgb(self.DELTA_HUE))
+                gtk.gdk.beep()
         else:
-            self.set_colour(self.colour.hcv.get_rotated_rgb(-self.DELTA_HUE))
-    def modify_hue_cw_cb(self, button):
-        if self.colour.hue.is_grey():
-            gtk.gdk.beep()
-            return
-        if not options.get('colour_wheel', 'red_to_yellow_clockwise'):
-            self.set_colour(self.colour.hcv.get_rotated_rgb(-self.DELTA_HUE))
-        else:
-            self.set_colour(self.colour.hcv.get_rotated_rgb(self.DELTA_HUE))
+            if self.rgb_manipulator.rotate_hue(self.DELTA_HUE):
+                self._set_colour_fm_manipulator()
+            else:
+                gtk.gdk.beep()
 
 class PaintColourNotebook(gpaint.HueWheelNotebook):
     class ColourListView(gpaint.ColourListView):

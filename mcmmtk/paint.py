@@ -74,8 +74,6 @@ class RGB(rgbh.RGB16):
         return RGB(*(int(self[i] / div + 0.5) for i in range(3)))
     def __str__(self):
         return 'RGB(0x{0:X}, 0x{1:X}, 0x{2:X})'.format(*self)
-    def get_value(self):
-        return fractions.Fraction(sum(self), self.THREE)
     @staticmethod
     def rotated(rgb, delta_hue_angle):
         return RGB(*rgbh.RGB16.rotated(rgb, delta_hue_angle))

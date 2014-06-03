@@ -289,7 +289,7 @@ class ColouredButton(gtk.EventBox):
             return False
         self.frame.set_shadow_type(gtk.SHADOW_OUT)
         self.set_state(gtk.STATE_PRELIGHT)
-        self.emit('clicked')
+        self.emit('clicked', int(event.state))
     def _enter_notify_cb(self, widget, event):
         self.frame.set_shadow_type(gtk.SHADOW_OUT)
         self.frame.set_border_width(self.prelit_width)
@@ -308,7 +308,7 @@ class ColouredButton(gtk.EventBox):
             self.modify_bg(state, bg_gcolour)
             self.modify_fg(state, fg_gcolour)
             self.modify_text(state, fg_gcolour)
-gobject.signal_new('clicked', ColouredButton, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ())
+gobject.signal_new('clicked', ColouredButton, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_INT,))
 
 ### Dialogues
 
