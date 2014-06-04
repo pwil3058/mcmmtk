@@ -74,14 +74,19 @@ class RGBNG:
     def get_value(self):
         total = sum(self)
         return total / self.ONE if self.BITS_PER_CHANNEL is None else fractions.Fraction(sum(self), self.THREE)
-    def has_underflows(self):
-        return min(self) < self.ZERO
-    def has_overflows(self):
-        return max(self) > self.ONE
-    def with_underflows_fixed(self):
-        return self.__class__(*[max(c, self.ZERO) for c in self])
-    def with_overflows_fixed(self):
-        return self.__class__(*[min(c, self.ONE) for c in self])
+    def converted_to(self, rgbt):
+        return rgbt(*[rgbt.ROUND((chnl * rgbt.ONE) / self.ONE) for chnl in self])
+    @property
+    def _class_name(self):
+        return repr(self.__class__)[8:-2]
+    @property
+    def _format_str(self):
+        s = self._class_name.split('.')[-1] + "("
+        if self.BITS_PER_CHANNEL is None:
+            s += "red={0.red:f}, green={0.green:f}, blue={0.blue:f})"
+        else:
+            s += "red=0x{{0.red:0{0}X}}, green=0x{{0.green:0{0}X}}, blue=0x{{0.blue:0{0}X}})".format(self.BITS_PER_CHANNEL / 4)
+        return s
     @staticmethod
     def indices_value_order(rgb):
         '''
@@ -196,21 +201,27 @@ class RGBNG:
         else:
             return rgb
 
-class RGB8(RGBNG, BPC8):
+class RGB8(RGB_TUPLE("RGB8"), RGBNG, BPC8):
     def __str__(self):
-        return 'RGB8(0x{0:X}, 0x{1:X}, 0x{2:X})'.format(*self)
+        return self._format_str.format(self)
+    def __repr__(self):
+        return str(self)
     def get_value(self):
         return fractions.Fraction(sum(self), self.THREE)
 
 class RGB16(RGB_TUPLE("RGB16"), RGBNG, BPC16):
     def __str__(self):
-        return 'RGB16(0x{0:X}, 0x{1:X}, 0x{2:X})'.format(*self)
+        return self._format_str.format(self)
+    def __repr__(self):
+        return str(self)
     def get_value(self):
         return fractions.Fraction(sum(self), self.THREE)
 
 class RGBPN(RGB_TUPLE("RGBPN"), RGBNG, PROPN_CHANNELS):
     def __str__(self):
-        return 'RGBPN({0:f}, {1:f}, {2:f})'.format(*self)
+        return self._format_str.format(self)
+    def __repr__(self):
+        return str(self)
     def get_value(self):
         return sum(self) / self.THREE
 
