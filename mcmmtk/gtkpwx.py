@@ -263,7 +263,7 @@ class ColouredButton(gtk.EventBox):
         gtk.STATE_INSENSITIVE: fractions.Fraction(1, 4)
     }
     def __init__(self, colour=None, label=None):
-        self.label = gtk.Label(label)
+        self.label = ColouredLabel(label, colour)
         gtk.EventBox.__init__(self)
         self.set_size_request(25, 25)
         self.add_events(gtk.gdk.BUTTON_PRESS_MASK|gtk.gdk.BUTTON_RELEASE_MASK|gtk.gdk.LEAVE_NOTIFY_MASK|gtk.gdk.FOCUS_CHANGE_MASK)
@@ -308,6 +308,7 @@ class ColouredButton(gtk.EventBox):
             self.modify_bg(state, bg_gcolour)
             self.modify_fg(state, fg_gcolour)
             self.modify_text(state, fg_gcolour)
+        self.label.set_colour(colour)
 gobject.signal_new('clicked', ColouredButton, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_INT,))
 
 ### Dialogues
