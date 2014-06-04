@@ -647,13 +647,6 @@ class ColourSampleMatcher(gtk.VBox):
         self.set_colour(None)
         #
         self.show_all()
-    def incr_delta_cb(self, widget=None):
-        self._delta *= 2
-    def decr_delta_cb(self, widget=None):
-        if self._delta == 1:
-            gtk.gdk.beep()
-        else:
-            self._delta /= 2
     def set_colour(self, colour):
         colour = paint.Colour(colour) if colour is not None else self.DEFAULT_COLOUR
         self.rgb_manipulator = rgbh.RGBManipulator(colour.rgb)
@@ -702,25 +695,6 @@ class ColourSampleMatcher(gtk.VBox):
             self.auto_match_sample(raw=self.DEFAULT_AUTO_MATCH_RAW)
     def _rgb_entry_changed_cb(self, entry):
         self.set_colour(entry.get_colour())
-    # TODO: implement matcher's colour fiddler functions in paint module
-    def _incr_channel(self, rgb, channel, denom=None, frac=None):
-        assert frac is None or denom is None
-        if denom is None or denom is 0:
-            if frac is None:
-                rgb[channel] = min(paint.RGB.ONE, rgb[channel] + self._delta)
-            else:
-                rgb[channel] = min(paint.RGB.ONE, rgb[channel] + self._delta * frac.numerator / frac.denominator)
-        else:
-            rgb[channel] = min(paint.RGB.ONE, rgb[channel] + self._delta * rgb[channel] / denom)
-    def _decr_channel(self, rgb, channel, denom=None, frac=None):
-        assert frac is None or denom is None
-        if denom is None:
-            if frac is None:
-                rgb[channel] = max(0, rgb[channel] - self._delta)
-            else:
-                rgb[channel] = max(0, rgb[channel] - self._delta * frac.numerator / frac.denominator)
-        else:
-            rgb[channel] = max(0, rgb[channel] - self._delta * rgb[channel] / denom)
     def incr_grayness_cb(self, button, state):
         if self.rgb_manipulator.decr_chroma(self.DELTA_CHROMA):
             self._set_colour_fm_manipulator()
