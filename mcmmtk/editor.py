@@ -550,12 +550,12 @@ class PaintEditor(gtk.VBox):
 gobject.signal_new('changed', PaintEditor, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))
 
 class ColourSampleMatcher(gtk.VBox):
-    HUE_DISPLAY_SPAN =  math.pi / 8
+    HUE_DISPLAY_SPAN =  math.pi / 10
     VALUE_DISPLAY_INCR = fractions.Fraction(1, 10)
     DEFAULT_COLOUR = paint.Colour(paint.RGB_WHITE / 2)
-    DELTA_HUE = utils.Angle(math.pi / 100)
-    DELTA_VALUE = 0.005
-    DELTA_CHROMA = 0.005
+    DELTA_HUE = [utils.Angle(math.pi / x) for x in [200, 100, 50]]
+    DELTA_VALUE = [0.0025, 0.005, 0.01]
+    DELTA_CHROMA = [0.0025, 0.005, 0.01]
     DEFAULT_AUTO_MATCH_RAW = True
     class HueClockwiseButton(gtkpwx.ColouredButton):
         def __init__(self):
@@ -695,49 +695,56 @@ class ColourSampleMatcher(gtk.VBox):
             self.auto_match_sample(raw=self.DEFAULT_AUTO_MATCH_RAW)
     def _rgb_entry_changed_cb(self, entry):
         self.set_colour(entry.get_colour())
+    def _get_delta_index(self, modifier_button_states):
+        if modifier_button_states & gtk.gdk.CONTROL_MASK:
+            return 0
+        elif modifier_button_states & gtk.gdk.SHIFT_MASK:
+            return 2
+        else:
+            return 1
     def incr_grayness_cb(self, button, state):
-        if self.rgb_manipulator.decr_chroma(self.DELTA_CHROMA):
+        if self.rgb_manipulator.decr_chroma(self.DELTA_CHROMA[self._get_delta_index(state)]):
             self._set_colour_fm_manipulator()
         else:
             # let the user know that we're at the limit
             gtk.gdk.beep()
     def decr_grayness_cb(self, button, state):
-        if self.rgb_manipulator.incr_chroma(self.DELTA_CHROMA):
+        if self.rgb_manipulator.incr_chroma(self.DELTA_CHROMA[self._get_delta_index(state)]):
             self._set_colour_fm_manipulator()
         else:
             # let the user know that we're at the limit
             gtk.gdk.beep()
     def incr_value_cb(self, button, state):
-        if self.rgb_manipulator.incr_value(self.DELTA_VALUE):
+        if self.rgb_manipulator.incr_value(self.DELTA_VALUE[self._get_delta_index(state)]):
             self._set_colour_fm_manipulator()
         else:
             # let the user know that we're at the limit
             gtk.gdk.beep()
     def decr_value_cb(self, button, state):
-        if self.rgb_manipulator.decr_value(self.DELTA_VALUE):
+        if self.rgb_manipulator.decr_value(self.DELTA_VALUE[self._get_delta_index(state)]):
             self._set_colour_fm_manipulator()
         else:
             # let the user know that we're at the limit
             gtk.gdk.beep()
     def modify_hue_acw_cb(self, button, state):
         if not options.get('colour_wheel', 'red_to_yellow_clockwise'):
-            if self.rgb_manipulator.rotate_hue(self.DELTA_HUE):
+            if self.rgb_manipulator.rotate_hue(self.DELTA_HUE[self._get_delta_index(state)]):
                 self._set_colour_fm_manipulator()
             else:
                 gtk.gdk.beep()
         else:
-            if self.rgb_manipulator.rotate_hue(-self.DELTA_HUE):
+            if self.rgb_manipulator.rotate_hue(-self.DELTA_HUE[self._get_delta_index(state)]):
                 self._set_colour_fm_manipulator()
             else:
                 gtk.gdk.beep()
     def modify_hue_cw_cb(self, button, state):
         if not options.get('colour_wheel', 'red_to_yellow_clockwise'):
-            if self.rgb_manipulator.rotate_hue(-self.DELTA_HUE):
+            if self.rgb_manipulator.rotate_hue(-self.DELTA_HUE[self._get_delta_index(state)]):
                 self._set_colour_fm_manipulator()
             else:
                 gtk.gdk.beep()
         else:
-            if self.rgb_manipulator.rotate_hue(self.DELTA_HUE):
+            if self.rgb_manipulator.rotate_hue(self.DELTA_HUE[self._get_delta_index(state)]):
                 self._set_colour_fm_manipulator()
             else:
                 gtk.gdk.beep()
