@@ -87,8 +87,13 @@ def set(section, oname, val):
     RECOLLECTIONS.write(open(_RECOLLECTIONS_PATH, 'w'))
 
 define('sample_viewer', 'last_file', Defn(str, os.path.join(options.get_sys_samples_dir(), 'example.jpg')))
+define('sample_viewer', 'last_size', Defn(str, ""))
 define('paint_series_selector', 'last_file', Defn(str, os.path.join(options.get_sys_data_dir(), 'ideal.psd')))
 define('paint_series_editor', 'last_file', Defn(str, ""))
 define('reference_image_viewer', 'last_file', Defn(str, ''))
+define("mixer", "last_geometry", Defn(str, ""))
+define("mixer", "hpaned_position", Defn(int, -1))
+define("mixer", "vpaned_position", Defn(int, -1))
+define("editor", "last_geometry", Defn(str, ""))
 
 load_recollections()

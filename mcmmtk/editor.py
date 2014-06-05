@@ -815,6 +815,7 @@ class TopLevelWindow(gtk.Window):
     """
     def __init__(self):
         gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
+        self.parse_geometry(recollect.get("editor", "last_geometry"))
         self.set_icon_from_file(icons.APP_ICON_FILE)
         self.editor = PaintSeriesEditor()
         self.editor.action_groups.get_action('close_colour_editor').set_visible(False)
@@ -822,6 +823,7 @@ class TopLevelWindow(gtk.Window):
         self.editor.set_file_path(None)
         self._menubar = self.editor.ui_manager.get_widget('/paint_series_editor_menubar')
         self.connect("destroy", self.editor._exit_colour_editor_cb)
+        self.connect("configure-event", self._configure_event_cb)
         vbox = gtk.VBox()
         vbox.pack_start(self._menubar, expand=False)
         vbox.pack_start(self.editor, expand=True, fill=True)
@@ -829,6 +831,8 @@ class TopLevelWindow(gtk.Window):
         self.show_all()
     def _file_changed_cb(self, widget, file_path):
         self.set_title(_('mcmmtk: Paint Series Editor: {0}').format(file_path))
+    def _configure_event_cb(self, widget, event):
+        recollect.set("editor", "last_geometry", "{0.width}x{0.height}+{0.x}+{0.y}".format(event))
 
 class SampleViewer(gtk.Window, actions.CAGandUIManager):
     """
@@ -848,6 +852,9 @@ class SampleViewer(gtk.Window, actions.CAGandUIManager):
     def __init__(self, parent):
         gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
         actions.CAGandUIManager.__init__(self)
+        self.__last_size = recollect.get("sample_viewer", "last_size")
+        if self.__last_size:
+            self.set_default_size(*eval(self.__last_size))
         self.set_icon_from_file(icons.APP_ICON_FILE)
         self.set_size_request(300, 200)
         last_samples_file = recollect.get('sample_viewer', 'last_file')
@@ -872,7 +879,7 @@ class SampleViewer(gtk.Window, actions.CAGandUIManager):
         vbox.pack_start(self.pixbuf_view, expand=True, fill=True)
         vbox.pack_start(self.buttons, expand=False)
         self.add(vbox)
-        #self.set_transient_for(parent)
+        self.connect("size-allocate", self._size_allocation_cb)
         self.show_all()
         self.pixbuf_view.set_pixbuf(pixbuf)
     def populate_action_groups(self):
@@ -885,6 +892,8 @@ class SampleViewer(gtk.Window, actions.CAGandUIManager):
             _('Close this window.'),
             self._close_colour_sample_viewer_cb),
         ])
+    def _size_allocation_cb(self, widget, allocation):
+        recollect.set("sample_viewer", "last_size", "({0.width}, {0.height})".format(allocation))
     def _open_colour_sample_file_cb(self, _action):
         """
         Ask the user for the name of the file then open it.

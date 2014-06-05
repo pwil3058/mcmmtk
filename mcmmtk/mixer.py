@@ -102,8 +102,8 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         hbox.pack_start(gtk.Label(_('Notes:')), expand=False)
         hbox.pack_start(self.notes, expand=True, fill=True)
         self.pack_start(hbox, expand=False)
-        hpaned = gtk.HPaned()
-        hpaned.pack1(self.wheels, resize=True, shrink=False)
+        self.hpaned = gtk.HPaned()
+        self.hpaned.pack1(self.wheels, resize=True, shrink=False)
         vbox = gtk.VBox()
         vhbox = gtk.HBox()
         vhbox.pack_start(self.next_name_label, expand=False)
@@ -111,9 +111,9 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         vbox.pack_start(vhbox, expand=False)
         vbox.pack_start(self.hcvw_display, expand=False)
         vbox.pack_start(gtkpwx.wrap_in_frame(self.mixpanel, gtk.SHADOW_ETCHED_IN), expand=True, fill=True)
-        hpaned.pack2(vbox, resize=True, shrink=False)
-        vpaned = gtk.VPaned()
-        vpaned.pack1(hpaned, resize=True, shrink=False)
+        self.hpaned.pack2(vbox, resize=True, shrink=False)
+        self.vpaned = gtk.VPaned()
+        self.vpaned.pack1(self.hpaned, resize=True, shrink=False)
         vbox = gtk.VBox()
         hbox = gtk.HBox()
         hbox.pack_start(gtk.Label(_('Paints:')), expand=False)
@@ -121,8 +121,10 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         vbox.pack_start(hbox, expand=False)
         vbox.pack_start(self.buttons, expand=False)
         vbox.pack_start(gtkpwx.wrap_in_scrolled_window(self.mixed_colours_view), expand=True, fill=True)
-        vpaned.pack2(vbox, resize=True, shrink=False)
-        self.pack_start(vpaned, expand=True, fill=True)
+        self.vpaned.pack2(vbox, resize=True, shrink=False)
+        self.pack_start(self.vpaned, expand=True, fill=True)
+        self.vpaned.set_position(recollect.get("mixer", "vpaned_position"))
+        self.hpaned.set_position(recollect.get("mixer", "hpaned_position"))
         self.show_all()
         self.recalculate_colour([])
     def populate_action_groups(self):
@@ -390,6 +392,8 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         Exit the program
         """
         # TODO: add checks for unsaved work in mixer before exiting
+        recollect.set("mixer", "vpaned_position", str(self.vpaned.get_position()))
+        recollect.set("mixer", "hpaned_position", str(self.hpaned.get_position()))
         gtk.main_quit()
 
 def colour_parts_adjustment():
@@ -889,12 +893,16 @@ class TopLevelWindow(gtk.Window):
     """
     def __init__(self):
         gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
+        self.parse_geometry(recollect.get("mixer", "last_geometry"))
         self.set_icon_from_file(icons.APP_ICON_FILE)
         self.set_title('mcmmtk: Mixer')
         self.mixer = Mixer()
         self.connect("destroy", self.mixer._quit_mixer_cb)
+        self.connect("configure-event", self._configure_event_cb)
         self.add(self.mixer)
         self.show_all()
+    def _configure_event_cb(self, widget, event):
+        recollect.set("mixer", "last_geometry", "{0.width}x{0.height}+{0.x}+{0.y}".format(event))
 
 class ReferenceImageViewer(gtk.Window, actions.CAGandUIManager):
     """
