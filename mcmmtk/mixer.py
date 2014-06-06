@@ -644,7 +644,7 @@ def generate_colour_parts_list_spec(model):
     )
     notes_col_spec = tlview.ColumnSpec(
         title =_('Notes'),
-        properties={'resizable' : True},
+        properties={'resizable' : True, 'expand' : True},
         sort_key_function=lambda row: row.colour.notes,
         cells=[
             tlview.CellSpec(
@@ -760,7 +760,7 @@ def generate_matched_colour_list_spec(model):
     )
     notes_col_spec = tlview.ColumnSpec(
         title =_('Notes'),
-        properties={'resizable' : True},
+        properties={'resizable' : True, 'expand' : True},
         sort_key_function=lambda row: row.colour.notes,
         cells=[
             tlview.CellSpec(
@@ -1073,7 +1073,7 @@ def generate_components_list_spec(model):
             ),
         ]
     )
-    name_col_spec = gpaint.colour_attribute_column_spec(gpaint.TNS(_('Name'), 'name', {}, lambda row: row.colour.name))
+    name_col_spec = gpaint.colour_attribute_column_spec(gpaint.TNS(_('Name'), 'name', {'expand' : True}, lambda row: row.colour.name))
     attr_cols_specs = [gpaint.colour_attribute_column_spec(tns) for tns in gpaint.COLOUR_ATTRS[1:]]
     return tlview.ViewSpec(
         properties={},

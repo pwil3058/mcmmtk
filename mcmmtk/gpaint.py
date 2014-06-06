@@ -950,7 +950,7 @@ def colour_attribute_column_spec(tns):
     )
 
 COLOUR_ATTRS = [
-    TNS(_('Colour Name'), 'name', {'resizable' : True}, lambda row: row.colour.name),
+    TNS(_('Colour Name'), 'name', {'resizable' : True, 'expand' : True}, lambda row: row.colour.name),
     TNS(_('Value'), 'value', {}, lambda row: row.colour.value),
     TNS(_('Hue'), 'hue', {}, lambda row: row.colour.hue),
     TNS(_('T.'), 'transparency', {}, lambda row: row.colour.transparency),
