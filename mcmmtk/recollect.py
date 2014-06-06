@@ -88,12 +88,21 @@ def set(section, oname, val):
 
 define('sample_viewer', 'last_file', Defn(str, os.path.join(options.get_sys_samples_dir(), 'example.jpg')))
 define('sample_viewer', 'last_size', Defn(str, ""))
-define('paint_series_selector', 'last_file', Defn(str, os.path.join(options.get_sys_data_dir(), 'ideal.psd')))
-define('paint_series_editor', 'last_file', Defn(str, ""))
+
+define("paint_colour_information", "last_size", Defn(str, ""))
+
+define("paint_colour_selector", "hpaned_position", Defn(int, -1))
+define("paint_colour_selector", "last_size", Defn(str, ""))
+
+define("paint_series_selector", "last_file", Defn(str, os.path.join(options.get_sys_data_dir(), 'ideal.psd')))
+
+define("editor", "last_size", Defn(str, ""))
+define("editor", "last_geometry", Defn(str, ""))
+
 define('reference_image_viewer', 'last_file', Defn(str, ''))
+
 define("mixer", "last_geometry", Defn(str, ""))
 define("mixer", "hpaned_position", Defn(int, -1))
 define("mixer", "vpaned_position", Defn(int, -1))
-define("editor", "last_geometry", Defn(str, ""))
 
 load_recollections()

@@ -345,12 +345,18 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         if self.current_target_colour:
             selector.wheels.set_crosshair(self.current_target_colour)
         window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        last_size = recollect.get("paint_colour_selector", "last_size")
+        if last_size:
+            window.set_default_size(*eval(last_size))
         window.set_icon_from_file(icons.APP_ICON_FILE)
         window.set_title(_('Paint Series: {}').format(os.path.relpath(filepath)))
         window.add(selector)
         window.connect('destroy', self._destroy_selector_cb)
+        window.connect('size-allocate', self._selector_size_allocation_cb)
         window.show()
         return True
+    def _selector_size_allocation_cb(self, widget, allocation):
+        recollect.set("paint_colour_selector", "last_size", "({0.width}, {0.height})".format(allocation))
     def _destroy_selector_cb(self, widget):
         selector = widget.get_child()
         self.selectors.remove(selector)
@@ -872,11 +878,16 @@ class PaintColourSelector(gtk.VBox):
         # lay the components out
         self.pack_start(sname, expand=False)
         self.pack_start(maker, expand=False)
-        hbox = gtk.HBox()
-        hbox.pack_start(self.wheels, expand=True, fill=True)
-        hbox.pack_start(gtkpwx.wrap_in_scrolled_window(self.paint_colours_view), expand=True, fill=True)
-        self.pack_start(hbox, expand=True, fill=True)
+        self.hpaned = gtk.HPaned()
+        self.hpaned.pack1(self.wheels, resize=True, shrink=False)
+        self.hpaned.pack2(gtkpwx.wrap_in_scrolled_window(self.paint_colours_view), resize=True, shrink=False)
+        self.pack_start(self.hpaned, expand=True, fill=True)
+        self.hpaned.set_position(recollect.get("paint_colour_selector", "hpaned_position"))
+        self.hpaned.connect("notify", self._hpaned_notify_cb)
         self.show_all()
+    def _hpaned_notify_cb(self, widget, parameter):
+        if parameter.name == "position":
+            recollect.set("paint_colour_selector", "hpaned_position", str(widget.get_position()))
     def _show_colour_details_cb(self, _action):
         colour = self.paint_colours_view.get_selected_colours()[0]
         PaintColourInformationDialogue(colour).show()
@@ -1027,6 +1038,9 @@ class PaintColourInformationDialogue(gtk.Dialog):
     """
     def __init__(self, colour, parent=None):
         gtk.Dialog.__init__(self, title=_('Paint Colour: {}').format(colour.name), parent=parent)
+        last_size = recollect.get("paint_colour_information", "last_size")
+        if last_size:
+            self.set_default_size(*eval(last_size))
         vbox = self.get_content_area()
         vbox.pack_start(gtkpwx.ColouredLabel(colour.name, colour), expand=False)
         vbox.pack_start(gtkpwx.ColouredLabel(colour.series.series_id.name, colour), expand=False)
@@ -1035,6 +1049,8 @@ class PaintColourInformationDialogue(gtk.Dialog):
         vbox.pack_start(gtk.Label(colour.transparency.description()), expand=False)
         vbox.pack_start(gtk.Label(colour.finish.description()), expand=False)
         vbox.show_all()
+    def _size_allocation_cb(self, widget, allocation):
+        recollect.set("paint_colour_information", "last_size", "({0.width}, {0.height})".format(allocation))
 
 def generate_components_list_spec(model):
     """

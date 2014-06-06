@@ -262,7 +262,7 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
         condns = 0 if file_path is None else self.AC_HAS_FILE
         self.action_groups.update_condns(actions.MaskedCondns(condns, self.AC_HAS_FILE))
         if condns:
-            recollect.set('paint_series_editor', 'last_file', file_path)
+            recollect.set("editor", "last_size", file_path)
         self.emit("file_changed", self.file_path)
     def colour_edit_state_ok(self):
         if self.current_colour is None:
@@ -406,7 +406,7 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
             lastdir = os.path.dirname(self.file_path)
             dlg.set_current_folder(lastdir)
         else:
-            last_file = recollect.get('paint_series_editor', 'last_file')
+            last_file = recollect.get("editor", "last_size")
             if last_file:
                 lastdir = os.path.dirname(last_file)
                 dlg.set_current_folder(lastdir)
@@ -461,7 +461,7 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
             lastdir = os.path.dirname(self.file_path)
             dlg.set_current_folder(lastdir)
         else:
-            last_file = recollect.get('paint_series_editor', 'last_file')
+            last_file = recollect.get("editor", "last_size")
             if last_file:
                 lastdir = os.path.dirname(last_file)
                 dlg.set_current_folder(lastdir)
@@ -852,9 +852,9 @@ class SampleViewer(gtk.Window, actions.CAGandUIManager):
     def __init__(self, parent):
         gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
         actions.CAGandUIManager.__init__(self)
-        self.__last_size = recollect.get("sample_viewer", "last_size")
-        if self.__last_size:
-            self.set_default_size(*eval(self.__last_size))
+        last_size = recollect.get("sample_viewer", "last_size")
+        if last_size:
+            self.set_default_size(*eval(last_size))
         self.set_icon_from_file(icons.APP_ICON_FILE)
         self.set_size_request(300, 200)
         last_samples_file = recollect.get('sample_viewer', 'last_file')
