@@ -704,10 +704,13 @@ class ColourWheel(gtk.DrawingArea):
         colour, rng = self.get_colour_nearest_to_xy(x, y)
         return colour if rng < self.scaled_size else None
     def query_tooltip_cb(self, widget, x, y, keyboard_mode, tooltip):
-        # TODO: move location of tootip as mouse moves
         colour, rng = self.get_colour_nearest_to_xy(x, y)
-        tooltip.set_text(colour.name if colour is not None else '')
-        return True
+        if colour is not None and rng <= self.scaled_size:
+            tooltip.set_text(colour.name)
+            return True
+        else:
+            tooltip.set_text("")
+            return False
     def scroll_event_cb(self, _widget, event):
         if event.device.source == gtk.gdk.SOURCE_MOUSE:
             new_zoom = self.zoom + 0.025 * (-1 if event.direction == gtk.gdk.SCROLL_UP else 1)
