@@ -1060,8 +1060,9 @@ class PaintColourInformationDialogue(gtk.Dialog):
         vbox.pack_start(gpaint.HCVDisplay(colour), expand=False)
         vbox.pack_start(gtk.Label(colour.transparency.description()), expand=False)
         vbox.pack_start(gtk.Label(colour.finish.description()), expand=False)
+        self.connect("configure-event", self._configure_event_cb)
         vbox.show_all()
-    def _size_allocation_cb(self, widget, allocation):
+    def _configure_event_cb(self, widget, allocation):
         recollect.set("paint_colour_information", "last_size", "({0.width}, {0.height})".format(allocation))
 
 def generate_components_list_spec(model):
@@ -1114,6 +1115,9 @@ class MixedColourInformationDialogue(gtk.Dialog):
 
     def __init__(self, colour, target_colour, parent=None):
         gtk.Dialog.__init__(self, title=_('Mixed Colour: {}').format(colour.name), parent=parent)
+        last_size = recollect.get("mixed_colour_information", "last_size")
+        if last_size:
+            self.set_default_size(*last_size)
         vbox = self.get_content_area()
         vbox.pack_start(gtkpwx.ColouredLabel(colour.name, colour), expand=False)
         vbox.pack_start(gtkpwx.ColouredLabel(colour.notes, colour), expand=False)
@@ -1127,6 +1131,9 @@ class MixedColourInformationDialogue(gtk.Dialog):
         for component in colour.blobs:
             self.cview.model.append(component)
         vbox.pack_start(self.cview, expand=False)
+        self.connect("configure-event", self._configure_event_cb)
         vbox.show_all()
+    def _configure_event_cb(self, widget, allocation):
+        recollect.set("mixed_colour_information", "last_size", "({0.width}, {0.height})".format(allocation))
     def unselect_all(self):
         self.cview.get_selection().unselect_all()

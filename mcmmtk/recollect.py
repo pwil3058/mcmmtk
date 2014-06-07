@@ -90,6 +90,7 @@ define('sample_viewer', 'last_file', Defn(str, os.path.join(options.get_sys_samp
 define('sample_viewer', 'last_size', Defn(str, ""))
 
 define("paint_colour_information", "last_size", Defn(str, ""))
+define("mixed_colour_information", "last_size", Defn(eval, ""))
 
 define("paint_colour_selector", "hpaned_position", Defn(int, -1))
 define("paint_colour_selector", "last_size", Defn(str, ""))
