@@ -102,8 +102,8 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         hbox.pack_start(gtk.Label(_('Notes:')), expand=False)
         hbox.pack_start(self.notes, expand=True, fill=True)
         self.pack_start(hbox, expand=False)
-        self.hpaned = gtk.HPaned()
-        self.hpaned.pack1(self.wheels, resize=True, shrink=False)
+        hpaned = gtk.HPaned()
+        hpaned.pack1(self.wheels, resize=True, shrink=False)
         vbox = gtk.VBox()
         vhbox = gtk.HBox()
         vhbox.pack_start(self.next_name_label, expand=False)
@@ -111,9 +111,9 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         vbox.pack_start(vhbox, expand=False)
         vbox.pack_start(self.hcvw_display, expand=False)
         vbox.pack_start(gtkpwx.wrap_in_frame(self.mixpanel, gtk.SHADOW_ETCHED_IN), expand=True, fill=True)
-        self.hpaned.pack2(vbox, resize=True, shrink=False)
-        self.vpaned = gtk.VPaned()
-        self.vpaned.pack1(self.hpaned, resize=True, shrink=False)
+        hpaned.pack2(vbox, resize=True, shrink=False)
+        vpaned = gtk.VPaned()
+        vpaned.pack1(hpaned, resize=True, shrink=False)
         vbox = gtk.VBox()
         hbox = gtk.HBox()
         hbox.pack_start(gtk.Label(_('Paints:')), expand=False)
@@ -121,12 +121,20 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         vbox.pack_start(hbox, expand=False)
         vbox.pack_start(self.buttons, expand=False)
         vbox.pack_start(gtkpwx.wrap_in_scrolled_window(self.mixed_colours_view), expand=True, fill=True)
-        self.vpaned.pack2(vbox, resize=True, shrink=False)
-        self.pack_start(self.vpaned, expand=True, fill=True)
-        self.vpaned.set_position(recollect.get("mixer", "vpaned_position"))
-        self.hpaned.set_position(recollect.get("mixer", "hpaned_position"))
+        vpaned.pack2(vbox, resize=True, shrink=False)
+        self.pack_start(vpaned, expand=True, fill=True)
+        vpaned.set_position(recollect.get("mixer", "vpaned_position"))
+        hpaned.set_position(recollect.get("mixer", "hpaned_position"))
+        vpaned.connect("notify", self._paned_notify_cb)
+        hpaned.connect("notify", self._paned_notify_cb)
         self.show_all()
         self.recalculate_colour([])
+    def _paned_notify_cb(self, widget, parameter):
+        if parameter.name == "position":
+            if isinstance(widget, gtk.HPaned):
+                recollect.set("mixer", "hpaned_position", str(widget.get_position()))
+            else:
+                recollect.set("mixer", "vpaned_position", str(widget.get_position()))
     def populate_action_groups(self):
         """
         Set up the actions for this component
@@ -398,8 +406,6 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         Exit the program
         """
         # TODO: add checks for unsaved work in mixer before exiting
-        recollect.set("mixer", "vpaned_position", str(self.vpaned.get_position()))
-        recollect.set("mixer", "hpaned_position", str(self.hpaned.get_position()))
         gtk.main_quit()
 
 def colour_parts_adjustment():
@@ -878,12 +884,12 @@ class PaintColourSelector(gtk.VBox):
         # lay the components out
         self.pack_start(sname, expand=False)
         self.pack_start(maker, expand=False)
-        self.hpaned = gtk.HPaned()
-        self.hpaned.pack1(self.wheels, resize=True, shrink=False)
-        self.hpaned.pack2(gtkpwx.wrap_in_scrolled_window(self.paint_colours_view), resize=True, shrink=False)
-        self.pack_start(self.hpaned, expand=True, fill=True)
-        self.hpaned.set_position(recollect.get("paint_colour_selector", "hpaned_position"))
-        self.hpaned.connect("notify", self._hpaned_notify_cb)
+        hpaned = gtk.HPaned()
+        hpaned.pack1(self.wheels, resize=True, shrink=False)
+        hpaned.pack2(gtkpwx.wrap_in_scrolled_window(self.paint_colours_view), resize=True, shrink=False)
+        self.pack_start(hpaned, expand=True, fill=True)
+        hpaned.set_position(recollect.get("paint_colour_selector", "hpaned_position"))
+        hpaned.connect("notify", self._hpaned_notify_cb)
         self.show_all()
     def _hpaned_notify_cb(self, widget, parameter):
         if parameter.name == "position":

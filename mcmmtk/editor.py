@@ -67,7 +67,7 @@ class UnaddedNewColourDialogue(gtk.Dialog):
         self.vbox.pack_start(gtk.Label(message))
         self.show_all()
 
-class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
+class PaintSeriesEditor(gtk.HPaned, actions.CAGandUIManager):
     UI_DESCR = '''
     <ui>
       <menubar name='paint_series_editor_menubar'>
@@ -87,7 +87,7 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
     '''
     AC_HAS_COLOUR, AC_NOT_HAS_COLOUR, AC_HAS_FILE, AC_ID_READY, AC_MASK = actions.ActionCondns.new_flags_and_mask(4)
     def __init__(self):
-        gtk.HBox.__init__(self)
+        gtk.HPaned.__init__(self)
         actions.CAGandUIManager.__init__(self)
         #
         self.set_file_path(None)
@@ -126,12 +126,17 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
         table.attach(self.series_name, 1, 2, 1, 2)
         vbox.pack_start(table, expand=False)
         vbox.pack_start(self.paint_colours, expand=True, fill=True)
-        self.pack_start(vbox, expand=True, fill=True)
+        self.pack1(vbox, resize=True, shrink=False)
         vbox = gtk.VBox()
         vbox.pack_start(self.paint_editor, expand=True, fill=True)
         vbox.pack_start(self.buttons, expand=False)
-        self.pack_start(vbox, expand=True, fill=True)
+        self.pack2(vbox, resize=True, shrink=False)
+        self.set_position(recollect.get("editor", "hpaned_position"))
+        self.connect("notify", self._notify_cb)
         self.show_all()
+    def _notify_cb(self, widget, parameter):
+        if parameter.name == "position":
+            recollect.set("editor", "hpaned_position", str(widget.get_position()))
     def populate_action_groups(self):
         self.action_groups[gpaint.ColourSampleArea.AC_SAMPLES_PASTED].add_actions([
             ('automatch_sample_images_raw', None, _('Auto Match'), None,
