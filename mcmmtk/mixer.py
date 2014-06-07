@@ -933,6 +933,9 @@ class ReferenceImageViewer(gtk.Window, actions.CAGandUIManager):
     def __init__(self, parent):
         gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
         actions.CAGandUIManager.__init__(self)
+        last_size = recollect.get("reference_image_viewer", "last_size")
+        if last_size:
+            self.set_default_size(*eval(last_size))
         self.set_icon_from_file(icons.APP_ICON_FILE)
         self.set_size_request(300, 200)
         last_image_file = recollect.get('reference_image_viewer', 'last_file')
@@ -958,9 +961,12 @@ class ReferenceImageViewer(gtk.Window, actions.CAGandUIManager):
         #vbox.pack_start(self.buttons, expand=False)
         self.add(vbox)
         #self.set_transient_for(parent)
+        self.connect("size-allocate", self._size_allocation_cb)
         self.show_all()
         if pixbuf is not None:
             self.ref_image.set_pixbuf(pixbuf)
+    def _size_allocation_cb(self, widget, allocation):
+        recollect.set("reference_image_viewer", "last_size", "({0.width}, {0.height})".format(allocation))
     def populate_action_groups(self):
         self.action_groups[actions.AC_DONT_CARE].add_actions([
             ('reference_image_file_menu', None, _('File')),
