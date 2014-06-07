@@ -262,7 +262,7 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
         condns = 0 if file_path is None else self.AC_HAS_FILE
         self.action_groups.update_condns(actions.MaskedCondns(condns, self.AC_HAS_FILE))
         if condns:
-            recollect.set("editor", "last_size", file_path)
+            recollect.set("editor", "last_file", file_path)
         self.emit("file_changed", self.file_path)
     def colour_edit_state_ok(self):
         if self.current_colour is None:
@@ -406,7 +406,7 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
             lastdir = os.path.dirname(self.file_path)
             dlg.set_current_folder(lastdir)
         else:
-            last_file = recollect.get("editor", "last_size")
+            last_file = recollect.get("editor", "last_file")
             if last_file:
                 lastdir = os.path.dirname(last_file)
                 dlg.set_current_folder(lastdir)
@@ -461,7 +461,7 @@ class PaintSeriesEditor(gtk.HBox, actions.CAGandUIManager):
             lastdir = os.path.dirname(self.file_path)
             dlg.set_current_folder(lastdir)
         else:
-            last_file = recollect.get("editor", "last_size")
+            last_file = recollect.get("editor", "last_file")
             if last_file:
                 lastdir = os.path.dirname(last_file)
                 dlg.set_current_folder(lastdir)
