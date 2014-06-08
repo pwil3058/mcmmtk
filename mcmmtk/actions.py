@@ -179,6 +179,11 @@ class ConditionalActionGroups(object):
         Connect the callback to the "activate" signal of the named action
         """
         return self.get_action(action_name).connect('activate', callback, *user_data)
+    def disconnect_action(self, action_name, handler_id):
+        """
+        Disconnect the callback to the "activate" signal of the named action
+        """
+        return self.get_action(action_name).disconnect(handler_id)
     def __str__(self):
         string = 'ConditionalActionGroups({0})\n'.format(self.name)
         for condns, group in self.groups.items():
@@ -232,10 +237,12 @@ class CAGandUIManager(gobject.GObject):
         self.set_popup(popup)
     def populate_action_groups(self):
         assert False, 'should be derived in subclass'
-    @staticmethod
-    def _button_press_cb(widget, event):
+    def do_popup_preliminaries(self, event):
+        pass
+    def _button_press_cb(self, widget, event):
         if event.type == gtk.gdk.BUTTON_PRESS:
             if event.button == 3 and widget._popup:
+                self.do_popup_preliminaries(event)
                 menu = widget.ui_manager.get_widget(widget._popup)
                 menu.popup(None, None, None, event.button, event.time)
                 return True

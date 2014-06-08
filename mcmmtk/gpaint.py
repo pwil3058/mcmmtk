@@ -31,6 +31,7 @@ from mcmmtk import actions
 from mcmmtk import tlview
 from mcmmtk import gtkpwx
 from mcmmtk import paint
+from mcmmtk import recollect
 
 if __name__ == '__main__':
     _ = lambda x: x
@@ -641,6 +642,9 @@ class HueWheelNotebook(gtk.Notebook):
         self.hue_value_wheel = HueValueWheel()
         self.append_page(self.hue_value_wheel, gtk.Label(_('Hue/Value Wheel')))
         self.append_page(self.hue_chroma_wheel, gtk.Label(_('Hue/Chroma Wheel')))
+    def set_wheels_colour_info_acb(self, callback):
+        self.hue_chroma_wheel.set_colour_info_acb(callback)
+        self.hue_value_wheel.set_colour_info_acb(callback)
     def add_colour(self, new_colour):
         self.hue_chroma_wheel.add_colour(new_colour)
         self.hue_value_wheel.add_colour(new_colour)
@@ -660,9 +664,19 @@ class HueWheelNotebook(gtk.Notebook):
         self.hue_chroma_wheel.unset_crosshair()
         self.hue_value_wheel.unset_crosshair()
 
-class ColourWheel(gtk.DrawingArea):
-    def __init__(self, nrings=9):
+class ColourWheel(gtk.DrawingArea, actions.CAGandUIManager):
+    UI_DESCR = '''
+        <ui>
+            <popup name='colour_wheel_I_popup'>
+                <menuitem action='colour_info'/>
+            </popup>
+        </ui>
+        '''
+    AC_HAVE_POPUP_COLOUR, _DUMMY = actions.ActionCondns.new_flags_and_mask(1)
+    def __init__(self, nrings=9, popup='/colour_wheel_I_popup'):
         gtk.DrawingArea.__init__(self)
+        actions.CAGandUIManager.__init__(self, popup=popup)
+        self.__popup_colour = None
         self.BLACK = self.new_colour([0, 0, 0])
         self.set_size_request(400, 400)
         self.scale = 1.0
@@ -680,9 +694,32 @@ class ColourWheel(gtk.DrawingArea):
         self.connect('expose-event', self.expose_cb)
         self.set_has_tooltip(True)
         self.connect('query-tooltip', self.query_tooltip_cb)
-        self.add_events(gtk.gdk.SCROLL_MASK)
+        self.add_events(gtk.gdk.SCROLL_MASK|gtk.gdk.BUTTON_PRESS_MASK)
         self.connect('scroll-event', self.scroll_event_cb)
         self.show()
+    @property
+    def popup_colour(self):
+        return self.__popup_colour
+    def populate_action_groups(self):
+        self.action_groups[self.AC_HAVE_POPUP_COLOUR].add_actions([
+            ('colour_info', gtk.STOCK_INFO, None, None,
+             _('Detailed information for this colour.'),
+            ),
+        ])
+        self.__ci_acbid = self.action_groups.connect_activate('colour_info', self._show_colour_details_acb)
+    def _show_colour_details_acb(self, _action):
+        PaintColourInformationDialogue(self.__popup_colour).show()
+    def do_popup_preliminaries(self, event):
+        colour, rng = self.get_colour_nearest_to_xy(event.x, event.y)
+        if colour is not None and rng <= self.scaled_size:
+            self.__popup_colour = colour
+            self.action_groups.update_condns(actions.MaskedCondns(self.AC_HAVE_POPUP_COLOUR, self.AC_HAVE_POPUP_COLOUR))
+        else:
+            self.__popup_colour = None
+            self.action_groups.update_condns(actions.MaskedCondns(0, self.AC_HAVE_POPUP_COLOUR))
+    def set_colour_info_acb(self, callback):
+        self.action_groups.disconnect_action('colour_info', self.__ci_acbid)
+        self.__ci_acbid = self.action_groups.connect_activate('colour_info', callback, self)
     def polar_to_cartesian(self, radius, angle):
         if options.get('colour_wheel', 'red_to_yellow_clockwise'):
             x = -radius * math.cos(angle)
@@ -1045,6 +1082,27 @@ class RGBEntryBox(gtk.HBox):
             elif spinner is self.blue:
                 self.red.entry.grab_focus()
 gobject.signal_new("colour-changed", RGBEntryBox, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ())
+
+class PaintColourInformationDialogue(gtk.Dialog):
+    """
+    A dialog to display the detailed information for a paint colour
+    """
+    def __init__(self, colour, parent=None):
+        gtk.Dialog.__init__(self, title=_('Paint Colour: {}').format(colour.name), parent=parent)
+        last_size = recollect.get("paint_colour_information", "last_size")
+        if last_size:
+            self.set_default_size(*eval(last_size))
+        vbox = self.get_content_area()
+        vbox.pack_start(gtkpwx.ColouredLabel(colour.name, colour), expand=False)
+        vbox.pack_start(gtkpwx.ColouredLabel(colour.series.series_id.name, colour), expand=False)
+        vbox.pack_start(gtkpwx.ColouredLabel(colour.series.series_id.maker, colour), expand=False)
+        vbox.pack_start(HCVDisplay(colour), expand=False)
+        vbox.pack_start(gtk.Label(colour.transparency.description()), expand=False)
+        vbox.pack_start(gtk.Label(colour.finish.description()), expand=False)
+        self.connect("configure-event", self._configure_event_cb)
+        vbox.show_all()
+    def _configure_event_cb(self, widget, allocation):
+        recollect.set("paint_colour_information", "last_size", "({0.width}, {0.height})".format(allocation))
 
 if __name__ == '__main__':
     doctest.testmod()

@@ -88,6 +88,7 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         self.selectors = list()
         self.wheels = gpaint.HueWheelNotebook()
         self.wheels.set_size_request(360, 360)
+        self.wheels.set_wheels_colour_info_acb(self._show_wheel_colour_details_cb)
         self.buttons = self.action_groups.create_action_button_box([
             'new_mixed_colour',
             'accept_mixed_colour',
@@ -177,6 +178,13 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
             _('Start working on a new mixed colour.'),
             self._new_mixed_colour_cb),
         ])
+    def _show_wheel_colour_details_cb(self, _action, wheel):
+        colour = wheel.popup_colour
+        if isinstance(colour, paint.NamedMixedColour):
+            MixedColourInformationDialogue(colour, self.mixed_colours.get_target_colour(colour)).show()
+        else:
+            gpaint.PaintColourInformationDialogue(colour).show()
+        return True
     def __str__(self):
         paint_colours = self.paint_colours.get_colours()
         if len(paint_colours) == 0:
@@ -471,7 +479,7 @@ class ColourPartsSpinButton(gtk.EventBox, actions.CAGandUIManager):
     def set_sensitive(self, sensitive):
         self.entry.set_sensitive(sensitive)
     def _paint_colour_info_cb(self, _action):
-        PaintColourInformationDialogue(self.colour).show()
+        gpaint.PaintColourInformationDialogue(self.colour).show()
 
 class ColourPartsSpinButtonBox(gtk.VBox):
     """
@@ -724,7 +732,7 @@ class PartsColourListView(gpaint.ColourListView):
         model.process_parts_change(paint.BLOB(colour=row.colour, parts=new_parts))
     def _show_colour_details_cb(self, _action):
         colour = self.get_selected_colours()[0]
-        PaintColourInformationDialogue(colour).show()
+        gpaint.PaintColourInformationDialogue(colour).show()
 
 MATCH = collections.namedtuple('MATCH', ['colour', 'target_colour'])
 
@@ -736,6 +744,14 @@ class MatchedColourListStore(gpaint.ColourListStore):
         self.append(self.Row(target_colour=target_colour, colour=colour))
     def get_colour_users(self, colour):
         return [row.colour for row in self.named() if row.colour.contains_colour(colour)]
+    def get_target_colour(self, colour):
+        """
+        Return the target colour for the given colour
+        """
+        model_iter = self.find_named(lambda x: x.colour == colour)
+        if model_iter is None:
+            raise LookupError()
+        return self.get_value_named(model_iter, 'target_colour')
 
 def match_cell_data_func(column, cell, model, model_iter, attribute):
     colour = model.get_value_named(model_iter, 'target_colour')
@@ -834,7 +850,7 @@ class MatchedColourListView(gpaint.ColourListView):
         if isinstance(colour, paint.NamedMixedColour):
             MixedColourInformationDialogue(colour, selected_rows[0].target_colour).show()
         else:
-            PaintColourInformationDialogue(colour).show()
+            gpaint.PaintColourInformationDialogue(colour).show()
 
 class SelectColourListView(gpaint.ColourListView):
     UI_DESCR = '''
@@ -896,7 +912,7 @@ class PaintColourSelector(gtk.VBox):
             recollect.set("paint_colour_selector", "hpaned_position", str(widget.get_position()))
     def _show_colour_details_cb(self, _action):
         colour = self.paint_colours_view.get_selected_colours()[0]
-        PaintColourInformationDialogue(colour).show()
+        gpaint.PaintColourInformationDialogue(colour).show()
     def _add_colours_to_mixer_cb(self, _action):
         """
         Add the currently selected colours to the mixer.
@@ -1043,27 +1059,6 @@ class NewMixedColourDialogue(gtk.Dialog):
         vbox.show_all()
     def _description_changed_cb(self, widget):
         self.set_response_sensitive(gtk.RESPONSE_ACCEPT, len(self.colour_description.get_text()) > 0)
-
-class PaintColourInformationDialogue(gtk.Dialog):
-    """
-    A dialog to display the detailed information for a paint colour
-    """
-    def __init__(self, colour, parent=None):
-        gtk.Dialog.__init__(self, title=_('Paint Colour: {}').format(colour.name), parent=parent)
-        last_size = recollect.get("paint_colour_information", "last_size")
-        if last_size:
-            self.set_default_size(*eval(last_size))
-        vbox = self.get_content_area()
-        vbox.pack_start(gtkpwx.ColouredLabel(colour.name, colour), expand=False)
-        vbox.pack_start(gtkpwx.ColouredLabel(colour.series.series_id.name, colour), expand=False)
-        vbox.pack_start(gtkpwx.ColouredLabel(colour.series.series_id.maker, colour), expand=False)
-        vbox.pack_start(gpaint.HCVDisplay(colour), expand=False)
-        vbox.pack_start(gtk.Label(colour.transparency.description()), expand=False)
-        vbox.pack_start(gtk.Label(colour.finish.description()), expand=False)
-        self.connect("configure-event", self._configure_event_cb)
-        vbox.show_all()
-    def _configure_event_cb(self, widget, allocation):
-        recollect.set("paint_colour_information", "last_size", "({0.width}, {0.height})".format(allocation))
 
 def generate_components_list_spec(model):
     """
