@@ -265,6 +265,7 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         self.reset_parts()
         self.paint_colours.set_sensitive(False)
         self.mixpanel.clear()
+        self.current_colour_description.set_text("")
         self.wheels.add_target_colour(name, self.current_target_colour)
         self.current_target_colour = None
         self.hcvw_display.set_target_colour(None)
