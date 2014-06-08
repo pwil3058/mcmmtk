@@ -684,8 +684,9 @@ class ColourWheel(gtk.DrawingArea, actions.CAGandUIManager):
         self.one = 100 * self.scale
         self.size = 3
         self.scaled_size = self.size * self.scale
-        self.cx = 0.0
-        self.cy = 0.0
+        self.centre = gtkpwx.XY(0, 0)
+        self.offset = gtkpwx.XY(0, 0)
+        self.__last_xy = gtkpwx.XY(0, 0)
         self.paint_colours = {}
         self.mixed_colours = {}
         self.target_colours = {}
@@ -694,8 +695,15 @@ class ColourWheel(gtk.DrawingArea, actions.CAGandUIManager):
         self.connect('expose-event', self.expose_cb)
         self.set_has_tooltip(True)
         self.connect('query-tooltip', self.query_tooltip_cb)
-        self.add_events(gtk.gdk.SCROLL_MASK|gtk.gdk.BUTTON_PRESS_MASK)
+        self.add_events(gtk.gdk.SCROLL_MASK|gtk.gdk.BUTTON_PRESS_MASK|gtk.gdk.BUTTON_RELEASE_MASK)
         self.connect('scroll-event', self.scroll_event_cb)
+        self.__press_cb_id = self.connect('button_press_event', self._button_press_cb)
+        self.__cb_ids = []
+        self.__cb_ids.append(self.connect('button_release_event', self._button_release_cb))
+        self.__cb_ids.append(self.connect('motion_notify_event', self._motion_notify_cb))
+        self.__cb_ids.append(self.connect('leave_notify_event', self._leave_notify_cb))
+        for cb_id in self.__cb_ids:
+            self.handler_block(cb_id)
         self.show()
     @property
     def popup_colour(self):
@@ -726,7 +734,7 @@ class ColourWheel(gtk.DrawingArea, actions.CAGandUIManager):
         else:
             x = radius * math.cos(angle)
         y = radius * math.sin(angle)
-        return (int(self.cx + x), int(self.cy - y))
+        return (int(self.centre.x + x), int(self.centre.y - y))
     def get_colour_nearest_to_xy(self, x, y):
         smallest = 0xFF
         nearest = None
@@ -805,12 +813,11 @@ class ColourWheel(gtk.DrawingArea, actions.CAGandUIManager):
         self.gc.set_background(self.new_colour(paint.RGB_WHITE / 2))
         #
         dw, dh = self.window.get_size()
-        self.cx = dw / 2
-        self.cy = dh / 2
+        self.centre = gtkpwx.XY(dw / 2, dh / 2) + self.offset
         #
         # calculate a scale factor to use for drawing the graph based
         # on the minimum available width or height
-        mindim = min(self.cx, dh / 2)
+        mindim = min(dw, dh) / 2
         self.scale = mindim / scaledmax
         self.one = self.scale * 100
         self.scaled_size = self.size * self.scale
@@ -818,13 +825,13 @@ class ColourWheel(gtk.DrawingArea, actions.CAGandUIManager):
         # Draw the graticule
         self.gc.set_foreground(self.new_colour(paint.RGB_WHITE * 3 / 4))
         for radius in [100 * (i + 1) * self.scale / self.nrings for i in range(self.nrings)]:
-            self.draw_circle(self.cx, self.cy, int(round(radius * self.zoom)))
+            self.draw_circle(self.centre.x, self.centre.y, int(round(radius * self.zoom)))
         #
         self.gc.line_width = 2
         for angle in [utils.PI_60 * i for i in range(6)]:
             hue = paint.Hue.from_angle(angle)
             self.gc.set_foreground(self.new_colour(hue.rgb))
-            self.window.draw_line(self.gc, self.cx, self.cy, *self.polar_to_cartesian(self.one * self.zoom, angle))
+            self.window.draw_line(self.gc, self.centre.x, self.centre.y, *self.polar_to_cartesian(self.one * self.zoom, angle))
         for target_colour in self.target_colours.values():
             target_colour.draw()
         for paint_colour in self.paint_colours.values():
@@ -834,6 +841,33 @@ class ColourWheel(gtk.DrawingArea, actions.CAGandUIManager):
         if self.crosshair is not None:
             self.crosshair.draw()
         return True
+    # Allow graticule to be moved using mouse (left button depressed)
+    # Careful not to override CAGandUIManager method
+    def _button_press_cb(self, widget, event):
+        if event.button == 1:
+            self.__last_xy = gtkpwx.XY(int(event.x), int(event.y))
+            for cb_id in self.__cb_ids:
+                widget.handler_unblock(cb_id)
+            return True
+        return actions.CAGandUIManager._button_press_cb(self, widget, event)
+    def _motion_notify_cb(self, widget, event):
+        this_xy = gtkpwx.XY(int(event.x), int(event.y))
+        delta_xy = this_xy - self.__last_xy
+        self.__last_xy = this_xy
+        # TODO: limit offset values
+        self.offset += delta_xy
+        widget.queue_draw()
+        return True
+    def _button_release_cb(self, widget, event):
+        if event.button != 1:
+            return False
+        for cb_id in self.__cb_ids:
+            widget.handler_block(cb_id)
+        return True
+    def _leave_notify_cb(self, widget, event):
+        for cb_id in self.__cb_ids:
+            widget.handler_block(cb_id)
+        return False
     class ColourShape(object):
         def __init__(self, parent, colour):
             self.parent = parent
@@ -1094,11 +1128,13 @@ class PaintColourInformationDialogue(gtk.Dialog):
             self.set_default_size(*eval(last_size))
         vbox = self.get_content_area()
         vbox.pack_start(gtkpwx.ColouredLabel(colour.name, colour), expand=False)
-        vbox.pack_start(gtkpwx.ColouredLabel(colour.series.series_id.name, colour), expand=False)
-        vbox.pack_start(gtkpwx.ColouredLabel(colour.series.series_id.maker, colour), expand=False)
+        if isinstance(colour, paint.PaintColour):
+            vbox.pack_start(gtkpwx.ColouredLabel(colour.series.series_id.name, colour), expand=False)
+            vbox.pack_start(gtkpwx.ColouredLabel(colour.series.series_id.maker, colour), expand=False)
         vbox.pack_start(HCVDisplay(colour), expand=False)
-        vbox.pack_start(gtk.Label(colour.transparency.description()), expand=False)
-        vbox.pack_start(gtk.Label(colour.finish.description()), expand=False)
+        if isinstance(colour, paint.PaintColour):
+            vbox.pack_start(gtk.Label(colour.transparency.description()), expand=False)
+            vbox.pack_start(gtk.Label(colour.finish.description()), expand=False)
         self.connect("configure-event", self._configure_event_cb)
         vbox.show_all()
     def _configure_event_cb(self, widget, allocation):

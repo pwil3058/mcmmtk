@@ -92,6 +92,9 @@ class WH(collections.namedtuple('WH', ['width', 'height'])):
 class XY(collections.namedtuple('XY', ['x', 'y'])):
     __slots__ = ()
     # These operations are compatible with gtk.gdk.Rectangle
+    def __add__(self, other):
+        # don't assume other is XY just that it has x and y attributes
+        return XY(x=self.x + other.x, y=self.y + other.y)
     def __sub__(self, other):
         # don't assume other is XY just that it has x and y attributes
         return XY(x=self.x - other.x, y=self.y - other.y)
