@@ -379,6 +379,22 @@ def ask_user_to_confirm(msg, parent=None):
     dlg.destroy()
     return response == gtk.RESPONSE_OK
 
+def report_io_error(edata):
+    msg = '{0}: {1}'.format(edata.strerror, edata.filename)
+    dlg = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_CLOSE, message_format=msg)
+    dlg.run()
+    dlg.destroy()
+    return False
+
+def report_format_error(edata, *args):
+    msg = _("Format Error: ") + str(edata)
+    for arg in args:
+        msg += ":" + arg
+    dlg = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_CLOSE, message_format=msg)
+    dlg.run()
+    dlg.destroy()
+    return False
+
 class CancelOKDialog(gtk.Dialog):
     def __init__(self, title=None, parent=None):
         flags = gtk.DIALOG_MODAL|gtk.DIALOG_DESTROY_WITH_PARENT

@@ -365,24 +365,17 @@ class PaintSeriesEditor(gtk.HPaned, actions.CAGandUIManager):
             self.set_current_colour(new_colour)
     def _automatch_sample_images_raw_cb(self, _widget):
         self.paint_editor.auto_match_sample(raw=True)
-    def report_io_error(self, edata):
-        msg = '{0}: {1}'.format(edata.strerror, edata.filename)
-        gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_CLOSE, message_format=msg).run()
-        return False
-    def report_format_error(self, msg):
-        gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_CLOSE, message_format=msg).run()
-        return False
     def load_fm_file(self, filepath):
         try:
             fobj = open(filepath, 'r')
             text = fobj.read()
             fobj.close()
         except IOError as edata:
-            return self.report_io_error(edata)
+            return gtkpwx.report_io_error(edata)
         try:
             series = paint.Series.fm_definition(text)
         except paint.Series.ParseError as edata:
-            return self.report_format_error(str(edata))
+            return gtkpwx.report_format_error(edata, filepath)
         # All OK so clear the paint editor and ditch the current colours
         self.paint_editor.reset()
         self.set_current_colour(None)
@@ -444,7 +437,7 @@ class PaintSeriesEditor(gtk.HPaned, actions.CAGandUIManager):
             self.set_file_path(filepath)
             self.saved_hash = hashlib.sha1(definition).digest()
         except IOError as edata:
-            return self.report_io_error(edata)
+            return gtkpwx.report_io_error(edata)
     def _save_paint_series_to_file_cb(self, _action):
         """
         Save the paint series to the current file

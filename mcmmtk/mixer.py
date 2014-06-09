@@ -350,11 +350,11 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
             text = fobj.read()
             fobj.close()
         except IOError as edata:
-            return self.report_io_error(edata)
+            return gtkpwx.report_io_error(edata)
         try:
             series = paint.Series.fm_definition(text)
         except paint.Series.ParseError as edata:
-            return self.report_format_error(edata)
+            return gtkpwx.report_format_error(edata, filepath)
         # All OK so we can launch the selector
         selector = PaintColourSelector(series)
         selector.connect('add-paint-colours', self._add_colours_to_mixer_cb)
