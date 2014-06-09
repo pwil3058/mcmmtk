@@ -443,7 +443,7 @@ class ColourPartsSpinButton(gtk.EventBox, actions.CAGandUIManager):
         frame = gtk.Frame()
         frame.set_shadow_type(gtk.SHADOW_ETCHED_IN)
         hbox = gtk.HBox()
-        hbox.pack_start(gpaint.ColouredRectangle(self.colour), expand=True, fill=True)
+        hbox.pack_start(gtkpwx.ColouredLabel(self.colour.name, self.colour), expand=True, fill=True)
         vbox = gtk.VBox()
         vbox.pack_start(gpaint.ColouredRectangle(self.colour), expand=True, fill=True)
         vbox.pack_start(self.entry, expand=False)
@@ -491,7 +491,7 @@ class ColourPartsSpinButtonBox(gtk.VBox):
         self.__spinbuttons = []
         self.__hboxes = []
         self.__count = 0
-        self.__ncols = 8
+        self.__ncols = 6
         self.__sensitive = False
         self.__suppress_change_notification = False
     def set_sensitive(self, sensitive):
@@ -512,7 +512,7 @@ class ColourPartsSpinButtonBox(gtk.VBox):
         if self.__count % self.__ncols == 0:
             self.__hboxes.append(gtk.HBox())
             self.pack_start(self.__hboxes[-1], expand=False)
-        self.__hboxes[-1].pack_start(spinbutton, expand=False)
+        self.__hboxes[-1].pack_start(spinbutton, expand=True)
         self.__count += 1
     def _unpack_all(self):
         """
