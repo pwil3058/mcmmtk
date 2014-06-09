@@ -636,15 +636,18 @@ class TargetedHCVDisplay(gtk.VBox):
         self.value.set_target_colour(new_target_colour)
 
 class HueWheelNotebook(gtk.Notebook):
-    def __init__(self):
+    def __init__(self, popup='/colour_wheel_I_popup'):
         gtk.Notebook.__init__(self)
-        self.hue_chroma_wheel = HueChromaWheel(nrings=5)
-        self.hue_value_wheel = HueValueWheel()
+        self.hue_chroma_wheel = HueChromaWheel(nrings=5, popup=popup)
+        self.hue_value_wheel = HueValueWheel(popup=popup)
         self.append_page(self.hue_value_wheel, gtk.Label(_('Hue/Value Wheel')))
         self.append_page(self.hue_chroma_wheel, gtk.Label(_('Hue/Chroma Wheel')))
     def set_wheels_colour_info_acb(self, callback):
         self.hue_chroma_wheel.set_colour_info_acb(callback)
         self.hue_value_wheel.set_colour_info_acb(callback)
+    def set_wheels_add_colour_acb(self, callback):
+        self.hue_chroma_wheel.set_add_colour_acb(callback)
+        self.hue_value_wheel.set_add_colour_acb(callback)
     def add_colour(self, new_colour):
         self.hue_chroma_wheel.add_colour(new_colour)
         self.hue_value_wheel.add_colour(new_colour)
@@ -668,6 +671,10 @@ class ColourWheel(gtk.DrawingArea, actions.CAGandUIManager):
     UI_DESCR = '''
         <ui>
             <popup name='colour_wheel_I_popup'>
+                <menuitem action='colour_info'/>
+            </popup>
+            <popup name='colour_wheel_AI_popup'>
+                <menuitem action='add_colour'/>
                 <menuitem action='colour_info'/>
             </popup>
         </ui>
@@ -713,8 +720,12 @@ class ColourWheel(gtk.DrawingArea, actions.CAGandUIManager):
             ('colour_info', gtk.STOCK_INFO, None, None,
              _('Detailed information for this colour.'),
             ),
+            ('add_colour', gtk.STOCK_ADD, None, None,
+             _('Add this colour to the mixer.'),
+            ),
         ])
         self.__ci_acbid = self.action_groups.connect_activate('colour_info', self._show_colour_details_acb)
+        self.__ac_acbid = None
     def _show_colour_details_acb(self, _action):
         PaintColourInformationDialogue(self.__popup_colour).show()
     def do_popup_preliminaries(self, event):
@@ -728,6 +739,10 @@ class ColourWheel(gtk.DrawingArea, actions.CAGandUIManager):
     def set_colour_info_acb(self, callback):
         self.action_groups.disconnect_action('colour_info', self.__ci_acbid)
         self.__ci_acbid = self.action_groups.connect_activate('colour_info', callback, self)
+    def set_add_colour_acb(self, callback):
+        if self.__ac_acbid is not None:
+            self.action_groups.disconnect_action('add_colour', self.__ac_acbid)
+        self.__ac_acbid = self.action_groups.connect_activate('add_colour', callback, self)
     def polar_to_cartesian(self, radius, angle):
         if options.get('colour_wheel', 'red_to_yellow_clockwise'):
             x = -radius * math.cos(angle)

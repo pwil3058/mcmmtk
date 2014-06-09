@@ -886,7 +886,8 @@ class PaintColourSelector(gtk.VBox):
     def __init__(self, paint_series):
         gtk.VBox.__init__(self)
         # components
-        self.wheels = gpaint.HueWheelNotebook()
+        self.wheels = gpaint.HueWheelNotebook(popup='/colour_wheel_AI_popup')
+        self.wheels.set_wheels_add_colour_acb(self._add_wheel_colour_to_mixer_cb)
         self.paint_colours_view = SelectColourListView()
         self.paint_colours_view.set_size_request(480, 360)
         model = self.paint_colours_view.get_model()
@@ -919,6 +920,11 @@ class PaintColourSelector(gtk.VBox):
         Add the currently selected colours to the mixer.
         """
         self.emit('add-paint-colours', self.paint_colours_view.get_selected_colours())
+    def _add_wheel_colour_to_mixer_cb(self, _action, wheel):
+        """
+        Add the currently selected colours to the mixer.
+        """
+        self.emit('add-paint-colours', [wheel.popup_colour])
 gobject.signal_new('add-paint-colours', PaintColourSelector, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))
 
 class TopLevelWindow(gtk.Window):
