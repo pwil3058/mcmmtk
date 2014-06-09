@@ -16,7 +16,6 @@
 import os
 
 from mcmmtk import options
-from mcmmtk import paint
 
 CONFIG_DIR_PATH = options.get_user_config_dir()
 SYS_DATA_DIR_PATH = options.get_sys_data_dir()
@@ -24,7 +23,7 @@ SYS_DATA_DIR_PATH = options.get_sys_data_dir()
 IDEAL_PAINTS_FILE_PATH = os.sep.join([SYS_DATA_DIR_PATH, "ideal.psd"])
 SERIES_FILES_FILE_PATH = os.sep.join([CONFIG_DIR_PATH, "paint_series_files"])
 
-def _read_series_file_names():
+def read_series_file_names():
     series_file_names = []
     if os.path.isfile(SERIES_FILES_FILE_PATH):
         for line in open(SERIES_FILES_FILE_PATH, 'r').readlines():
@@ -34,7 +33,7 @@ def _read_series_file_names():
             series_file_names.append(sf_name)
     return series_file_names
 
-def _write_series_file_names(sf_names):
+def write_series_file_names(sf_names):
     fobj = open(SERIES_FILES_FILE_PATH, 'w')
     for sf_name in sf_names:
         fobj.write(sf_name)

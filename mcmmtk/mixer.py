@@ -927,6 +927,43 @@ class PaintColourSelector(gtk.VBox):
         self.emit('add-paint-colours', [wheel.popup_colour])
 gobject.signal_new('add-paint-colours', PaintColourSelector, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))
 
+class PaintSeriesManager(gobject.GObject):
+    def __init__(self):
+        gobject.GOBject.__init__(self)
+        self.__target_colour = None
+        self.__series_dict = dict()
+        menu = gtk.Menu()
+        # Open
+        self.__open_item = gtk.MenuItem(_("Open"))
+        self.__open_item.set_submenu(gtk.Menu())
+        self.__open_item.set_tooltip_text(_("Open a paint series paint selector."))
+        self.__open_item.show()
+        menu.append(self.__open_item)
+        # Add
+        add_menu = gtk.MenuItem(_("Remove"))
+        add_menu.set_submenu(gtk.Menu())
+        add_menu.set_tooltip_text(_("Add a paint series to the application (from a file)."))
+        add_menu.show()
+        add_menu.connect("activated", self._add_paint_series_cb)
+        menu.append(add_menu)
+        # Remove
+        self.__remove_item = gtk.MenuItem(_("Remove"))
+        self.__remove_item.set_submenu(gtk.Menu())
+        self.__remove_item.set_tooltip_text(_("Remove a paint series from the application."))
+        self.__remove_item.show()
+        menu.append(self.__remove_item)
+        #
+        self.__menu = gtk.MenuItem(_("Paint Colour Series"))
+    @property
+    def menu(self):
+        return self.__menu
+    def _add_paint_series_cb(self, widget):
+        print "add paint series activated"
+    def _open_paint_series_cb(self, widget, series):
+        print "open paint series activated", series
+    def _remove_paint_series_cb(self, widget, series):
+        print "remove paint series activated", series
+
 class TopLevelWindow(gtk.Window):
     """
     A top level window wrapper around a mixer

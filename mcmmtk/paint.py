@@ -320,6 +320,11 @@ class Series(object):
         self.paint_colours = {}
         for colour in colours:
             self.add_colour(colour)
+    def __cmp__(self, other):
+        result = cmp(self.series_id.maker, other.series_id.maker)
+        if result:
+            result = cmp(self.series_id.name, other.series_id.name)
+        return result
     def add_colour(self, colour):
         paint_colour = PaintColour(self, name=colour.name, rgb=colour.rgb, transparency=colour.transparency, finish=colour.finish)
         self.paint_colours[paint_colour.name] = paint_colour
