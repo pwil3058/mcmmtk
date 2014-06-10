@@ -37,6 +37,7 @@ from mcmmtk import iview
 from mcmmtk import data
 from mcmmtk import editor
 from mcmmtk import utils
+from mcmmtk import config
 
 def pango_rgb_str(rgb, bits_per_channel=16):
     """
@@ -54,9 +55,6 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
             <menu action='mixer_file_menu'>
                 <menuitem action='print_mixer'/>
                 <menuitem action='quit_mixer'/>
-            </menu>
-            <menu action='paint_series_menu'>
-                <menuitem action='open_paint_series_selector'/>
             </menu>
             <menu action='reference_resource_menu'>
                 <menuitem action='open_reference_image_viewer'/>
@@ -128,6 +126,9 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         hpaned.set_position(recollect.get("mixer", "hpaned_position"))
         vpaned.connect("notify", self._paned_notify_cb)
         hpaned.connect("notify", self._paned_notify_cb)
+        self.paint_series_manager = PaintSeriesManager()
+        self.paint_series_manager.connect('add-paint-colours', self._add_colours_to_mixer_cb)
+        menubar.insert(self.paint_series_manager.menu, 1)
         self.show_all()
         self.recalculate_colour([])
     def _paned_notify_cb(self, widget, parameter):
@@ -272,6 +273,7 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         self.wheels.unset_crosshair()
         for selector in self.selectors:
             selector.wheels.unset_crosshair()
+        self.paint_series_manager.unset_target_colour()
         self.action_groups.update_condns(actions.MaskedCondns(self.AC_DONT_HAVE_TARGET, self.AC_TARGET_MASK))
         self.next_name_label.set_text(_("#???:"))
         self.current_colour_description.set_text("")
@@ -285,6 +287,7 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
             self.current_target_colour = dlg.colour_specifier.colour
             self.hcvw_display.set_target_colour(self.current_target_colour)
             self.wheels.set_crosshair(self.current_target_colour)
+            self.paint_series_manager.set_target_colour(self.current_target_colour)
             for selector in self.selectors:
                 selector.wheels.set_crosshair(self.current_target_colour)
             self.action_groups.update_condns(actions.MaskedCondns(self.AC_HAVE_TARGET, self.AC_TARGET_MASK))
@@ -909,6 +912,13 @@ class PaintColourSelector(gtk.VBox):
         hpaned.set_position(recollect.get("paint_colour_selector", "hpaned_position"))
         hpaned.connect("notify", self._hpaned_notify_cb)
         self.show_all()
+    def set_target_colour(self, target_colour):
+        if target_colour is None:
+            self.wheels.unset_crosshair()
+        else:
+            self.wheels.set_crosshair(target_colour)
+    def unset_target_colour(self, target_colour):
+        self.wheels.unset_crosshair()
     def _hpaned_notify_cb(self, widget, parameter):
         if parameter.name == "position":
             recollect.set("paint_colour_selector", "hpaned_position", str(widget.get_position()))
@@ -929,22 +939,22 @@ gobject.signal_new('add-paint-colours', PaintColourSelector, gobject.SIGNAL_RUN_
 
 class PaintSeriesManager(gobject.GObject):
     def __init__(self):
-        gobject.GOBject.__init__(self)
+        gobject.GObject.__init__(self)
         self.__target_colour = None
         self.__series_dict = dict()
+        self._load_series_data()
         menu = gtk.Menu()
         # Open
         self.__open_item = gtk.MenuItem(_("Open"))
-        self.__open_item.set_submenu(gtk.Menu())
+        self.__open_item.set_submenu(self._build_open_submenu())
         self.__open_item.set_tooltip_text(_("Open a paint series paint selector."))
         self.__open_item.show()
         menu.append(self.__open_item)
         # Add
-        add_menu = gtk.MenuItem(_("Remove"))
-        add_menu.set_submenu(gtk.Menu())
+        add_menu = gtk.MenuItem(_("Add"))
         add_menu.set_tooltip_text(_("Add a paint series to the application (from a file)."))
         add_menu.show()
-        add_menu.connect("activated", self._add_paint_series_cb)
+        add_menu.connect("activate", self._add_paint_series_cb)
         menu.append(add_menu)
         # Remove
         self.__remove_item = gtk.MenuItem(_("Remove"))
@@ -954,15 +964,122 @@ class PaintSeriesManager(gobject.GObject):
         menu.append(self.__remove_item)
         #
         self.__menu = gtk.MenuItem(_("Paint Colour Series"))
+        self.__menu.set_submenu(menu)
     @property
     def menu(self):
         return self.__menu
+    def set_target_colour(self, colour):
+        for sdata in self.__series_dict.values():
+            sdata["selector"].set_target_colour(colour)
+    def unset_target_colour(self):
+        for sdata in self.__series_dict.values():
+            sdata["selector"].unset_target_colour()
+    def _add_series_from_file(self, filepath):
+        try:
+            fobj = open(filepath, 'r')
+            text = fobj.read()
+            fobj.close()
+        except IOError as edata:
+            return gtkpwx.report_io_error(edata)
+        try:
+            series = paint.Series.fm_definition(text)
+        except paint.Series.ParseError as edata:
+            return gtkpwx.report_format_error(edata, filepath)
+        # All OK so we can add this series to our dictionary
+        selector = PaintColourSelector(series)
+        selector.set_target_colour(self.__target_colour)
+        selector.connect('add-paint-colours', self._add_colours_to_mixer_cb)
+        self.__series_dict[series] = { "selector" : selector, "filepath" : filepath }
+        return series
+    def _load_series_data(self):
+        assert len(self.__series_dict) == 0
+        io_errors = []
+        format_errors = []
+        for filepath in config.read_series_file_names():
+            try:
+                self._add_series_from_file(filepath)
+            except IOError as edata:
+                io_errors.append(edata)
+                continue
+            except paint.Series.ParseError as edata:
+                format_errors.append((edata, filepath))
+                continue
+        if io_errors or format_errors:
+            msg = _("The following errors occured load paint series data:\n")
+            for edata in io_errors:
+                msg += "{0}: {1}".format(edata.filename, edata.strerror)
+            for edata, filepath in io_errors:
+                msg += "{0}: {1}".format(filepath, str(edata))
+            gtkpwx.report_error(msg)
+    def _build_open_submenu(self):
+        menu = gtk.Menu()
+        for series in sorted(self.__series_dict.keys()):
+            menu_item = gtk.MenuItem("{0.maker}: {0.name}".format(series.series_id))
+            menu_item.connect("activate", self._open_paint_series_cb, series)
+            menu_item.show()
+            menu.append(menu_item)
+        return menu
+    def _rebuild_open_submenu(self):
+        menu = self._build_open_submenu()
+        self.__open_item.remove_submenu()
+        self.__open_item.set_submenu(menu)
     def _add_paint_series_cb(self, widget):
-        print "add paint series activated"
+        dlg = gtk.FileChooserDialog(
+            title='Select Paint Series Description File',
+            parent=None,
+            action=gtk.FILE_CHOOSER_ACTION_OPEN,
+            buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK)
+        )
+        last_paint_file = recollect.get('paint_series_selector', 'last_file')
+        last_paint_dir = None if last_paint_file is None else os.path.dirname(last_paint_file)
+        if last_paint_dir:
+            dlg.set_current_folder(last_paint_dir)
+        response = dlg.run()
+        filepath = dlg.get_filename()
+        dlg.destroy()
+        if response != gtk.RESPONSE_OK:
+            return
+        try:
+            series = self._add_series_from_file(filepath)
+        except IOError as edata:
+            return gtkpwx.report_io_error(edata)
+        except paint.Series.ParseError as edata:
+            return gtkpwx.report_format_error(edata, filepath)
+        # All OK this series is in our dictionary
+        config.write_series_file_names([value["filepath"] for value in self.__series_dict.values()])
+        self._rebuild_open_submenu()
+        self._open_paint_series_cb(None, series)
     def _open_paint_series_cb(self, widget, series):
-        print "open paint series activated", series
+        sdata = self.__series_dict[series]
+        presenter = sdata.get("presenter", None)
+        if presenter is not None:
+            presenter.present()
+            return
+        # put it in a window and show it
+        window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        last_size = recollect.get("paint_colour_selector", "last_size")
+        if last_size:
+            window.set_default_size(*eval(last_size))
+        window.set_icon_from_file(icons.APP_ICON_FILE)
+        window.set_title(_("Paint Series: {0.maker}: {0.name}").format(series.series_id))
+        window.add(sdata["selector"])
+        window.connect('destroy', self._destroy_selector_cb, series)
+        window.connect('size-allocate', self._selector_size_allocation_cb)
+        sdata["presenter"] = window
+        window.show()
+        return True
+    def _selector_size_allocation_cb(self, widget, allocation):
+        recollect.set("paint_colour_selector", "last_size", "({0.width}, {0.height})".format(allocation))
+    def _destroy_selector_cb(self, widget, series):
+        del self.__series_dict[series]["presenter"]
+        widget.remove(self.__series_dict[series]["selector"])
+        widget.destroy()
     def _remove_paint_series_cb(self, widget, series):
         print "remove paint series activated", series
+    def _add_colours_to_mixer_cb(self, widget, paint_colours):
+        # pass the parcel :-)
+        self.emit('add-paint-colours', paint_colours)
+gobject.signal_new('add-paint-colours', PaintSeriesManager, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))
 
 class TopLevelWindow(gtk.Window):
     """

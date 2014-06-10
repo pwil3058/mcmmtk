@@ -31,6 +31,8 @@ def read_series_file_names():
             if len(line) == 0:
                 continue
             series_file_names.append(sf_name)
+    elif os.path.isfile(IDEAL_PAINTS_FILE_PATH):
+        series_file_names.append(IDEAL_PAINTS_FILE_PATH)
     return series_file_names
 
 def write_series_file_names(sf_names):

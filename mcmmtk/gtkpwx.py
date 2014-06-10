@@ -381,7 +381,7 @@ def ask_user_to_confirm(msg, parent=None):
 
 def report_io_error(edata):
     msg = '{0}: {1}'.format(edata.strerror, edata.filename)
-    dlg = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_CLOSE, message_format=msg)
+    dlg = ScrolledMessageDialog(parent=None, message_format=msg, type=gtk.MESSAGE_ERROR)
     dlg.run()
     dlg.destroy()
     return False
@@ -390,7 +390,7 @@ def report_format_error(edata, *args):
     msg = _("Format Error: ") + str(edata)
     for arg in args:
         msg += ":" + arg
-    dlg = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_CLOSE, message_format=msg)
+    dlg = ScrolledMessageDialog(parent=None, message_format=msg, type=gtk.MESSAGE_ERROR)
     dlg.run()
     dlg.destroy()
     return False
