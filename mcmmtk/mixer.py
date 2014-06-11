@@ -951,8 +951,8 @@ class PaintSeriesManager(gobject.GObject):
         self.__open_item.show()
         menu.append(self.__open_item)
         # Add
-        add_menu = gtk.MenuItem(_("Add"))
-        add_menu.set_tooltip_text(_("Add a paint series to the application (from a file)."))
+        add_menu = gtk.MenuItem(_("Load"))
+        add_menu.set_tooltip_text(_("Load a paint series from a file."))
         add_menu.show()
         add_menu.connect("activate", self._add_paint_series_cb)
         menu.append(add_menu)
@@ -975,16 +975,16 @@ class PaintSeriesManager(gobject.GObject):
         for sdata in self.__series_dict.values():
             sdata["selector"].unset_target_colour()
     def _add_series_from_file(self, filepath):
-        try:
-            fobj = open(filepath, 'r')
-            text = fobj.read()
-            fobj.close()
-        except IOError as edata:
-            return gtkpwx.report_io_error(edata)
-        try:
-            series = paint.Series.fm_definition(text)
-        except paint.Series.ParseError as edata:
-            return gtkpwx.report_format_error(edata, filepath)
+        # Check and see if this file is already loaded
+        for series, sdata in self.__series_dict.items():
+            if filepath == sdata["filepath"]:
+                gtkpwx.warn_user(_("File \"{0}\" is already loaded providing series \"{1.series_id.maker}: {1.series_id.name}\".\nAborting.").format(filepath, series))
+                return None
+        # We let the clients handle any exceptions
+        fobj = open(filepath, 'r')
+        text = fobj.read()
+        fobj.close()
+        series = paint.Series.fm_definition(text)
         # All OK so we can add this series to our dictionary
         selector = PaintColourSelector(series)
         selector.set_target_colour(self.__target_colour)
@@ -1005,12 +1005,14 @@ class PaintSeriesManager(gobject.GObject):
                 format_errors.append((edata, filepath))
                 continue
         if io_errors or format_errors:
-            msg = _("The following errors occured load paint series data:\n")
+            msg = _("The following errors occured loading paint series data:\n")
             for edata in io_errors:
-                msg += "{0}: {1}".format(edata.filename, edata.strerror)
-            for edata, filepath in io_errors:
-                msg += "{0}: {1}".format(filepath, str(edata))
+                msg += "\t{0}: {1}\n".format(edata.filename, edata.strerror)
+            for edata, filepath in format_errors:
+                msg += "\t{0}: Format Error: {1}\n".format(filepath, str(edata))
             gtkpwx.report_error(msg)
+            # Remove the offending files from the saved list
+            config.write_series_file_names([value["filepath"] for value in self.__series_dict.values()])
     def _build_open_submenu(self):
         menu = gtk.Menu()
         for series in sorted(self.__series_dict.keys()):
@@ -1045,6 +1047,8 @@ class PaintSeriesManager(gobject.GObject):
             return gtkpwx.report_io_error(edata)
         except paint.Series.ParseError as edata:
             return gtkpwx.report_format_error(edata, filepath)
+        if series is None:
+            return
         # All OK this series is in our dictionary
         config.write_series_file_names([value["filepath"] for value in self.__series_dict.values()])
         self._rebuild_open_submenu()
