@@ -853,7 +853,7 @@ class PaintColourSelector(gtk.VBox):
             self.wheels.unset_crosshair()
         else:
             self.wheels.set_crosshair(target_colour)
-    def unset_target_colour(self, target_colour):
+    def unset_target_colour(self):
         self.wheels.unset_crosshair()
     def _hpaned_notify_cb(self, widget, parameter):
         if parameter.name == "position":
