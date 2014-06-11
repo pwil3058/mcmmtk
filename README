@@ -6,7 +6,7 @@ USAGE below for more details.
 
 STATUS:
 
-This software is still under development and is only Alpha standard at
+This software is still under development and is only Beta standard at
 this time.
 
 REQUIREMENTS:
@@ -58,14 +58,11 @@ PAINT SERIES:
 At this time, the only paint series data included in the distribution is
 for an imaginary set of paints known as the "Ideal Paint Colours Series"
 which features six colours equally spaced around the colour circle
-(at maximim chroma) together with black and white. This series can be
-found in the file "ideal.psd" in the "data" subdirectory of the source
-distribution and in the directory "$ROOT/share/ModellersColourMatcherMixer/data"
-in installed distributions. On Linux $ROOT should be "/usr" and to
-facilitate finding the file on Windows the file selector should open in
-that directory when the "Paint Series/Open" menu option in the Mixer is
-invoked.  Although of no real use in practice this set of paints is
-useful for assessing the Mixer's potential and learning how to mix paints.
+(at maximim chroma) together with black and white. This series should be
+automatically included in the mixer's "Paint Colour Series"->Open menu
+when it is run for the first time.  Although of no real use in practice
+this set of paints is useful for assessing the Mixer's potential and,
+more importantly, learning how to mix paints.
 
 INTERNATIONALIZATION:
 
@@ -73,9 +70,42 @@ The code is extensively hooked for i18n but (at the moment) there is no
 localization available for languages other than English.
 
 CHANGES:
-    V-0.02: adds target colour crosshairs to colour series selector wheels
-    v-0.03: adds mechanisms for entering target/paint colour as RGB values
-            adds mechanisms to make accidentally deleting paints harder
+    v-0.02:
+        - adds target colour crosshairs to colour series selector wheels
+    v-0.03:
+        - adds mechanisms for entering target/paint colour as RGB values
+        - adds mechanisms to make accidentally deleting paints harder
+    v-0.04:
+        - removes inappropriate cross coupling between Hue, Value and
+          Chroma in the mixer's new mixd colour specifier and the editor's
+          paint colour editor interfaces.
+        - allows smaller/larger increments to be used when tweaking
+          the colour in these interfaces by depressing the Control/Shift
+          keys respectively while clicking the tweak buttons.
+        - allows paint colours to be added to the mixer from the
+          paint series selector's colour wheels via a right button
+          popup menu.
+        - allows colour details to be displayed from all colour wheels
+          via a right button popup menu.
+        - adds the ability to move wheels' graticules using mouse
+          motion with the left button pressed. This is useful when
+          zooming the wheel (via the existing mouse wheel mechanism)
+          places the colours of interest out of view.
+        - gives the user more mechanisms for changing the size and
+          layout of windows.
+        - saves size/layout changes and uses them next time either tool
+          is reused.
+        - replaces the mixer's primitive "load paint series data from a file"
+          mechanism with a more sophisticated one where "known" paint
+          series are offered for selection in its "Paint Colour Series"->Open
+          menu.  New paint series can be made "known" by loading them from
+          a file via the "Paint Colour Series"->Load menu item. Similarly,
+          unwanted paint series may be removed via the
+          "Paint Colour Series"->Remove menu item.  Once "known" paint
+          series remain "known" between sessions provided the file
+          containing their specification continues to exist.
+        - increases the size of the mixer's paint spinners and adds
+          the paints name to the label.
 
 BUGS:
 
