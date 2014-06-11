@@ -322,7 +322,7 @@ class Series(object):
             self.add_colour(colour)
     def __cmp__(self, other):
         result = cmp(self.series_id.maker, other.series_id.maker)
-        if result:
+        if result == 0:
             result = cmp(self.series_id.name, other.series_id.name)
         return result
     def add_colour(self, colour):
