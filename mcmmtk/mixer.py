@@ -849,6 +849,7 @@ class PaintColourSelector(gtk.VBox):
         hpaned.connect("notify", self._hpaned_notify_cb)
         self.show_all()
     def set_target_colour(self, target_colour):
+        print "TC:", target_colour
         if target_colour is None:
             self.wheels.unset_crosshair()
         else:
@@ -906,9 +907,11 @@ class PaintSeriesManager(gobject.GObject):
     def menu(self):
         return self.__menu
     def set_target_colour(self, colour):
+        self.__target_colour = colour
         for sdata in self.__series_dict.values():
             sdata["selector"].set_target_colour(colour)
     def unset_target_colour(self):
+        self.__target_colour = None
         for sdata in self.__series_dict.values():
             sdata["selector"].unset_target_colour()
     def _add_series_from_file(self, filepath):
