@@ -943,10 +943,11 @@ class PaintSeriesManager(gobject.GObject):
         self.__target_colour = None
         self.__series_dict = dict()
         self._load_series_data()
+        open_menu, remove_menu = self._build_submenus()
         menu = gtk.Menu()
         # Open
         self.__open_item = gtk.MenuItem(_("Open"))
-        self.__open_item.set_submenu(self._build_open_submenu())
+        self.__open_item.set_submenu(open_menu)
         self.__open_item.set_tooltip_text(_("Open a paint series paint selector."))
         self.__open_item.show()
         menu.append(self.__open_item)
@@ -958,7 +959,7 @@ class PaintSeriesManager(gobject.GObject):
         menu.append(add_menu)
         # Remove
         self.__remove_item = gtk.MenuItem(_("Remove"))
-        self.__remove_item.set_submenu(gtk.Menu())
+        self.__remove_item.set_submenu(remove_menu)
         self.__remove_item.set_tooltip_text(_("Remove a paint series from the application."))
         self.__remove_item.show()
         menu.append(self.__remove_item)
@@ -1013,18 +1014,23 @@ class PaintSeriesManager(gobject.GObject):
             gtkpwx.report_error(msg)
             # Remove the offending files from the saved list
             config.write_series_file_names([value["filepath"] for value in self.__series_dict.values()])
-    def _build_open_submenu(self):
-        menu = gtk.Menu()
+    def _build_submenus(self):
+        open_menu = gtk.Menu()
+        remove_menu = gtk.Menu()
         for series in sorted(self.__series_dict.keys()):
-            menu_item = gtk.MenuItem("{0.maker}: {0.name}".format(series.series_id))
-            menu_item.connect("activate", self._open_paint_series_cb, series)
-            menu_item.show()
-            menu.append(menu_item)
-        return menu
-    def _rebuild_open_submenu(self):
-        menu = self._build_open_submenu()
+            label = "{0.maker}: {0.name}".format(series.series_id)
+            for menu, cb in [(open_menu, self._open_paint_series_cb), (remove_menu, self._remove_paint_series_cb)]:
+                menu_item = gtk.MenuItem(label)
+                menu_item.connect("activate", cb, series)
+                menu_item.show()
+                menu.append(menu_item)
+        return (open_menu, remove_menu)
+    def _rebuild_submenus(self):
+        open_menu, remove_menu = self._build_submenus()
         self.__open_item.remove_submenu()
-        self.__open_item.set_submenu(menu)
+        self.__open_item.set_submenu(open_menu)
+        self.__remove_item.remove_submenu()
+        self.__remove_item.set_submenu(remove_menu)
     def _add_paint_series_cb(self, widget):
         dlg = gtk.FileChooserDialog(
             title='Select Paint Series Description File',
@@ -1051,7 +1057,7 @@ class PaintSeriesManager(gobject.GObject):
             return
         # All OK this series is in our dictionary
         config.write_series_file_names([value["filepath"] for value in self.__series_dict.values()])
-        self._rebuild_open_submenu()
+        self._rebuild_submenus()
         self._open_paint_series_cb(None, series)
     def _open_paint_series_cb(self, widget, series):
         sdata = self.__series_dict[series]
@@ -1079,7 +1085,13 @@ class PaintSeriesManager(gobject.GObject):
         widget.remove(self.__series_dict[series]["selector"])
         widget.destroy()
     def _remove_paint_series_cb(self, widget, series):
-        print "remove paint series activated", series
+        sde = self.__series_dict[series]
+        del self.__series_dict[series]
+        config.write_series_file_names([value["filepath"] for value in self.__series_dict.values()])
+        self._rebuild_submenus()
+        if "presenter" in sde:
+            sde["presenter"].destroy()
+        sde["selector"].destroy()
     def _add_colours_to_mixer_cb(self, widget, paint_colours):
         # pass the parcel :-)
         self.emit('add-paint-colours', paint_colours)
