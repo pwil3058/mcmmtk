@@ -83,7 +83,6 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         self.mixed_colours_view = MatchedColourListView(self.mixed_colours)
         self.mixed_colours_view.action_groups.connect_activate('remove_selected_colours', self._remove_mixed_colours_cb)
         self.mixed_count = 0
-        self.selectors = list()
         self.wheels = gpaint.HueWheelNotebook()
         self.wheels.set_size_request(360, 360)
         self.wheels.set_wheels_colour_info_acb(self._show_wheel_colour_details_cb)
@@ -143,14 +142,10 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         """
         self.action_groups[actions.AC_DONT_CARE].add_actions([
             ('mixer_file_menu', None, _('File')),
-            ('paint_series_menu', None, _('Paint Colour Series')),
             ('reference_resource_menu', None, _('Reference Resources')),
             ('remove_unused_paints', None, _('Remove Unused Paints'), None,
             _('Remove all unused paints from the mixer.'),
             self._remove_unused_paints_cb),
-            ('open_paint_series_selector', gtk.STOCK_OPEN, None, None,
-            _('Open a paint series paint selector.'),
-            self._open_paint_series_selector_cb),
             ('quit_mixer', gtk.STOCK_QUIT, None, None,
             _('Quit this program.'),
             self._quit_mixer_cb),
@@ -271,8 +266,6 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         self.current_target_colour = None
         self.hcvw_display.set_target_colour(None)
         self.wheels.unset_crosshair()
-        for selector in self.selectors:
-            selector.wheels.unset_crosshair()
         self.paint_series_manager.unset_target_colour()
         self.action_groups.update_condns(actions.MaskedCondns(self.AC_DONT_HAVE_TARGET, self.AC_TARGET_MASK))
         self.next_name_label.set_text(_("#???:"))
@@ -288,8 +281,6 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
             self.hcvw_display.set_target_colour(self.current_target_colour)
             self.wheels.set_crosshair(self.current_target_colour)
             self.paint_series_manager.set_target_colour(self.current_target_colour)
-            for selector in self.selectors:
-                selector.wheels.set_crosshair(self.current_target_colour)
             self.action_groups.update_condns(actions.MaskedCondns(self.AC_HAVE_TARGET, self.AC_TARGET_MASK))
             self.next_name_label.set_text(_("#{:03d}:").format(self.mixed_count + 1))
             self.paint_colours.set_sensitive(True)
@@ -347,61 +338,6 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         for colour in colours:
             if len(self.mixed_colours.get_colour_users(colour)) == 0:
                 self.del_paint(colour)
-    def launch_selector(self, filepath):
-        try:
-            fobj = open(filepath, 'r')
-            text = fobj.read()
-            fobj.close()
-        except IOError as edata:
-            return gtkpwx.report_io_error(edata)
-        try:
-            series = paint.Series.fm_definition(text)
-        except paint.Series.ParseError as edata:
-            return gtkpwx.report_format_error(edata, filepath)
-        # All OK so we can launch the selector
-        selector = PaintColourSelector(series)
-        selector.connect('add-paint-colours', self._add_colours_to_mixer_cb)
-        self.selectors.append(selector)
-        if self.current_target_colour:
-            selector.wheels.set_crosshair(self.current_target_colour)
-        window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        last_size = recollect.get("paint_colour_selector", "last_size")
-        if last_size:
-            window.set_default_size(*eval(last_size))
-        window.set_icon_from_file(icons.APP_ICON_FILE)
-        window.set_title(_('Paint Series: {}').format(os.path.relpath(filepath)))
-        window.add(selector)
-        window.connect('destroy', self._destroy_selector_cb)
-        window.connect('size-allocate', self._selector_size_allocation_cb)
-        window.show()
-        return True
-    def _selector_size_allocation_cb(self, widget, allocation):
-        recollect.set("paint_colour_selector", "last_size", "({0.width}, {0.height})".format(allocation))
-    def _destroy_selector_cb(self, widget):
-        selector = widget.get_child()
-        self.selectors.remove(selector)
-        widget.destroy()
-    def _open_paint_series_selector_cb(self, _action):
-        """
-        Open a tool for adding paint colours to the mixer
-        Ask the user for the name of the file then open it.
-        """
-        parent = self.get_toplevel()
-        dlg = gtk.FileChooserDialog(
-            title='Open Paint Series Description File',
-            parent=parent if isinstance(parent, gtk.Window) else None,
-            action=gtk.FILE_CHOOSER_ACTION_OPEN,
-            buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK)
-        )
-        last_paint_file = recollect.get('paint_series_selector', 'last_file')
-        last_paint_dir = None if last_paint_file is None else os.path.dirname(last_paint_file)
-        if last_paint_dir:
-            dlg.set_current_folder(last_paint_dir)
-        if dlg.run() == gtk.RESPONSE_OK:
-            filepath = dlg.get_filename()
-            if self.launch_selector(filepath):
-                recollect.set('paint_series_selector', 'last_file', filepath)
-        dlg.destroy()
     def _print_mixer_cb(self, _action):
         """
         Print the mixer as simple text
