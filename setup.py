@@ -24,7 +24,7 @@ for_windows = sys.platform in ['win32', 'cygwin'] or 'bdist_wininst' in sys.argv
 
 NAME = 'ModellersColourMatcherMixer'
 
-VERSION = '0.04.1'
+VERSION = '0.05'
 
 DESCRIPTION = 'A set of tools for modellers to experiment with mixing colours.'
 

@@ -106,6 +106,10 @@ CHANGES:
           containing their specification continues to exist.
         - increases the size of the mixer's paint spinners and adds
           the paints name to the label.
+    v-0.05:
+        - adds more words to the paint description lexicon
+        - adds a "general" words lexicon for use with comments etc.
+        - adds a mechanism to remember new words between sessions.
 
 BUGS:
 
