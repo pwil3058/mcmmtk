@@ -203,11 +203,14 @@ class TextEntryAutoComplete(gtk.Entry):
                         new_words.append(word)
                 for word in new_words:
                     model.append([word])
+                self.emit("new-words", new_words)
             else:
                 text = text.strip()
                 if text not in lexicon:
                     model.append([text])
+                    self.emit("new-words", [text])
         return text
+gobject.signal_new('new-words', TextEntryAutoComplete, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))
 
 ### Miscellaneous Data Entry
 

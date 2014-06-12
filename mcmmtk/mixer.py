@@ -69,10 +69,12 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         actions.CAGandUIManager.__init__(self)
         self.action_groups.update_condns(actions.MaskedCondns(self.AC_DONT_HAVE_TARGET, self.AC_TARGET_MASK))
         # Components
-        self.notes = gtk.Entry()
+        self.notes = gtkpwx.TextEntryAutoComplete(data.GENERAL_WORDS_LEXICON)
+        self.notes.connect("new-words", data.new_general_words_cb)
         self.next_name_label = gtk.Label(_("#???:"))
         self.current_target_colour = None
         self.current_colour_description = gtkpwx.TextEntryAutoComplete(data.COLOUR_NAME_LEXICON)
+        self.current_colour_description.connect("new-words", data.new_paint_words_cb)
         self.mixpanel = gpaint.ColourMatchArea()
         self.mixpanel.set_size_request(240, 240)
         self.hcvw_display = gpaint.TargetedHCVDisplay()
@@ -1160,6 +1162,7 @@ class NewMixedColourDialogue(gtk.Dialog):
                             )
         vbox = self.get_content_area()
         self.colour_description = gtkpwx.TextEntryAutoComplete(data.COLOUR_NAME_LEXICON)
+        self.colour_description.connect("new-words", data.new_paint_words_cb)
         self.colour_description.connect('changed', self._description_changed_cb)
         self.set_response_sensitive(gtk.RESPONSE_ACCEPT, len(self.colour_description.get_text()) > 0)
         hbox = gtk.HBox()
