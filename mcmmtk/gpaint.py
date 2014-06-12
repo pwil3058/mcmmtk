@@ -95,7 +95,7 @@ class ColourSampleArea(gtk.DrawingArea, actions.CAGandUIManager):
     def __init__(self, single_sample=False, default_bg=None):
         gtk.DrawingArea.__init__(self)
 
-        self.set_size_request(200, 200)
+        self.set_size_request(100, 100)
         self._ptr_x = self._ptr_y = 100
         self._sample_images = []
         self._single_sample = single_sample
@@ -205,7 +205,7 @@ class ColourMatchArea(gtk.DrawingArea):
     def __init__(self, target_colour=None, default_bg=None):
         gtk.DrawingArea.__init__(self)
 
-        self.set_size_request(200, 200)
+        self.set_size_request(100, 100)
         self._ptr_x = self._ptr_y = 100
         self.default_bg_colour = self.bg_colour = self.new_colour(paint.RGB_WHITE) if default_bg is None else self.new_colour(default_bg)
         self.target_colour = self.new_colour(target_colour) if target_colour is not None else None

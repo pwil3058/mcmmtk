@@ -74,7 +74,7 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         self.current_target_colour = None
         self.current_colour_description = gtkpwx.TextEntryAutoComplete(data.COLOUR_NAME_LEXICON)
         self.mixpanel = gpaint.ColourMatchArea()
-        self.mixpanel.set_size_request(360, 240)
+        self.mixpanel.set_size_request(240, 240)
         self.hcvw_display = gpaint.TargetedHCVDisplay()
         self.paint_colours = ColourPartsSpinButtonBox()
         self.paint_colours.connect('remove-colour', self._remove_paint_colour_cb)
@@ -828,7 +828,7 @@ class PaintColourSelector(gtk.VBox):
         self.wheels = gpaint.HueWheelNotebook(popup='/colour_wheel_AI_popup')
         self.wheels.set_wheels_add_colour_acb(self._add_wheel_colour_to_mixer_cb)
         self.paint_colours_view = SelectColourListView()
-        self.paint_colours_view.set_size_request(480, 360)
+        self.paint_colours_view.set_size_request(240, 360)
         model = self.paint_colours_view.get_model()
         for colour in paint_series.paint_colours.values():
             model.append_colour(colour)
@@ -849,7 +849,6 @@ class PaintColourSelector(gtk.VBox):
         hpaned.connect("notify", self._hpaned_notify_cb)
         self.show_all()
     def set_target_colour(self, target_colour):
-        print "TC:", target_colour
         if target_colour is None:
             self.wheels.unset_crosshair()
         else:
