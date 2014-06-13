@@ -996,6 +996,7 @@ class PaintSeriesManager(gobject.GObject):
         if series is None:
             return
         # All OK this series is in our dictionary
+        last_paint_file = recollect.set('paint_series_selector', 'last_file', filepath)
         config.write_series_file_names([value["filepath"] for value in self.__series_dict.values()])
         self._rebuild_submenus()
         self._open_paint_series_cb(None, series)
