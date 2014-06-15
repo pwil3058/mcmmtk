@@ -460,7 +460,7 @@ class GenericTargetedAttrDisplay(GenericAttrDisplay):
         self.target_val = None
         self.target_fg_colour = gtkpwx.best_foreground(colour)
         GenericAttrDisplay.__init__(self, colour=colour, size=size)
-        self._set_target_colour(colour)
+        self._set_target_colour(None)
     def draw_target(self, gc):
         if self.target_val is None:
             return
@@ -1146,7 +1146,7 @@ class PaintColourInformationDialogue(gtk.Dialog):
         if isinstance(colour, paint.PaintColour):
             vbox.pack_start(gtkpwx.ColouredLabel(colour.series.series_id.name, colour), expand=False)
             vbox.pack_start(gtkpwx.ColouredLabel(colour.series.series_id.maker, colour), expand=False)
-        vbox.pack_start(HCVDisplay(colour), expand=False)
+        vbox.pack_start(TargetedHCVDisplay(colour=colour), expand=False)
         if isinstance(colour, paint.PaintColour):
             vbox.pack_start(gtk.Label(colour.transparency.description()), expand=False)
             vbox.pack_start(gtk.Label(colour.finish.description()), expand=False)
