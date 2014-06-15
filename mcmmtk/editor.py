@@ -606,7 +606,7 @@ class ColourSampleMatcher(gtk.VBox):
         self.rgb_entry = gpaint.RGBEntryBox()
         self.rgb_entry.connect("colour-changed", self._rgb_entry_changed_cb)
         self.pack_start(self.rgb_entry, expand=False)
-        self.hcv_display = gpaint.HCVDisplay()
+        self.hcv_display = gpaint.TargetedHCVDisplay()
         self.pack_start(self.hcv_display, expand=False)
         # Add value modification buttons
         # Lighten
