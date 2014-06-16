@@ -314,9 +314,13 @@ class GenericAttrDisplay(gtk.DrawingArea):
         gtk.DrawingArea.__init__(self)
         self.set_size_request(size[0], size[1])
         self.colour = colour
-        self.fg_colour = gtkpwx.best_foreground(colour)
+        self.target_fg_colour = self.fg_colour = gtkpwx.best_foreground(colour)
         self.indicator_val = 0.5
+        # Set these to none so _set_colour() won't crash
+        self.target_colour = None
+        self.target_val = None
         self._set_colour(colour)
+        self._set_target_colour(None)
         self.connect('expose-event', self.expose_cb)
         self.show()
     @staticmethod
@@ -362,105 +366,6 @@ class GenericAttrDisplay(gtk.DrawingArea):
         self.colour = colour
         self._set_colour(colour)
         self.queue_draw()
-
-class HueDisplay(GenericAttrDisplay):
-    LABEL = _('Hue')
-
-    def expose_cb(self, _widget, _event):
-        if self.colour is None:
-            self.window.set_background(gtk.gdk.Color(0, 0, 0))
-            return
-        gc = self.window.new_gc()
-        gc.copy(self.get_style().fg_gc[gtk.STATE_NORMAL])
-        #
-        if self.colour.hue.is_grey():
-            self.window.set_background(self.new_colour(self.colour.hue_rgb))
-            self.draw_label(gc)
-            return
-        #
-        backwards = options.get('colour_wheel', 'red_to_yellow_clockwise')
-        w, h = self.window.get_size()
-        spectral_buf = generate_spectral_rgb_buf(self.colour.hue, 2 * math.pi, w, h, backwards)
-        self.window.draw_rgb_image(gc, x=0, y=0, width=w, height=h,
-            dith=gtk.gdk.RGB_DITHER_NONE,
-            rgb_buf=spectral_buf)
-
-        self.draw_indicators(gc)
-        self.draw_label(gc)
-    def _set_colour(self, colour):
-        self.fg_colour = self.get_colormap().alloc_color(gtkpwx.best_foreground(colour.hue_rgb))
-
-class ValueDisplay(GenericAttrDisplay):
-    LABEL = _('Value')
-    def __init__(self, colour=None, size=(100, 15)):
-        GenericAttrDisplay.__init__(self, colour=colour, size=size)
-        self.start_colour = paint.BLACK
-        self.end_colour = paint.WHITE
-    def expose_cb(self, _widget, _event):
-        if self.colour is None:
-            self.window.set_background(gtk.gdk.Color(0, 0, 0))
-            return
-        gc = self.window.new_gc()
-        gc.copy(self.get_style().fg_gc[gtk.STATE_NORMAL])
-        w, h = self.window.get_size()
-
-        graded_buf = generate_graded_rgb_buf(self.start_colour, self.end_colour, w, h)
-        self.window.draw_rgb_image(gc, x=0, y=0, width=w, height=h,
-            dith=gtk.gdk.RGB_DITHER_NONE,
-            rgb_buf=graded_buf)
-
-        self.draw_indicators(gc)
-        self.draw_label(gc)
-    def _set_colour(self, colour):
-        """
-        Set values that only change when the colour changes
-        """
-        self.fg_colour = self.get_colormap().alloc_color(gtkpwx.best_foreground(colour))
-        self.indicator_val = colour.value
-
-class ChromaDisplay(ValueDisplay):
-    LABEL = _('Chroma')
-    def __init__(self, colour=None, size=(100, 15)):
-        ValueDisplay.__init__(self, colour=colour, size=size)
-        if colour is not None:
-            self._set_colour(colour)
-    def _set_colour(self, colour):
-        """
-        Set values that only change when the colour changes
-        """
-        self.start_colour = self.colour.hcv.chroma_side()
-        self.end_colour = colour.hue_rgb
-        self.fg_colour = self.get_colormap().alloc_color(gtkpwx.best_foreground(self.start_colour))
-        self.indicator_val = colour.chroma
-
-class HCVDisplay(gtk.VBox):
-    def __init__(self, colour=paint.WHITE, size=(256, 120), stype = gtk.SHADOW_ETCHED_IN):
-        gtk.VBox.__init__(self)
-        #
-        w, h = size
-        self.hue = HueDisplay(colour=colour, size=(w, h / 4))
-        self.pack_start(gtkpwx.wrap_in_frame(self.hue, stype), expand=False)
-        self.value = ValueDisplay(colour=colour, size=(w, h / 4))
-        self.pack_start(gtkpwx.wrap_in_frame(self.value, stype), expand=False)
-        self.chroma = ChromaDisplay(colour=colour, size=(w, h / 4))
-        self.pack_start(gtkpwx.wrap_in_frame(self.chroma, stype), expand=False)
-        self.show()
-    def set_colour(self, new_colour):
-        self.chroma.set_colour(new_colour)
-        self.hue.set_colour(new_colour)
-        self.value.set_colour(new_colour)
-
-# Targetted attribute displays
-
-class GenericTargetedAttrDisplay(GenericAttrDisplay):
-    LABEL = None
-
-    def __init__(self, colour=None, size=(100, 15)):
-        self.target_colour = None
-        self.target_val = None
-        self.target_fg_colour = gtkpwx.best_foreground(colour)
-        GenericAttrDisplay.__init__(self, colour=colour, size=size)
-        self._set_target_colour(None)
     def draw_target(self, gc):
         if self.target_val is None:
             return
@@ -479,7 +384,7 @@ class GenericTargetedAttrDisplay(GenericAttrDisplay):
         self._set_target_colour(colour)
         self.queue_draw()
 
-class TargetedHueDisplay(GenericTargetedAttrDisplay):
+class HueDisplay(GenericAttrDisplay):
     LABEL = _('Hue')
 
     def expose_cb(self, _widget, _event):
@@ -537,12 +442,13 @@ class TargetedHueDisplay(GenericTargetedAttrDisplay):
                 else:
                     self.indicator_val = 0.5 - offset
 
-class TargetedValueDisplay(GenericTargetedAttrDisplay):
+class ValueDisplay(GenericAttrDisplay):
     LABEL = _('Value')
+
     def __init__(self, colour=None, size=(100, 15)):
         self.start_colour = paint.BLACK
         self.end_colour = paint.WHITE
-        GenericTargetedAttrDisplay.__init__(self, colour=colour, size=size)
+        GenericAttrDisplay.__init__(self, colour=colour, size=size)
     def expose_cb(self, _widget, _event):
         if self.colour is None and self.target_colour is None:
             self.window.set_background(gtk.gdk.Color(0, 0, 0))
@@ -578,10 +484,10 @@ class TargetedValueDisplay(GenericTargetedAttrDisplay):
             self.target_fg_colour = self.get_colormap().alloc_color(gtkpwx.best_foreground(colour))
             self.target_val = colour.value
 
-class TargetedChromaDisplay(TargetedValueDisplay):
+class ChromaDisplay(ValueDisplay):
     LABEL = _('Chroma')
     def __init__(self, colour=None, size=(100, 15)):
-        TargetedValueDisplay.__init__(self, colour=colour, size=size)
+        ValueDisplay.__init__(self, colour=colour, size=size)
     def _set_colour(self, colour):
         """
         Set values that only change when the colour changes
@@ -614,16 +520,17 @@ class TargetedChromaDisplay(TargetedValueDisplay):
             self.target_fg_colour = self.get_colormap().alloc_color(gtkpwx.best_foreground(self.start_colour))
             self.target_val = colour.chroma
 
-class TargetedHCVDisplay(gtk.VBox):
+
+class HCVDisplay(gtk.VBox):
     def __init__(self, colour=paint.WHITE, size=(256, 120), stype = gtk.SHADOW_ETCHED_IN):
         gtk.VBox.__init__(self)
         #
         w, h = size
-        self.hue = TargetedHueDisplay(colour=colour, size=(w, h / 4))
+        self.hue = HueDisplay(colour=colour, size=(w, h / 4))
         self.pack_start(gtkpwx.wrap_in_frame(self.hue, stype), expand=False)
-        self.value = TargetedValueDisplay(colour=colour, size=(w, h / 4))
+        self.value = ValueDisplay(colour=colour, size=(w, h / 4))
         self.pack_start(gtkpwx.wrap_in_frame(self.value, stype), expand=False)
-        self.chroma = TargetedChromaDisplay(colour=colour, size=(w, h / 4))
+        self.chroma = ChromaDisplay(colour=colour, size=(w, h / 4))
         self.pack_start(gtkpwx.wrap_in_frame(self.chroma, stype), expand=False)
         self.show()
     def set_colour(self, new_colour):
@@ -1146,7 +1053,7 @@ class PaintColourInformationDialogue(gtk.Dialog):
         if isinstance(colour, paint.PaintColour):
             vbox.pack_start(gtkpwx.ColouredLabel(colour.series.series_id.name, colour), expand=False)
             vbox.pack_start(gtkpwx.ColouredLabel(colour.series.series_id.maker, colour), expand=False)
-        vbox.pack_start(TargetedHCVDisplay(colour=colour), expand=False)
+        vbox.pack_start(HCVDisplay(colour=colour), expand=False)
         if isinstance(colour, paint.PaintColour):
             vbox.pack_start(gtk.Label(colour.transparency.description()), expand=False)
             vbox.pack_start(gtk.Label(colour.finish.description()), expand=False)
