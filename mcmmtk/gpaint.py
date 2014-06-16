@@ -310,7 +310,7 @@ def generate_graded_rgb_buf(start_colour, end_colour, width, height):
 class GenericAttrDisplay(gtk.DrawingArea):
     LABEL = None
 
-    def __init__(self, colour=None, size=(100, 15)):
+    def __init__(self, colour=None, target_colour=None, size=(100, 15)):
         gtk.DrawingArea.__init__(self)
         self.set_size_request(size[0], size[1])
         self.colour = colour
@@ -320,7 +320,9 @@ class GenericAttrDisplay(gtk.DrawingArea):
         self.target_colour = None
         self.target_val = None
         self._set_colour(colour)
-        self._set_target_colour(None)
+        # OK now set the target colour
+        self.target_colour = target_colour
+        self._set_target_colour(target_colour)
         self.connect('expose-event', self.expose_cb)
         self.show()
     @staticmethod
@@ -445,10 +447,10 @@ class HueDisplay(GenericAttrDisplay):
 class ValueDisplay(GenericAttrDisplay):
     LABEL = _('Value')
 
-    def __init__(self, colour=None, size=(100, 15)):
+    def __init__(self, colour=None, target_colour=None, size=(100, 15)):
         self.start_colour = paint.BLACK
         self.end_colour = paint.WHITE
-        GenericAttrDisplay.__init__(self, colour=colour, size=size)
+        GenericAttrDisplay.__init__(self, colour=colour, target_colour=target_colour, size=size)
     def expose_cb(self, _widget, _event):
         if self.colour is None and self.target_colour is None:
             self.window.set_background(gtk.gdk.Color(0, 0, 0))
@@ -486,8 +488,7 @@ class ValueDisplay(GenericAttrDisplay):
 
 class ChromaDisplay(ValueDisplay):
     LABEL = _('Chroma')
-    def __init__(self, colour=None, size=(100, 15)):
-        ValueDisplay.__init__(self, colour=colour, size=size)
+
     def _set_colour(self, colour):
         """
         Set values that only change when the colour changes
@@ -522,15 +523,15 @@ class ChromaDisplay(ValueDisplay):
 
 
 class HCVDisplay(gtk.VBox):
-    def __init__(self, colour=paint.WHITE, size=(256, 120), stype = gtk.SHADOW_ETCHED_IN):
+    def __init__(self, colour=paint.WHITE, target_colour=None, size=(256, 120), stype = gtk.SHADOW_ETCHED_IN):
         gtk.VBox.__init__(self)
         #
         w, h = size
-        self.hue = HueDisplay(colour=colour, size=(w, h / 4))
+        self.hue = HueDisplay(colour=colour, target_colour=target_colour, size=(w, h / 4))
         self.pack_start(gtkpwx.wrap_in_frame(self.hue, stype), expand=False)
-        self.value = ValueDisplay(colour=colour, size=(w, h / 4))
+        self.value = ValueDisplay(colour=colour, target_colour=target_colour, size=(w, h / 4))
         self.pack_start(gtkpwx.wrap_in_frame(self.value, stype), expand=False)
-        self.chroma = ChromaDisplay(colour=colour, size=(w, h / 4))
+        self.chroma = ChromaDisplay(colour=colour, target_colour=target_colour, size=(w, h / 4))
         self.pack_start(gtkpwx.wrap_in_frame(self.chroma, stype), expand=False)
         self.show()
     def set_colour(self, new_colour):
