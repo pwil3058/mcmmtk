@@ -682,7 +682,7 @@ class ColourSampleMatcher(gtk.VBox):
                     for i in range(3):
                         total[i] += data[offset + i]
             npixels += width * n_rows
-        rgb = paint.RGB(*((total[i] / npixels) << 8 for i in range(3)))
+        rgb = paint.RGB(*((total[i] << 8) / npixels for i in range(3)))
         if raw:
             self.set_colour(rgb)
         else:
