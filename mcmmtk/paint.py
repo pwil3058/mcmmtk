@@ -292,7 +292,7 @@ class NamedColour(Colour):
         self.name = name
     def __repr__(self):
         fmt_str = 'NamedColour(name="{0}", rgb={1}, transparency="{2}", finish="{3}")'
-        return fmt_str.format(self.name, self.rgb, self.transparency, self.finish)
+        return fmt_str.format(re.sub('"', r'\"', self.name), self.rgb, self.transparency, self.finish)
     def __str__(self):
         return self.name
     def __len__(self):
