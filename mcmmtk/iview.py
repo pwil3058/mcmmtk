@@ -22,9 +22,9 @@ import fractions
 import gtk
 import gobject
 
-from mcmmtk import actions
-from mcmmtk import gtkpwx
-from mcmmtk import printer
+from . import actions
+from . import gtkpwx
+from . import printer
 
 class ZoomedPixbuf(object):
     """

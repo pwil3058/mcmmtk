@@ -26,7 +26,7 @@ import fractions
 import gtk
 import pango
 
-from mcmmtk import options
+from . import options
 
 MM_PER_PT = 25.4 / 72
 

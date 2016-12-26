@@ -16,7 +16,7 @@
 import sys
 
 # Importing i18n here means that _() is defined for all package modules
-from mcmmtk import i18n
+from . import i18n
 
 # We can also check PyGTK versions here to avoid duplication in other
 # modules.

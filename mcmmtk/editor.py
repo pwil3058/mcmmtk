@@ -26,17 +26,17 @@ import gtk
 import gobject
 import glib
 
-from mcmmtk import options
-from mcmmtk import recollect
-from mcmmtk import utils
-from mcmmtk import actions
-from mcmmtk import gtkpwx
-from mcmmtk import paint
-from mcmmtk import gpaint
-from mcmmtk import data
-from mcmmtk import icons
-from mcmmtk import iview
-from mcmmtk import rgbh
+from . import options
+from . import recollect
+from . import utils
+from . import actions
+from . import gtkpwx
+from . import paint
+from . import gpaint
+from . import data
+from . import icons
+from . import iview
+from . import rgbh
 
 class UnacceptedChangesDialogue(gtk.Dialog):
     # TODO: make a better UnacceptedChangesDialogue()

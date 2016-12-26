@@ -27,7 +27,7 @@ import gobject
 import pango
 
 # TODO: make gtkpwx.py pure
-from mcmmtk import utils
+from . import utils
 
 BITS_PER_CHANNEL = 16
 ONE = (1 << BITS_PER_CHANNEL) - 1
@@ -488,6 +488,7 @@ class ScreenSampler(gtk.Window):
             cbd = gtk.clipboard_get(self.clipboard)
             cbd.set_image(pb)
         self.finish()
+        return False
     def mouse_event_handler(self, event):
         if event.type == gtk.gdk.BUTTON_PRESS:
             if event.button != 1:
@@ -511,10 +512,10 @@ class ScreenSampler(gtk.Window):
         elif event.type == gtk.gdk.BUTTON_RELEASE:
             if not self.started:
                 return
-            self.set_rect_size(event)
-            gtk.gdk.pointer_ungrab()
             self.hide()
-            gobject.timeout_add(120, self.take_sample)
+            gtk.gdk.pointer_ungrab()
+            self.set_rect_size(event)
+            gobject.timeout_add(125, self.take_sample)
         else:
             gtk.main_do_event(event)
     def grab_mouse(self):

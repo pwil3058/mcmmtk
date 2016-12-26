@@ -25,19 +25,19 @@ import collections
 import gtk
 import gobject
 
-from mcmmtk import recollect
-from mcmmtk import actions
-from mcmmtk import tlview
-from mcmmtk import gtkpwx
-from mcmmtk import gpaint
-from mcmmtk import paint
-from mcmmtk import printer
-from mcmmtk import icons
-from mcmmtk import iview
-from mcmmtk import data
-from mcmmtk import editor
-from mcmmtk import utils
-from mcmmtk import config
+from . import recollect
+from . import actions
+from . import tlview
+from . import gtkpwx
+from . import gpaint
+from . import paint
+from . import printer
+from . import icons
+from . import iview
+from . import data
+from . import editor
+from . import utils
+from . import config
 
 def pango_rgb_str(rgb, bits_per_channel=16):
     """

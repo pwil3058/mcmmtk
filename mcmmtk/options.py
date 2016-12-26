@@ -24,7 +24,7 @@ try:
 except ImportError:
     import ConfigParser as configparser
 
-from mcmmtk import i18n
+from . import i18n
 
 def _find_sys_base_dir():
     sys_data_dir = os.path.join(sys.path[0], 'data')

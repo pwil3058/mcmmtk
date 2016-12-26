@@ -22,7 +22,7 @@ import math
 import re
 import fractions
 
-from mcmmtk import rgbh
+from . import rgbh
 
 if __name__ == '__main__':
     import doctest

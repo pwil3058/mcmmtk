@@ -20,7 +20,7 @@ import sys
 
 import gtk
 
-from mcmmtk import options
+from . import options
 
 class LexiconListStore(gtk.ListStore):
     def __init__(self, lexicon):

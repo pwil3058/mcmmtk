@@ -15,7 +15,7 @@
 
 import os
 
-from mcmmtk import options
+from . import options
 
 CONFIG_DIR_PATH = options.get_user_config_dir()
 SYS_DATA_DIR_PATH = options.get_sys_data_dir()

@@ -25,13 +25,13 @@ import fractions
 import gtk
 import gobject
 
-from mcmmtk import options
-from mcmmtk import utils
-from mcmmtk import actions
-from mcmmtk import tlview
-from mcmmtk import gtkpwx
-from mcmmtk import paint
-from mcmmtk import recollect
+from . import options
+from . import utils
+from . import actions
+from . import tlview
+from . import gtkpwx
+from . import paint
+from . import recollect
 
 if __name__ == '__main__':
     _ = lambda x: x

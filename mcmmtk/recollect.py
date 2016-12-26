@@ -24,7 +24,7 @@ try:
 except ImportError:
     import ConfigParser as configparser
 
-from mcmmtk import options
+from . import options
 
 _RECOLLECTIONS_PATH = os.path.join(options.get_user_config_dir(), 'guistate.mem')
 
