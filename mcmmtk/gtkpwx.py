@@ -83,7 +83,7 @@ def wrap_in_frame(widget, shadow_type=Gtk.ShadowType.NONE):
 
 class WH(collections.namedtuple('WH', ['width', 'height'])):
     __slots__ = ()
-    # These operations are compatible with
+    # These operations are compatible with Gdk.Rectangle
     def __sub__(self, other):
         # don't assume other is WH just that it has width and height attributes
         return WH(width=self.width - other.width, height=self.height - other.height)
@@ -96,7 +96,7 @@ class WH(collections.namedtuple('WH', ['width', 'height'])):
 
 class XY(collections.namedtuple('XY', ['x', 'y'])):
     __slots__ = ()
-    # These operations are compatible with
+    # These operations are compatible with Gdk.Rectangle
     def __add__(self, other):
         # don't assume other is XY just that it has x and y attributes
         return XY(x=self.x + other.x, y=self.y + other.y)
@@ -113,7 +113,7 @@ class XY(collections.namedtuple('XY', ['x', 'y'])):
         # don't assume other is XY just that it has x and y attributes
         return other.x == self.x and other.y == self.y
 
-# A named tuple compatible with
+# A named tuple compatible with Gdk.Rectangle
 class RECT(collections.namedtuple('XY', ['x', 'y', 'width', 'height'])):
     __slots__ = ()
     @staticmethod
@@ -223,7 +223,7 @@ class Choice(Gtk.ComboBox):
     def __init__(self, choices):
         Gtk.ComboBox.__init__(self, model=Gtk.ListStore(str))
         cell = Gtk.CellRendererText()
-        self.pack_start(cell, True)
+        self.pack_start(cell, expand=True)
         self.add_attribute(cell, 'text', 0)
         for choice in choices:
             self.get_model().append([choice])
@@ -440,7 +440,6 @@ class UnsavedChangesDialogue(Gtk.Dialog):
 
 # Screen Sampling
 # Based on escrotum code (<https://github.com/Roger/escrotum>)
-
 class ScreenSampler(Gtk.Window):
     def __init__(self, clipboard=Gdk.SELECTION_CLIPBOARD):
         Gtk.Window.__init__(self, Gtk.WindowType.POPUP)

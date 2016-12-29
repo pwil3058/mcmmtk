@@ -579,9 +579,8 @@ class PartsColourListStore(gpaint.ColourListStore):
         new_parts = spinbutton.get_value_as_int()
         row = self.get_row(self.get_iter(path))
         self.process_parts_change(paint.BLOB(colour=row.colour, parts=new_parts))
-    def _notes_edited_cb(self, cell, path, new_text, index):
-        self[path][index].notes = new_text
-        self._notify_modification()
+    def _notes_edited_cb(self, cell, path, new_text):
+        self[path][0].notes = new_text
 GObject.signal_new('contributions-changed', PartsColourListStore, GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT, ))
 
 def notes_cell_data_func(column, cell, model, model_iter, *args):
@@ -590,7 +589,7 @@ def notes_cell_data_func(column, cell, model, model_iter, *args):
     cell.set_property('background-gdk', Gdk.Color(*colour.rgb))
     cell.set_property('foreground-gdk', gtkpwx.best_foreground(colour.rgb))
 
-def generate_colour_parts_list_spec(model):
+def generate_colour_parts_list_spec(view, model):
     """
     Generate the specification for a paint colour parts list
     """
@@ -622,6 +621,7 @@ def generate_colour_parts_list_spec(model):
                     cell_renderer=Gtk.CellRendererText,
                     expand=None,
                     properties={'editable' : True, },
+                    signal_handlers = {"edited" : model._notes_edited_cb},
                     start=False
                 ),
                 cell_data_function_spec=tlview.CellDataFunctionSpec(
@@ -649,19 +649,9 @@ class PartsColourListView(gpaint.ColourListView):
     </ui>
     '''
     MODEL = PartsColourListStore
-    SPECIFICATION = generate_colour_parts_list_spec(PartsColourListStore)
+    SPECIFICATION = generate_colour_parts_list_spec
     def __init__(self, *args, **kwargs):
         gpaint.ColourListView.__init__(self, *args, **kwargs)
-        self._set_cell_connections()
-    def _set_cell_connections(self):
-        pass
-        #parts_cell = self.get_cell_with_title(_('Parts'))
-        #parts_cell.connect('value-changed', self._value_changed_cb)
-        #notes_cell = self.get_cell_with_title(_('Notes'))
-        #notes_cell.connect('edited', self._notes_edited_cb, self.MODEL.col_index('colour'))
-    def _notes_edited_cb(self, cell, path, new_text, index):
-        self.get_model()[path][index].notes = new_text
-        self._notify_modification()
     def populate_action_groups(self):
         """
         Populate action groups ready for UI initialization.
@@ -679,17 +669,9 @@ class PartsColourListView(gpaint.ColourListView):
                  _('Remove the selected colours from the list.'), ),
             ]
         )
-    #def _value_changed_cb(self, cell, path, spinbutton):
-        #"""
-        #Let the model know about a change to a spinbutton value
-        #"""
-        #model = self.get_model()
-        #new_parts = spinbutton.get_value_as_int()
-        #row = model.get_row(model.get_iter(path))
-        #model.process_parts_change(paint.BLOB(colour=row.colour, parts=new_parts))
-    #def _show_colour_details_cb(self, _action):
-        #colour = self.get_selected_colours()[0]
-        #gpaint.PaintColourInformationDialogue(colour).show()
+    def _show_colour_details_cb(self, _action):
+        colour = self.get_selected_colours()[0]
+        gpaint.PaintColourInformationDialogue(colour).show()
 
 MATCH = collections.namedtuple('MATCH', ['colour', 'target_colour'])
 
@@ -709,19 +691,21 @@ class MatchedColourListStore(gpaint.ColourListStore):
         if model_iter is None:
             raise LookupError()
         return self.get_value_named(model_iter, 'target_colour')
+    def _notes_edited_cb(self, cell, path, new_text):
+        self[path][0].notes = new_text
 
 def match_cell_data_func(column, cell, model, model_iter, attribute):
     colour = model.get_value_named(model_iter, 'target_colour')
     cell.set_property('background-gdk', Gdk.Color(*colour.rgb))
 
-def generate_matched_colour_list_spec(model):
+def generate_matched_colour_list_spec(view, model):
     """
     Generate the specification for a paint colour parts list
     """
     matched_col_spec = tlview.ColumnSpec(
         title =_('Matched'),
         properties={},
-        sort_key_function=lambda row: row.colour_matched.hue,
+        sort_key_function=lambda row: row.target_colour.hue,
         cells=[
             tlview.CellSpec(
                 cell_renderer_spec=tlview.CellRendererSpec(
@@ -747,6 +731,7 @@ def generate_matched_colour_list_spec(model):
                     cell_renderer=Gtk.CellRendererText,
                     expand=None,
                     properties={'editable' : True, },
+                    signal_handlers = {"edited" : model._notes_edited_cb},
                     start=False
                 ),
                 cell_data_function_spec=tlview.CellDataFunctionSpec(
@@ -774,7 +759,7 @@ class MatchedColourListView(gpaint.ColourListView):
     </ui>
     '''
     MODEL = MatchedColourListStore
-    SPECIFICATION = generate_matched_colour_list_spec(MatchedColourListStore)
+    SPECIFICATION = generate_matched_colour_list_spec
     def __init__(self, *args, **kwargs):
         gpaint.ColourListView.__init__(self, *args, **kwargs)
         self._set_cell_connections()
@@ -803,7 +788,7 @@ class MatchedColourListView(gpaint.ColourListView):
             ]
         )
     def _show_colour_details_cb(self, _action):
-        selected_rows = tlview.NamedTreeModel.get_selected_rows(self.get_selection())
+        selected_rows = self.MODEL.get_selected_rows(self.get_selection())
         colour = selected_rows[0].colour
         if isinstance(colour, paint.NamedMixedColour):
             MixedColourInformationDialogue(colour, selected_rows[0].target_colour).show()
@@ -1195,7 +1180,7 @@ class NewMixedColourDialogue(Gtk.Dialog):
     def _description_changed_cb(self, widget):
         self.set_response_sensitive(Gtk.ResponseType.ACCEPT, len(self.colour_description.get_text()) > 0)
 
-def generate_components_list_spec(model):
+def generate_components_list_spec(view, model):
     """
     Generate the specification for a mixed colour components list
     """
@@ -1233,7 +1218,7 @@ class ComponentsListView(PartsColourListView):
     </ui>
     '''
     MODEL = PartsColourListStore
-    SPECIFICATION = generate_components_list_spec(PartsColourListStore)
+    SPECIFICATION = generate_components_list_spec
 
     def _set_cell_connections(self):
         pass

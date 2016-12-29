@@ -18,6 +18,7 @@ A viewer for digital images
 '''
 
 import fractions
+import cairo
 
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
@@ -234,6 +235,7 @@ class PixbufView(Gtk.ScrolledWindow, actions.CAGandUIManager):
                     cairo_ctxt.set_dash([3])
                 cairo_ctxt.rectangle(*rect)
                 cairo_ctxt.set_source_rgb(0, 0, 0)
+                cairo_ctxt.set_operator(cairo.OPERATOR_XOR)
                 cairo_ctxt.stroke()
         return True
     def _size_allocate_cb(self, _widget, _event):

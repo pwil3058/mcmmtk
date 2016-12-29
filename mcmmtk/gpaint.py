@@ -16,11 +16,11 @@
 '''
 Widgets the work with paint colours
 '''
-import sys
 
 import collections
 import math
 import fractions
+import sys
 import cairo
 
 from gi.repository import Gtk
@@ -921,7 +921,7 @@ def paint_cell_data_func(column, cell, model, model_iter, attribute):
         cell.set_property('background-gdk', Gdk.Color(*colour.rgb))
         cell.set_property('foreground-gdk', gtkpwx.best_foreground(colour.rgb))
     elif attribute == 'value':
-        cell.set_property('text', str(round(colour.value, 2)))
+        cell.set_property('text', str(float(round(colour.value, 2))))
         cell.set_property('background-gdk', Gdk.Color(*colour.value_rgb()))
         cell.set_property('foreground-gdk', gtkpwx.best_foreground(colour.value_rgb()))
     elif attribute == 'hue':
