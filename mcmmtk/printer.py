@@ -23,8 +23,10 @@ import os
 import math
 import fractions
 
-import gtk
-import pango
+from gi.repository import Gdk
+from gi.repository import Gtk
+from gi.repository import Pango
+from gi.repository import PangoCairo
 
 from . import options
 
@@ -32,7 +34,7 @@ MM_PER_PT = 25.4 / 72
 
 _USER_SETTINGS_FILE = os.path.join(options.get_user_config_dir(), 'printer.cfg')
 
-SETTINGS = gtk.PrintSettings()
+SETTINGS = Gtk.PrintSettings()
 
 if os.path.exists(_USER_SETTINGS_FILE) and os.path.getsize(_USER_SETTINGS_FILE):
     if not SETTINGS.load_file(_USER_SETTINGS_FILE):
@@ -44,28 +46,28 @@ def print_text(text, parent=None):
     '''
     Print a plain text
     '''
-    prop = gtk.PrintOperation()
+    prop = Gtk.PrintOperation()
 
     prop.set_print_settings(SETTINGS)
-    prop.set_unit(gtk.UNIT_MM)
+    prop.set_unit(Gtk.UNIT_MM)
 
     data = {'text' : text}
 
     prop.connect( "begin-print", begin_print_text, data)
     prop.connect("draw-page", draw_page_text, data)
 
-    res = prop.run(gtk.PRINT_OPERATION_ACTION_PRINT_DIALOG, parent)
+    res = prop.run(Gtk.PrintOperationAction.PRINT_DIALOG, parent)
 
-    if res == gtk.PRINT_OPERATION_RESULT_ERROR:
+    if res == Gtk.PrintOperationResult.ERROR:
         emsg = prop.get_error()
-        error_dialog = gtk.MessageDialog(parent,
-            gtk.DIALOG_DESTROY_WITH_PARENT,
-            gtk.MESSAGE_ERROR,
-            gtk.BUTTONS_CLOSE,
+        error_dialog = Gtk.MessageDialog(parent,
+            Gtk.DialogFlags.DESTROY_WITH_PARENT,
+            Gtk.MessageType.ERROR,
+            Gtk.ButtonsType.CLOSE,
             "Error printing: {}\n".format(emsg))
         error_dialog.connect("response", lambda w,id: w.destroy())
         error_dialog.show()
-    elif res == gtk.PRINT_OPERATION_RESULT_APPLY:
+    elif res == Gtk.PrintOperationResult.APPLY:
         settings = prop.get_print_settings()
         if settings.to_file(_USER_SETTINGS_FILE):
             SETTINGS.load_file(_USER_SETTINGS_FILE)
@@ -75,7 +77,7 @@ def begin_print_text(operation, context, data):
     Process the "begin-print" signal
     """
     layout = context.create_pango_layout()
-    layout.set_width(int(context.get_width() * pango.SCALE))
+    layout.set_width(int(context.get_width() * Pango.SCALE))
     layout.set_text(data['text'])
     _twidth, theight = layout.get_pixel_size()
     data['layout'] = layout
@@ -109,28 +111,28 @@ def print_markup_chunks(chunks, parent=None):
     Print a series of marked up chunks with no page breaks within a
     chunk unless the chunk itself is too big for one page.
     """
-    prop = gtk.PrintOperation()
+    prop = Gtk.PrintOperation()
     #
     prop.set_print_settings(SETTINGS)
-    prop.set_unit(gtk.UNIT_MM)
+    prop.set_unit(Gtk.Unit.MM)
     #
     data = {'chunks' : chunks}
     #
     prop.connect( "begin-print", begin_print_markup_chunks, data)
     prop.connect("draw-page", draw_page_markup_chunks, data)
     #
-    res = prop.run(gtk.PRINT_OPERATION_ACTION_PRINT_DIALOG, parent)
+    res = prop.run(Gtk.PrintOperationAction.PRINT_DIALOG, parent)
     #
-    if res == gtk.PRINT_OPERATION_RESULT_ERROR:
+    if res == Gtk.PrintOperationResult.ERROR:
         emsg = prop.get_error()
-        error_dialog = gtk.MessageDialog(parent,
-            gtk.DIALOG_DESTROY_WITH_PARENT,
-            gtk.MESSAGE_ERROR,
-            gtk.BUTTONS_CLOSE,
+        error_dialog = Gtk.MessageDialog(parent,
+            Gtk.DialogFlags.DESTROY_WITH_PARENT,
+            Gtk.MessageType.ERROR,
+            Gtk.ButtonsType.CLOSE,
             "Error printing: {}\n".format(emsg))
         error_dialog.connect("response", lambda w,id: w.destroy())
         error_dialog.show()
-    elif res == gtk.PRINT_OPERATION_RESULT_APPLY:
+    elif res == Gtk.PrintOperationResult.APPLY:
         settings = prop.get_print_settings()
         if settings.to_file(_USER_SETTINGS_FILE):
             SETTINGS.load_file(_USER_SETTINGS_FILE)
@@ -140,7 +142,7 @@ def begin_print_markup_chunks(operation, context, data):
     Allocate the chunks to pages ready for printing.
     """
     pheight = context.get_height()
-    spwidth = int(context.get_width() * pango.SCALE)
+    spwidth = int(context.get_width() * Pango.SCALE)
     pages = []
     page = []
     total_height = 0
@@ -172,7 +174,7 @@ def draw_page_markup_chunks(operation, context, page_num, data):
     for layout in data['pages'][page_num]:
         cc = context.get_cairo_context()
         cc.move_to(0, y)
-        cc.show_layout(layout)
+        PangoCairo.show_layout(cc, layout)
         _w, h = layout.get_pixel_size()
         y += h
 
@@ -180,28 +182,28 @@ def print_pixbuf(pixbuf, parent=None):
     """
     Print a single pixbuf on one page.
     """
-    prop = gtk.PrintOperation()
+    prop = Gtk.PrintOperation()
     #
     prop.set_print_settings(SETTINGS)
-    prop.set_unit(gtk.UNIT_MM)
+    prop.set_unit(Gtk.UNIT_MM)
     #
     data = {'pixbuf' : pixbuf}
     #
     prop.connect( "begin-print", begin_print_pixbuf, data)
     prop.connect("draw-page", draw_page_pixbuf, data)
     #
-    res = prop.run(gtk.PRINT_OPERATION_ACTION_PRINT_DIALOG, parent)
+    res = prop.run(Gtk.PrintOperationAction.PRINT_DIALOG, parent)
     #
-    if res == gtk.PRINT_OPERATION_RESULT_ERROR:
+    if res == Gtk.PrintOperationResult.ERROR:
         emsg = prop.get_error()
-        error_dialog = gtk.MessageDialog(parent,
-            gtk.DIALOG_DESTROY_WITH_PARENT,
-            gtk.MESSAGE_ERROR,
-            gtk.BUTTONS_CLOSE,
+        error_dialog = Gtk.MessageDialog(parent,
+            Gtk.DialogFlags.DESTROY_WITH_PARENT,
+            Gtk.MessageType.ERROR,
+            Gtk.ButtonsType.CLOSE,
             "Error printing: {}\n".format(emsg))
         error_dialog.connect("response", lambda w,id: w.destroy())
         error_dialog.show()
-    elif res == gtk.PRINT_OPERATION_RESULT_APPLY:
+    elif res == Gtk.PrintOperationResult.APPLY:
         settings = prop.get_print_settings()
         if settings.to_file(_USER_SETTINGS_FILE):
             SETTINGS.load_file(_USER_SETTINGS_FILE)
@@ -214,7 +216,7 @@ def begin_print_pixbuf(operation, context, data):
     pwidth = data['pixbuf'].get_width()
     psu = context.get_page_setup()
     if pwidth > pheight:
-        data['pixbuf'] = data['pixbuf'].rotate_simple(gtk.gdk.PIXBUF_ROTATE_CLOCKWISE)
+        data['pixbuf'] = data['pixbuf'].rotate_simple(Gdk.PIXBUF_ROTATE_CLOCKWISE)
         pheight = data['pixbuf'].get_height()
         pwidth = data['pixbuf'].get_width()
     cheight = fractions.Fraction.from_float(context.get_height())
@@ -227,7 +229,7 @@ def begin_print_pixbuf(operation, context, data):
     else:
         new_width = int(round(pwidth * wscale))
         new_height = int(round(pheight * wscale))
-    data['pixbuf'] = data['pixbuf'].scale_simple(new_width, new_height, gtk.gdk.INTERP_BILINEAR)
+    data['pixbuf'] = data['pixbuf'].scale_simple(new_width, new_height, GdkPixbuf.InterpType.BILINEAR)
     operation.set_n_pages(1)
 
 def draw_page_pixbuf(operation, context, page_num, data):

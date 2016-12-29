@@ -22,9 +22,11 @@ import fractions
 import sys
 import math
 
-import gtk
-import gobject
-import pango
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GdkPixbuf
+from gi.repository import GObject
+from gi.repository import Pango
 
 # TODO: make gtkpwx.py pure
 from . import utils
@@ -37,9 +39,12 @@ ONE = (1 << BITS_PER_CHANNEL) - 1
 def best_foreground(rgb, threshold=0.5):
     wval = (rgb[0] * 0.299 + rgb[1] * 0.587 + rgb[2] * 0.114)
     if wval > ONE * threshold:
-        return gtk.gdk.Color(0, 0, 0)
+        return Gdk.Color(0, 0, 0)
     else:
-        return gtk.gdk.Color(ONE, ONE, ONE)
+        return Gdk.Color(ONE, ONE, ONE)
+
+def best_foreground_rgb(rgb, threshold=0.5):
+    return gdk_color_to_rgb(best_foreground(rgb=rgb, threshold=threshold))
 
 def gdk_color_to_rgb(gcol):
     gcol_str = gcol.to_string()[1:]
@@ -49,15 +54,15 @@ def gdk_color_to_rgb(gcol):
         return [int(gcol_str[i*2:(i+1) * 2] * 2, 16) for i in range(3)]
     return [int(gcol_str[i*4:(i+1) * 4], 16) for i in range(3)]
 
-def wrap_in_scrolled_window(widget, policy=(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC), with_frame=True, label=None):
-    scrw = gtk.ScrolledWindow()
+def wrap_in_scrolled_window(widget, policy=(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC), with_frame=True, label=None):
+    scrw = Gtk.ScrolledWindow()
     scrw.set_policy(policy[0], policy[1])
-    if isinstance(widget, gtk.Container):
+    if isinstance(widget, Gtk.Container):
         scrw.add(widget)
     else:
         scrw.add_with_viewport(widget)
     if with_frame:
-        frame = gtk.Frame(label)
+        frame = Gtk.Frame(label=label)
         frame.add(scrw)
         frame.show_all()
         return frame
@@ -65,11 +70,11 @@ def wrap_in_scrolled_window(widget, policy=(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUT
         scrw.show_all()
         return scrw
 
-def wrap_in_frame(widget, shadow_type=gtk.SHADOW_NONE):
+def wrap_in_frame(widget, shadow_type=Gtk.ShadowType.NONE):
     """
     Wrap the widget in a frame with the requested shadow type
     """
-    frame = gtk.Frame()
+    frame = Gtk.Frame()
     frame.set_shadow_type(shadow_type)
     frame.add(widget)
     return frame
@@ -78,7 +83,7 @@ def wrap_in_frame(widget, shadow_type=gtk.SHADOW_NONE):
 
 class WH(collections.namedtuple('WH', ['width', 'height'])):
     __slots__ = ()
-    # These operations are compatible with gtk.gdk.Rectangle
+    # These operations are compatible with
     def __sub__(self, other):
         # don't assume other is WH just that it has width and height attributes
         return WH(width=self.width - other.width, height=self.height - other.height)
@@ -91,7 +96,7 @@ class WH(collections.namedtuple('WH', ['width', 'height'])):
 
 class XY(collections.namedtuple('XY', ['x', 'y'])):
     __slots__ = ()
-    # These operations are compatible with gtk.gdk.Rectangle
+    # These operations are compatible with
     def __add__(self, other):
         # don't assume other is XY just that it has x and y attributes
         return XY(x=self.x + other.x, y=self.y + other.y)
@@ -108,7 +113,7 @@ class XY(collections.namedtuple('XY', ['x', 'y'])):
         # don't assume other is XY just that it has x and y attributes
         return other.x == self.x and other.y == self.y
 
-# A named tuple compatible with gtk.gdk.Rectangle
+# A named tuple compatible with
 class RECT(collections.namedtuple('XY', ['x', 'y', 'width', 'height'])):
     __slots__ = ()
     @staticmethod
@@ -117,7 +122,7 @@ class RECT(collections.namedtuple('XY', ['x', 'y', 'width', 'height'])):
 
 ### Text Entry
 
-class EntryCompletionMultiWord(gtk.EntryCompletion):
+class EntryCompletionMultiWord(Gtk.EntryCompletion):
     """
     Extend EntryCompletion to handle mult-word text.
     """
@@ -125,7 +130,7 @@ class EntryCompletionMultiWord(gtk.EntryCompletion):
         """
         model: an argument to allow the TreeModel to be set at creation.
         """
-        gtk.EntryCompletion.__init__(self)
+        Gtk.EntryCompletion.__init__(self)
         if model is not None:
             self.set_model(model)
         self.set_match_func(self.match_func)
@@ -153,7 +158,7 @@ class EntryCompletionMultiWord(gtk.EntryCompletion):
         entry = completion.get_entry()
         cursor_index = entry.get_position()
         # just in case get_text() is overloaded e.g. to add learning
-        text = gtk.Entry.get_text(entry)
+        text = Gtk.Entry.get_text(entry)
         #
         text_col = completion.get_text_column()
         mword = model.get_value(model_iter, text_col)
@@ -163,20 +168,20 @@ class EntryCompletionMultiWord(gtk.EntryCompletion):
         entry.set_position(cursor_index + len(new_text) - len(text))
         return True
 
-class TextEntryAutoComplete(gtk.Entry):
+class TextEntryAutoComplete(Gtk.Entry):
     def __init__(self, lexicon=None, learn=True, multiword=True, **kwargs):
         '''
         multiword: if True use individual words in entry as the target of autocompletion
         '''
-        gtk.Entry.__init__(self, **kwargs)
+        Gtk.Entry.__init__(self, **kwargs)
         self.__multiword = multiword
         if self.__multiword:
             completion = EntryCompletionMultiWord()
         else:
-            completion = gtk.EntryCompletion()
+            completion = Gtk.EntryCompletion()
         self.set_completion(completion)
-        cell = gtk.CellRendererText()
-        completion.pack_start(cell)
+        cell = Gtk.CellRendererText()
+        completion.pack_start(cell, expand=True)
         completion.set_text_column(0)
         self.set_lexicon(lexicon)
         self.set_learn(learn)
@@ -189,7 +194,7 @@ class TextEntryAutoComplete(gtk.Entry):
         """
         self.learn = enable
     def get_text(self):
-        text = gtk.Entry.get_text(self)
+        text = Gtk.Entry.get_text(self)
         if self.learn:
             completion = self.get_completion()
             model = completion.get_model()
@@ -210,14 +215,14 @@ class TextEntryAutoComplete(gtk.Entry):
                     model.append([text])
                     self.emit("new-words", [text])
         return text
-gobject.signal_new('new-words', TextEntryAutoComplete, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))
+GObject.signal_new('new-words', TextEntryAutoComplete, GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,))
 
 ### Miscellaneous Data Entry
 
-class Choice(gtk.ComboBox):
+class Choice(Gtk.ComboBox):
     def __init__(self, choices):
-        gtk.ComboBox.__init__(self, gtk.ListStore(str))
-        cell = gtk.CellRendererText()
+        Gtk.ComboBox.__init__(self, model=Gtk.ListStore(str))
+        cell = Gtk.CellRendererText()
         self.pack_start(cell, True)
         self.add_attribute(cell, 'text', 0)
         for choice in choices:
@@ -228,20 +233,20 @@ class Choice(gtk.ComboBox):
     def set_selection(self, index):
         self.set_active(index if index is not None else -1)
 
-class ColourableLabel(gtk.EventBox):
+class ColourableLabel(Gtk.EventBox):
     def __init__(self, label=''):
-        gtk.EventBox.__init__(self)
-        self.label = gtk.Label(label)
+        Gtk.EventBox.__init__(self)
+        self.label = Gtk.Label(label=label)
         self.add(self.label)
         self.show_all()
     def modify_base(self, state, colour):
-        gtk.EventBox.modify_base(self, state, colour)
+        Gtk.EventBox.modify_base(self, state, colour)
         self.label.modify_base(state, colour)
     def modify_text(self, state, colour):
-        gtk.EventBox.modify_text(self, state, colour)
+        Gtk.EventBox.modify_text(self, state, colour)
         self.label.modify_text(state, colour)
     def modify_fg(self, state, colour):
-        gtk.EventBox.modify_fg(self, state, colour)
+        Gtk.EventBox.modify_fg(self, state, colour)
         self.label.modify_fg(state, colour)
 
 class ColouredLabel(ColourableLabel):
@@ -250,35 +255,35 @@ class ColouredLabel(ColourableLabel):
         if colour is not None:
             self.set_colour(colour)
     def set_colour(self, colour):
-        bg_colour = self.get_colormap().alloc_color(gtk.gdk.Color(*colour))
-        fg_colour = self.get_colormap().alloc_color(best_foreground(colour))
-        for state in [gtk.STATE_NORMAL, gtk.STATE_PRELIGHT, gtk.STATE_ACTIVE]:
+        bg_colour = Gdk.Color(*colour)
+        fg_colour = best_foreground(colour)
+        for state in [Gtk.StateType.NORMAL, Gtk.StateType.PRELIGHT, Gtk.StateType.ACTIVE]:
             self.modify_base(state, bg_colour)
             self.modify_bg(state, bg_colour)
             self.modify_fg(state, fg_colour)
             self.modify_text(state, fg_colour)
 
-class ColouredButton(gtk.EventBox):
+class ColouredButton(Gtk.EventBox):
     prelit_width = 2
     unprelit_width = 0
     state_value_ratio = {
-        gtk.STATE_NORMAL: fractions.Fraction(1),
-        gtk.STATE_ACTIVE: fractions.Fraction(1, 2),
-        gtk.STATE_PRELIGHT: fractions.Fraction(1),
-        gtk.STATE_SELECTED: fractions.Fraction(1),
-        gtk.STATE_INSENSITIVE: fractions.Fraction(1, 4)
+        Gtk.StateType.NORMAL: fractions.Fraction(1),
+        Gtk.StateType.ACTIVE: fractions.Fraction(1, 2),
+        Gtk.StateType.PRELIGHT: fractions.Fraction(1),
+        Gtk.StateType.SELECTED: fractions.Fraction(1),
+        Gtk.StateType.INSENSITIVE: fractions.Fraction(1, 4)
     }
     def __init__(self, colour=None, label=None):
         self.label = ColouredLabel(label, colour)
-        gtk.EventBox.__init__(self)
+        Gtk.EventBox.__init__(self)
         self.set_size_request(25, 25)
-        self.add_events(gtk.gdk.BUTTON_PRESS_MASK|gtk.gdk.BUTTON_RELEASE_MASK|gtk.gdk.LEAVE_NOTIFY_MASK|gtk.gdk.FOCUS_CHANGE_MASK)
+        self.add_events(Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.BUTTON_RELEASE_MASK|Gdk.EventMask.LEAVE_NOTIFY_MASK|Gdk.EventMask.FOCUS_CHANGE_MASK)
         self.connect('button-press-event', self._button_press_cb)
         self.connect('button-release-event', self._button_release_cb)
         self.connect('enter-notify-event', self._enter_notify_cb)
         self.connect('leave-notify-event', self._leave_notify_cb)
-        self.frame = gtk.Frame()
-        self.frame.set_shadow_type(gtk.SHADOW_ETCHED_IN)
+        self.frame = Gtk.Frame()
+        self.frame.set_shadow_type(Gtk.ShadowType.ETCHED_IN)
         self.frame.set_border_width(self.unprelit_width)
         self.frame.add(self.label)
         self.add(self.frame)
@@ -288,103 +293,103 @@ class ColouredButton(gtk.EventBox):
     def _button_press_cb(self, widget, event):
         if event.button != 1:
             return False
-        self.frame.set_shadow_type(gtk.SHADOW_IN)
-        self.set_state(gtk.STATE_ACTIVE)
+        self.frame.set_shadow_type(Gtk.ShadowType.IN)
+        self.set_state(Gtk.StateType.ACTIVE)
     def _button_release_cb(self, widget, event):
         if event.button != 1:
             return False
-        self.frame.set_shadow_type(gtk.SHADOW_OUT)
-        self.set_state(gtk.STATE_PRELIGHT)
-        self.emit('clicked', int(event.state))
+        self.frame.set_shadow_type(Gtk.ShadowType.OUT)
+        self.set_state(Gtk.StateType.PRELIGHT)
+        self.emit('clicked', int(event.get_state()))
     def _enter_notify_cb(self, widget, event):
-        self.frame.set_shadow_type(gtk.SHADOW_OUT)
+        self.frame.set_shadow_type(Gtk.ShadowType.OUT)
         self.frame.set_border_width(self.prelit_width)
-        self.set_state(gtk.STATE_PRELIGHT)
+        self.set_state(Gtk.StateType.PRELIGHT)
     def _leave_notify_cb(self, widget, event):
-        self.frame.set_shadow_type(gtk.SHADOW_ETCHED_IN)
+        self.frame.set_shadow_type(Gtk.ShadowType.ETCHED_IN)
         self.frame.set_border_width(self.unprelit_width)
-        self.set_state(gtk.STATE_NORMAL)
+        self.set_state(Gtk.StateType.NORMAL)
     def set_colour(self, colour):
         self.colour = colour
         for state, value_ratio in self.state_value_ratio.items():
             rgb = [min(int(colour[i] * value_ratio), 65535) for i in range(3)]
-            bg_gcolour = self.get_colormap().alloc_color(gtk.gdk.Color(*rgb))
-            fg_gcolour = self.get_colormap().alloc_color(best_foreground(rgb))
+            bg_gcolour = Gdk.Color(*rgb)
+            fg_gcolour = best_foreground(rgb)
             self.modify_base(state, bg_gcolour)
             self.modify_bg(state, bg_gcolour)
             self.modify_fg(state, fg_gcolour)
             self.modify_text(state, fg_gcolour)
         self.label.set_colour(colour)
-gobject.signal_new('clicked', ColouredButton, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_INT,))
+GObject.signal_new('clicked', ColouredButton, GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_INT,))
 
 ### Dialogues
 
-class ScrolledMessageDialog(gtk.Dialog):
+class ScrolledMessageDialog(Gtk.Dialog):
     icons = {
-        gtk.MESSAGE_INFO: gtk.STOCK_DIALOG_INFO,
-        gtk.MESSAGE_WARNING: gtk.STOCK_DIALOG_WARNING,
-        gtk.MESSAGE_QUESTION: gtk.STOCK_DIALOG_QUESTION,
-        gtk.MESSAGE_ERROR: gtk.STOCK_DIALOG_ERROR,
+        Gtk.MessageType.INFO: Gtk.STOCK_DIALOG_INFO,
+        Gtk.MessageType.WARNING: Gtk.STOCK_DIALOG_WARNING,
+        Gtk.MessageType.QUESTION: Gtk.STOCK_DIALOG_QUESTION,
+        Gtk.MessageType.ERROR: Gtk.STOCK_DIALOG_ERROR,
     }
     labels = {
-        gtk.MESSAGE_INFO: _('FYI'),
-        gtk.MESSAGE_WARNING: _('Warning'),
-        gtk.MESSAGE_QUESTION: _('Question'),
-        gtk.MESSAGE_ERROR: _('Error'),
+        Gtk.MessageType.INFO: _('FYI'),
+        Gtk.MessageType.WARNING: _('Warning'),
+        Gtk.MessageType.QUESTION: _('Question'),
+        Gtk.MessageType.ERROR: _('Error'),
     }
     @staticmethod
     def copy_cb(tview):
-        tview.get_buffer().copy_clipboard(gtk.clipboard_get())
-    def __init__(self, parent=None, flags=gtk.DIALOG_MODAL|gtk.DIALOG_DESTROY_WITH_PARENT, type=gtk.MESSAGE_INFO, buttons=None, message_format=None):
-        gtk.Dialog.__init__(self, title='{0}: {1}'.format(sys.argv[0], self.labels[type]), parent=parent, flags=flags, buttons=buttons)
-        hbox = gtk.HBox()
-        icon = gtk.Image()
-        icon.set_from_stock(self.icons[type], gtk.ICON_SIZE_DIALOG)
-        hbox.pack_start(icon, expand=False, fill=False)
-        label = gtk.Label(self.labels[type])
-        label.modify_font(pango.FontDescription('bold 35'))
-        hbox.pack_start(label, expand=False, fill=False)
-        self.get_content_area().pack_start(hbox, expand=False, fill=False)
-        sbw = gtk.ScrolledWindow()
-        sbw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-        tview = gtk.TextView()
+        tview.get_buffer().copy_clipboard(Gtk.clipboard_get())
+    def __init__(self, parent=None, flags=Gtk.DialogFlags.MODAL|Gtk.DialogFlags.DESTROY_WITH_PARENT, type=Gtk.MessageType.INFO, buttons=None, message_format=None):
+        Gtk.Dialog.__init__(self, title='{0}: {1}'.format(sys.argv[0], self.labels[type]), parent=parent, flags=flags, buttons=buttons)
+        hbox = Gtk.HBox()
+        icon = Gtk.Image()
+        icon.set_from_stock(self.icons[type], Gtk.IconSize.DIALOG)
+        hbox.pack_start(icon, expand=False, fill=False, padding=0)
+        label = Gtk.Label(label=self.labels[type])
+        label.modify_font(Pango.FontDescription('bold 35'))
+        hbox.pack_start(label, expand=False, fill=False, padding=0)
+        self.get_content_area().pack_start(hbox, expand=False, fill=False, padding=0)
+        sbw = Gtk.ScrolledWindow()
+        sbw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+        tview = Gtk.TextView()
         tview.set_size_request(480,120)
         tview.set_editable(False)
         tview.get_buffer().set_text(message_format.strip())
         tview.connect('copy-clipboard', ScrolledMessageDialog.copy_cb)
         sbw.add(tview)
-        self.get_content_area().pack_end(sbw, expand=True, fill=True)
+        self.get_content_area().pack_end(sbw, expand=True, fill=True, padding=0)
         self.show_all()
         self.set_resizable(True)
 
 def inform_user(msg, parent=None):
     dlg = ScrolledMessageDialog(parent=parent, message_format=msg)
-    gtk.gdk.beep()
+    Gdk.beep()
     dlg.run()
     dlg.destroy()
 
 def warn_user(msg, parent=None):
-    dlg = ScrolledMessageDialog(parent=parent, message_format=msg, type=gtk.MESSAGE_WARNING)
-    gtk.gdk.beep()
+    dlg = ScrolledMessageDialog(parent=parent, message_format=msg, type=Gtk.MessageType.WARNING)
+    Gdk.beep()
     dlg.run()
     dlg.destroy()
 
 def report_error(msg, parent=None):
-    dlg = ScrolledMessageDialog(parent=parent, message_format=msg, type=gtk.MESSAGE_ERROR)
-    gtk.gdk.beep()
+    dlg = ScrolledMessageDialog(parent=parent, message_format=msg, type=Gtk.MessageType.ERROR)
+    Gdk.beep()
     dlg.run()
     dlg.destroy()
 
 def ask_user_to_confirm(msg, parent=None):
-    dlg = ScrolledMessageDialog(parent=parent, message_format=msg, type=gtk.MESSAGE_QUESTION, buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_OK))
-    gtk.gdk.beep()
+    dlg = ScrolledMessageDialog(parent=parent, message_format=msg, type=Gtk.MessageType.QUESTION, buttons=(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OK, Gtk.ResponseType.OK))
+    Gdk.beep()
     response = dlg.run()
     dlg.destroy()
-    return response == gtk.RESPONSE_OK
+    return response == Gtk.ResponseType.OK
 
 def report_io_error(edata):
     msg = '{0}: {1}'.format(edata.strerror, edata.filename)
-    dlg = ScrolledMessageDialog(parent=None, message_format=msg, type=gtk.MESSAGE_ERROR)
+    dlg = ScrolledMessageDialog(parent=None, message_format=msg, type=Gtk.MessageType.ERROR)
     dlg.run()
     dlg.destroy()
     return False
@@ -393,70 +398,59 @@ def report_format_error(edata, *args):
     msg = _("Format Error: ") + str(edata)
     for arg in args:
         msg += ":" + arg
-    dlg = ScrolledMessageDialog(parent=None, message_format=msg, type=gtk.MESSAGE_ERROR)
+    dlg = ScrolledMessageDialog(parent=None, message_format=msg, type=Gtk.MessageType.ERROR)
     dlg.run()
     dlg.destroy()
     return False
 
-class CancelOKDialog(gtk.Dialog):
+class CancelOKDialog(Gtk.Dialog):
     def __init__(self, title=None, parent=None):
-        flags = gtk.DIALOG_MODAL|gtk.DIALOG_DESTROY_WITH_PARENT
-        buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_OK)
-        gtk.Dialog.__init__(self, title, parent, flags, buttons)
+        flags = Gtk.DialogFlags.MODAL|Gtk.DialogFlags.DESTROY_WITH_PARENT
+        buttons = (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OK, Gtk.ResponseType.OK)
+        Gtk.Dialog.__init__(self, title, parent, flags, buttons)
 
 class TextEntryDialog(CancelOKDialog):
     def __init__(self, title=None, prompt=None, suggestion="", parent=None):
         CancelOKDialog.__init__(self, title, parent)
-        self.hbox = gtk.HBox()
+        self.hbox = Gtk.HBox()
         self.vbox.add(self.hbox)
         self.hbox.show()
         if prompt:
-            self.hbox.pack_start(gtk.Label(prompt), fill=False, expand=False)
-        self.entry = gtk.Entry()
+            self.hbox.pack_start(Gtk.Label(prompt), expand=False, fill=False, padding=0)
+        self.entry = Gtk.Entry()
         self.entry.set_width_chars(32)
         self.entry.set_text(suggestion)
-        self.hbox.pack_start(self.entry)
+        self.hbox.pack_start(self.entry, expand=True, fill=True, padding=0)
         self.show_all()
 
-class UnsavedChangesDialogue(gtk.Dialog):
+class UnsavedChangesDialogue(Gtk.Dialog):
     # TODO: make a better UnsavedChangesDialogue()
     SAVE_AND_CONTINUE, CONTINUE_UNSAVED = range(1, 3)
     def __init__(self, parent, message):
-        buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
+        buttons = (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
         buttons += (_('Save and Continue'), UnsavedChangesDialogue.SAVE_AND_CONTINUE)
         buttons += (_('Continue Without Saving'), UnsavedChangesDialogue.CONTINUE_UNSAVED)
-        gtk.Dialog.__init__(self,
+        Gtk.Dialog.__init__(self,
             parent=parent,
-            flags=gtk.DIALOG_MODAL,
+            flags=Gtk.DialogFlags.MODAL,
             buttons=buttons,
         )
-        self.vbox.pack_start(gtk.Label(message))
+        self.vbox.pack_start(Gtk.Label(message), expand=True, fill=True, padding=0)
         self.show_all()
 
 # Screen Sampling
 # Based on escrotum code (<https://github.com/Roger/escrotum>)
 
-class ScreenSampler(gtk.Window):
-    def __init__(self, clipboard="CLIPBOARD"):
-        gtk.Window.__init__(self, gtk.WINDOW_POPUP)
+class ScreenSampler(Gtk.Window):
+    def __init__(self, clipboard=Gdk.SELECTION_CLIPBOARD):
+        Gtk.Window.__init__(self, Gtk.WindowType.POPUP)
         self.started = False
         self.x = self.y = 0
         self.start_x = self.start_y = 0
         self.height = self.width = 0
         self.clipboard = clipboard
-        self.rgba_supported = self.get_rgba_support()
-        if self.rgba_supported:
-            self.set_opacity(0.4)
-        self.set_keep_above(True)
-        self.root = gtk.gdk.get_default_root_window()
-        self.area = gtk.DrawingArea()
-        self.area.connect("expose-event", self.on_expose)
-        self.add(self.area)
+        self.connect("draw", self.on_expose)
         self.grab_mouse()
-    def get_rgba_support(self):
-        screen = self.get_screen()
-        colormap = screen.get_rgba_colormap()
-        return colormap is not None and screen.is_composited()
     def set_rect_size(self, event):
         if event.x < self.start_x:
             x = int(event.x)
@@ -476,79 +470,74 @@ class ScreenSampler(gtk.Window):
         self.height = height
     def take_sample(self):
         x, y = (self.x, self.y)
-        window = self.root
         width, height = self.width, self.height
         if self.height == 0 or self.width == 0:
             # treat a zero area selection as a user initiated cancellation
             self.finish()
             return
-        pb = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, False, 8, width, height)
-        pb = pb.get_from_drawable(window, window.get_colormap(), x, y, 0, 0, width, height)
+        win = Gdk.get_default_root_window()
+        pb = Gdk.pixbuf_get_from_window(win, x, y, width, height)
         if pb:
-            cbd = gtk.clipboard_get(self.clipboard)
+            cbd = Gtk.Clipboard.get(self.clipboard)
             cbd.set_image(pb)
         self.finish()
         return False
     def mouse_event_handler(self, event):
-        if event.type == gtk.gdk.BUTTON_PRESS:
-            if event.button != 1:
+        if event.type == Gdk.EventType.BUTTON_PRESS:
+            if event.button.button != 1:
                 # treat button 2 or 3 press as a user initiated cancellation
                 self.finish()
                 return
             self.started = True
-            self.start_x = int(event.x)
-            self.start_y = int(event.y)
+            self.start_x = int(event.button.x)
+            self.start_y = int(event.button.y)
             self.move(self.x, self.y)
-        elif event.type == gtk.gdk.MOTION_NOTIFY:
+        elif event.type == Gdk.EventType.MOTION_NOTIFY:
             if not self.started:
                 return
-            self.set_rect_size(event)
-            if not self.rgba_supported:
-                self._draw()
+            self.set_rect_size(event.button)
             if self.width > 3 and self.height > 3:
                 self.resize(self.width, self.height)
                 self.move(self.x, self.y)
                 self.show_all()
-        elif event.type == gtk.gdk.BUTTON_RELEASE:
+        elif event.type == Gdk.EventType.BUTTON_RELEASE:
             if not self.started:
                 return
+            self.set_rect_size(event.button)
+            Gdk.pointer_ungrab(Gdk.CURRENT_TIME)
             self.hide()
-            gtk.gdk.pointer_ungrab()
-            self.set_rect_size(event)
-            gobject.timeout_add(125, self.take_sample)
+            GObject.timeout_add(125, self.take_sample)
         else:
-            gtk.main_do_event(event)
+            Gtk.main_do_event(event)
     def grab_mouse(self):
-        mask = gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.BUTTON_RELEASE_MASK |  gtk.gdk.POINTER_MOTION_MASK  | gtk.gdk.POINTER_MOTION_HINT_MASK |  gtk.gdk.ENTER_NOTIFY_MASK | gtk.gdk.LEAVE_NOTIFY_MASK
-        self.root.set_events(gtk.gdk.BUTTON_PRESS | gtk.gdk.MOTION_NOTIFY | gtk.gdk.BUTTON_RELEASE)
-        gtk.gdk.pointer_grab(self.root, event_mask=mask, cursor=gtk.gdk.Cursor(gtk.gdk.CROSSHAIR))
-        gtk.gdk.event_handler_set(self.mouse_event_handler)
+        win = Gdk.get_default_root_window()
+        mask = Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK |  Gdk.EventMask.POINTER_MOTION_MASK  | Gdk.EventMask.POINTER_MOTION_HINT_MASK |  Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.LEAVE_NOTIFY_MASK
+        win.set_events(mask)
+        Gdk.pointer_grab(win, True, mask, None, Gdk.Cursor(Gdk.CursorType.CROSSHAIR), Gdk.CURRENT_TIME)
+        Gdk.event_handler_set(self.mouse_event_handler)
     def finish(self):
-        if gtk.gdk.pointer_is_grabbed():
-            gtk.gdk.pointer_ungrab()
-        self.root.set_events(0)
-        gtk.gdk.event_handler_set(gtk.main_do_event)
+        if Gdk.pointer_is_grabbed():
+            Gdk.pointer_ungrab(Gdk.CURRENT_TIME)
+        Gdk.get_default_root_window().set_events(0)
+        Gdk.event_handler_set(Gtk.main_do_event)
         self.destroy()
-    def on_expose(self, widget, event):
+    def on_expose(self, widget, cairo_ctxt):
         width, height = self.get_size()
-        white_gc = self.style.white_gc
-        black_gc = self.style.black_gc
-        # actualy paint the window
-        self.area.window.draw_rectangle(white_gc, True, 0, 0, width, height)
-        self.area.window.draw_rectangle(black_gc, True, 1, 1, width-2, height-2)
-        if not self.rgba_supported:
-            self._draw()
-    def _draw(self):
-        width, height = self.get_size()
-        mask = gtk.gdk.Pixmap(None, width, height, 1)
-        gc = mask.new_gc()
-        # draw the rectangle
-        gc.foreground = gtk.gdk.Color(0, 0, 0, 1)
-        mask.draw_rectangle(gc, True, 0, 0, width, height)
-        # and clear the background
-        gc.foreground = gtk.gdk.Color(0, 0, 0, 0)
-        mask.draw_rectangle(gc, True, 2, 2, width-4, height-4)
-        self.shape_combine_mask(mask, 0, 0)
+        width, height = widget.get_allocated_width(), widget.get_allocated_height()
+        #print("SIZE:", width, height, widget.get_allocated_width(), widget.get_allocated_height())
+        widget.set_opacity(0.15)
+        widget.set_keep_above(True)
+        widget.show_all()
+        cairo_ctxt.set_source_rgb(0, 0, 0)
+        cairo_ctxt.set_line_width(12)
+        cairo_ctxt.move_to(0, 0)
+        cairo_ctxt.line_to(width, 0)
+        cairo_ctxt.line_to(width, height)
+        cairo_ctxt.line_to(0, height)
+        cairo_ctxt.close_path()
+        #cairo_ctxt.rectangle(0, 0, width, height)
+        cairo_ctxt.stroke()
+        #print("EXPOSED")
 
 
 def take_screen_sample(action=None):
@@ -558,57 +547,56 @@ def take_screen_sample(action=None):
         ScreenSampler()
 
 class Key:
-    ESCAPE = gtk.gdk.keyval_from_name("Escape")
-    RETURN = gtk.gdk.keyval_from_name("Return")
-    TAB = gtk.gdk.keyval_from_name("Tab")
-    UP_ARROW = gtk.gdk.keyval_from_name("Up")
-    DOWN_ARROW = gtk.gdk.keyval_from_name("Down")
+    ESCAPE = Gdk.keyval_from_name("Escape")
+    RETURN = Gdk.keyval_from_name("Return")
+    TAB = Gdk.keyval_from_name("Tab")
+    UP_ARROW = Gdk.keyval_from_name("Up")
+    DOWN_ARROW = Gdk.keyval_from_name("Down")
 
-class ArrowButton(gtk.Button):
+class ArrowButton(Gtk.Button):
     def __init__(self, arrow_type, shadow_type, width=-1, height=-1):
-        gtk.Button.__init__(self)
+        Gtk.Button.__init__(self)
         self.set_size_request(width, height)
-        self.add(gtk.Arrow(arrow_type, shadow_type))
+        self.add(Gtk.Arrow(arrow_type, shadow_type))
 
-class HexSpinButton(gtk.HBox):
+class HexSpinButton(Gtk.HBox):
     OFF, INCR, DECR = range(3)
     PAUSE = 500
     INTERVAL = 5
     def __init__(self, max_value, label=None):
-        gtk.HBox.__init__(self)
+        Gtk.HBox.__init__(self)
         if label:
-            self.pack_start(label, expand=True)
+            self.pack_start(label, expand=True, fill=True, padding=0)
         self.__dirn = self.OFF
         self.__value = 0
         self.__max_value = max_value
         self.__current_step = 1
-        self.__max_step = max(1, max_value / 32)
+        self.__max_step = max(1, max_value // 32)
         width = 0
         while max_value:
             width += 1
-            max_value /= 16
+            max_value //= 16
         self.format_str = "0x{0:0>" + str(width) + "X}"
-        self.entry = gtk.Entry(width+2)
-        self.entry.set_width_chars(width+2)
-        self.pack_start(self.entry, expand=False)
+        self.entry = Gtk.Entry(width_chars=width + 2)
+        self.pack_start(self.entry, expand=False, fill=True, padding=0)
         self._update_text()
         self.entry.connect("key-press-event", self._key_press_cb)
         self.entry.connect("key-release-event", self._key_release_cb)
-        ew, eh = self.entry.size_request()
+        eh = self.entry.size_request().height
         bw = eh * 2 / 3
         bh = eh / 2 -1
-        vbox = gtk.VBox()
-        self.pack_start(vbox, expand=False)
-        self.up_arrow = ArrowButton(gtk.ARROW_UP, gtk.SHADOW_NONE, bw, bh)
+        vbox = Gtk.VBox()
+        self.pack_start(vbox, expand=False, fill=True, padding=0)
+        self.up_arrow = ArrowButton(Gtk.ArrowType.UP, Gtk.ShadowType.NONE, bw, bh)
         self.up_arrow.connect("button-press-event", self._arrow_pressed_cb, self.INCR)
         self.up_arrow.connect("button-release-event", self._arrow_released_cb)
         self.up_arrow.connect("leave-notify-event", self._arrow_released_cb)
-        vbox.pack_start(self.up_arrow, expand=True)
-        self.down_arrow = ArrowButton(gtk.ARROW_DOWN, gtk.SHADOW_NONE, bw, bh)
+        vbox.pack_start(self.up_arrow, expand=True, fill=True, padding=0)
+        self.down_arrow = ArrowButton(Gtk.ArrowType.DOWN, Gtk.ShadowType.NONE, bw, bh)
         self.down_arrow.connect("button-press-event", self._arrow_pressed_cb, self.DECR)
         self.down_arrow.connect("button-release-event", self._arrow_released_cb)
         self.down_arrow.connect("leave-notify-event", self._arrow_released_cb)
-        vbox.pack_start(self.down_arrow, expand=True)
+        vbox.pack_start(self.down_arrow, expand=True, fill=True, padding=0)
     def get_value(self):
         return self.__value
     def set_value(self, value):
@@ -620,10 +608,10 @@ class HexSpinButton(gtk.HBox):
         self.__dirn = dirn
         if self.__dirn is self.INCR:
             if self._incr_value():
-                gobject.timeout_add(self.PAUSE, self._iterate_steps)
+                GObject.timeout_add(self.PAUSE, self._iterate_steps)
         elif self.__dirn is self.DECR:
             if self._decr_value():
-                gobject.timeout_add(self.PAUSE, self._iterate_steps)
+                GObject.timeout_add(self.PAUSE, self._iterate_steps)
     def _arrow_released_cb(self, arrow, event):
         self.__dirn = self.OFF
     def _incr_value(self, step=1):
@@ -681,4 +669,4 @@ class HexSpinButton(gtk.HBox):
         if event.keyval in [Key.UP_ARROW, Key.DOWN_ARROW]:
             self._reset_current_step()
             return True
-gobject.signal_new("value-changed", HexSpinButton, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_BOOLEAN,))
+GObject.signal_new("value-changed", HexSpinButton, GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_BOOLEAN,))

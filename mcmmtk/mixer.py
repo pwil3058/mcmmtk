@@ -22,8 +22,11 @@ import cgi
 import time
 import collections
 
-import gtk
-import gobject
+from gi.repository import Gdk
+from gi.repository import GdkPixbuf
+from gi.repository import Gtk
+from gi.repository import GObject
+from gi.repository import GLib
 
 from . import recollect
 from . import actions
@@ -41,14 +44,14 @@ from . import config
 
 def pango_rgb_str(rgb, bits_per_channel=16):
     """
-    Convert an rgb to a pango colour description string
+    Convert an rgb to a Pango colour description string
     """
     string = '#'
     for i in range(3):
         string += '{0:02X}'.format(rgb[i] >> (bits_per_channel - 8))
     return string
 
-class Mixer(gtk.VBox, actions.CAGandUIManager):
+class Mixer(Gtk.VBox, actions.CAGandUIManager):
     UI_DESCR = '''
     <ui>
         <menubar name='mixer_menubar'>
@@ -65,13 +68,13 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
     AC_HAVE_MIXTURE, AC_MASK = actions.ActionCondns.new_flags_and_mask(1)
     AC_HAVE_TARGET, AC_DONT_HAVE_TARGET, AC_TARGET_MASK = actions.ActionCondns.new_flags_and_mask(2)
     def __init__(self):
-        gtk.VBox.__init__(self)
+        Gtk.VBox.__init__(self)
         actions.CAGandUIManager.__init__(self)
         self.action_groups.update_condns(actions.MaskedCondns(self.AC_DONT_HAVE_TARGET, self.AC_TARGET_MASK))
         # Components
         self.notes = gtkpwx.TextEntryAutoComplete(data.GENERAL_WORDS_LEXICON)
         self.notes.connect("new-words", data.new_general_words_cb)
-        self.next_name_label = gtk.Label(_("#???:"))
+        self.next_name_label = Gtk.Label(label=_("#???:"))
         self.current_target_colour = None
         self.current_colour_description = gtkpwx.TextEntryAutoComplete(data.COLOUR_NAME_LEXICON)
         self.current_colour_description.connect("new-words", data.new_paint_words_cb)
@@ -97,32 +100,32 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         ])
         menubar = self.ui_manager.get_widget('/mixer_menubar')
         # Lay out components
-        self.pack_start(menubar, expand=False)
-        hbox = gtk.HBox()
-        hbox.pack_start(gtk.Label(_('Notes:')), expand=False)
-        hbox.pack_start(self.notes, expand=True, fill=True)
-        self.pack_start(hbox, expand=False)
-        hpaned = gtk.HPaned()
+        self.pack_start(menubar, expand=False, fill=True, padding=0)
+        hbox = Gtk.HBox()
+        hbox.pack_start(Gtk.Label(_('Notes:')), expand=False, fill=True, padding=0)
+        hbox.pack_start(self.notes, expand=True, fill=True, padding=0)
+        self.pack_start(hbox, expand=False, fill=True, padding=0)
+        hpaned = Gtk.HPaned()
         hpaned.pack1(self.wheels, resize=True, shrink=False)
-        vbox = gtk.VBox()
-        vhbox = gtk.HBox()
-        vhbox.pack_start(self.next_name_label, expand=False)
-        vhbox.pack_start(self.current_colour_description, expand=True)
-        vbox.pack_start(vhbox, expand=False)
-        vbox.pack_start(self.hcvw_display, expand=False)
-        vbox.pack_start(gtkpwx.wrap_in_frame(self.mixpanel, gtk.SHADOW_ETCHED_IN), expand=True, fill=True)
+        vbox = Gtk.VBox()
+        vhbox = Gtk.HBox()
+        vhbox.pack_start(self.next_name_label, expand=False, fill=True, padding=0)
+        vhbox.pack_start(self.current_colour_description, expand=True, fill=True, padding=0)
+        vbox.pack_start(vhbox, expand=False, fill=True, padding=0)
+        vbox.pack_start(self.hcvw_display, expand=False, fill=True, padding=0)
+        vbox.pack_start(gtkpwx.wrap_in_frame(self.mixpanel, Gtk.ShadowType.ETCHED_IN), expand=True, fill=True, padding=0)
         hpaned.pack2(vbox, resize=True, shrink=False)
-        vpaned = gtk.VPaned()
+        vpaned = Gtk.VPaned()
         vpaned.pack1(hpaned, resize=True, shrink=False)
-        vbox = gtk.VBox()
-        hbox = gtk.HBox()
-        hbox.pack_start(gtk.Label(_('Paints:')), expand=False)
-        hbox.pack_start(self.paint_colours, expand=True, fill=True)
-        vbox.pack_start(hbox, expand=False)
-        vbox.pack_start(self.buttons, expand=False)
-        vbox.pack_start(gtkpwx.wrap_in_scrolled_window(self.mixed_colours_view), expand=True, fill=True)
+        vbox = Gtk.VBox()
+        hbox = Gtk.HBox()
+        hbox.pack_start(Gtk.Label(_('Paints:')), expand=False, fill=True, padding=0)
+        hbox.pack_start(self.paint_colours, expand=True, fill=True, padding=0)
+        vbox.pack_start(hbox, expand=False, fill=True, padding=0)
+        vbox.pack_start(self.buttons, expand=False, fill=True, padding=0)
+        vbox.pack_start(gtkpwx.wrap_in_scrolled_window(self.mixed_colours_view), expand=True, fill=True, padding=0)
         vpaned.pack2(vbox, resize=True, shrink=False)
-        self.pack_start(vpaned, expand=True, fill=True)
+        self.pack_start(vpaned, expand=True, fill=True, padding=0)
         vpaned.set_position(recollect.get("mixer", "vpaned_position"))
         hpaned.set_position(recollect.get("mixer", "hpaned_position"))
         vpaned.connect("notify", self._paned_notify_cb)
@@ -134,7 +137,7 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         self.recalculate_colour([])
     def _paned_notify_cb(self, widget, parameter):
         if parameter.name == "position":
-            if isinstance(widget, gtk.HPaned):
+            if isinstance(widget, Gtk.HPaned):
                 recollect.set("mixer", "hpaned_position", str(widget.get_position()))
             else:
                 recollect.set("mixer", "vpaned_position", str(widget.get_position()))
@@ -148,13 +151,13 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
             ('remove_unused_paints', None, _('Remove Unused Paints'), None,
             _('Remove all unused paints from the mixer.'),
             self._remove_unused_paints_cb),
-            ('quit_mixer', gtk.STOCK_QUIT, None, None,
+            ('quit_mixer', Gtk.STOCK_QUIT, None, None,
             _('Quit this program.'),
             self._quit_mixer_cb),
             ('open_reference_image_viewer', None, _('Open Image Viewer'), None,
             _('Open a tool for viewing reference images.'),
             self._open_reference_image_viewer_cb),
-            ('print_mixer', gtk.STOCK_PRINT, None, None,
+            ('print_mixer', Gtk.STOCK_PRINT, None, None,
             _('Print a text description of the mixer.'),
             self._print_mixer_cb),
         ])
@@ -205,7 +208,7 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         return string
     def pango_markup_chunks(self):
         """
-        Format the palette description as a list of pango markup chunks
+        Format the palette description as a list of Pango markup chunks
         """
         paint_colours = self.paint_colours.get_colours()
         if len(paint_colours) == 0:
@@ -274,7 +277,7 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         self.current_colour_description.set_text("")
     def _new_mixed_colour_cb(self,_action):
         dlg = NewMixedColourDialogue(self.mixed_count + 1, self.get_parent())
-        if dlg.run() == gtk.RESPONSE_ACCEPT:
+        if dlg.run() == Gtk.ResponseType.ACCEPT:
             descr = dlg.colour_description.get_text()
             assert len(descr) > 0
             self.mixpanel.set_target_colour(dlg.colour_specifier.colour)
@@ -319,7 +322,7 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
             for user in users:
                 string += '\t{0}\n'.format(user.name)
             dlg = gtkpwx.ScrolledMessageDialog(message_format=string)
-            gtk.gdk.beep()
+            Gdk.beep()
             dlg.run()
             dlg.destroy()
         else:
@@ -356,12 +359,12 @@ class Mixer(gtk.VBox, actions.CAGandUIManager):
         Exit the program
         """
         # TODO: add checks for unsaved work in mixer before exiting
-        gtk.main_quit()
+        Gtk.main_quit()
 
 def colour_parts_adjustment():
-    return gtk.Adjustment(0, 0, 999, 1, 10, 0)
+    return Gtk.Adjustment(0, 0, 999, 1, 10, 0)
 
-class ColourPartsSpinButton(gtk.EventBox, actions.CAGandUIManager):
+class ColourPartsSpinButton(Gtk.EventBox, actions.CAGandUIManager):
     UI_DESCR = '''
         <ui>
             <popup name='colour_spinner_popup'>
@@ -371,26 +374,26 @@ class ColourPartsSpinButton(gtk.EventBox, actions.CAGandUIManager):
         </ui>
         '''
     def __init__(self, colour, sensitive=False, *kwargs):
-        gtk.EventBox.__init__(self)
+        Gtk.EventBox.__init__(self)
         actions.CAGandUIManager.__init__(self, popup='/colour_spinner_popup')
-        self.add_events(gtk.gdk.BUTTON_PRESS_MASK|gtk.gdk.BUTTON_RELEASE_MASK)
+        self.add_events(Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.BUTTON_RELEASE_MASK)
         self.set_size_request(85, 40)
         self.colour = colour
-        self.entry = gtk.SpinButton()
+        self.entry = Gtk.SpinButton()
         self.entry.set_adjustment(colour_parts_adjustment())
         self.entry.set_numeric(True)
         self.entry.connect('button_press_event', self._button_press_cb)
         self.set_tooltip_text(str(colour))
-        frame = gtk.Frame()
-        frame.set_shadow_type(gtk.SHADOW_ETCHED_IN)
-        hbox = gtk.HBox()
-        hbox.pack_start(gtkpwx.ColouredLabel(self.colour.name, self.colour), expand=True, fill=True)
-        vbox = gtk.VBox()
-        vbox.pack_start(gpaint.ColouredRectangle(self.colour), expand=True, fill=True)
-        vbox.pack_start(self.entry, expand=False)
-        vbox.pack_start(gpaint.ColouredRectangle(self.colour), expand=True, fill=True)
-        hbox.pack_start(vbox, expand=False)
-        hbox.pack_start(gpaint.ColouredRectangle(self.colour, (5, -1)), expand=False)
+        frame = Gtk.Frame()
+        frame.set_shadow_type(Gtk.ShadowType.ETCHED_IN)
+        hbox = Gtk.HBox()
+        hbox.pack_start(gtkpwx.ColouredLabel(self.colour.name, self.colour), expand=True, fill=True, padding=0)
+        vbox = Gtk.VBox()
+        vbox.pack_start(gpaint.ColouredRectangle(self.colour), expand=True, fill=True, padding=0)
+        vbox.pack_start(self.entry, expand=False, fill=True, padding=0)
+        vbox.pack_start(gpaint.ColouredRectangle(self.colour), expand=True, fill=True, padding=0)
+        hbox.pack_start(vbox, expand=False, fill=True, padding=0)
+        hbox.pack_start(gpaint.ColouredRectangle(self.colour, (5, -1)), expand=False, fill=True, padding=0)
         frame.add(hbox)
         self.add(frame)
         self.set_sensitive(sensitive)
@@ -401,11 +404,11 @@ class ColourPartsSpinButton(gtk.EventBox, actions.CAGandUIManager):
         """
         self.action_groups[actions.AC_DONT_CARE].add_actions(
             [
-                ('paint_colour_info', gtk.STOCK_INFO, None, None,
+                ('paint_colour_info', Gtk.STOCK_INFO, None, None,
                  _('Detailed information for this paint colour.'),
                  self._paint_colour_info_cb
                 ),
-                ('remove_me', gtk.STOCK_REMOVE, None, None,
+                ('remove_me', Gtk.STOCK_REMOVE, None, None,
                  _('Remove this paint colour from the mixer.'),
                 ),
             ]
@@ -423,12 +426,12 @@ class ColourPartsSpinButton(gtk.EventBox, actions.CAGandUIManager):
     def _paint_colour_info_cb(self, _action):
         gpaint.PaintColourInformationDialogue(self.colour).show()
 
-class ColourPartsSpinButtonBox(gtk.VBox):
+class ColourPartsSpinButtonBox(Gtk.VBox):
     """
     A dynamic array of coloured spinners
     """
     def __init__(self):
-        gtk.VBox.__init__(self)
+        Gtk.VBox.__init__(self)
         self.__spinbuttons = []
         self.__hboxes = []
         self.__count = 0
@@ -451,9 +454,9 @@ class ColourPartsSpinButtonBox(gtk.VBox):
         self.show_all()
     def _pack_append(self, spinbutton):
         if self.__count % self.__ncols == 0:
-            self.__hboxes.append(gtk.HBox())
-            self.pack_start(self.__hboxes[-1], expand=False)
-        self.__hboxes[-1].pack_start(spinbutton, expand=True)
+            self.__hboxes.append(Gtk.HBox())
+            self.pack_start(self.__hboxes[-1], expand=False, fill=True, padding=0)
+        self.__hboxes[-1].pack_start(spinbutton, expand=True, fill=True, padding=0)
         self.__count += 1
     def _unpack_all(self):
         """
@@ -520,15 +523,15 @@ class ColourPartsSpinButtonBox(gtk.VBox):
             spinbutton.set_parts(0)
         self.__suppress_change_notification = False
         self.emit('contributions-changed', self.get_contributions())
-gobject.signal_new('remove-colour', ColourPartsSpinButtonBox, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))
-gobject.signal_new('contributions-changed', ColourPartsSpinButtonBox, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))
+GObject.signal_new('remove-colour', ColourPartsSpinButtonBox, GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,))
+GObject.signal_new('contributions-changed', ColourPartsSpinButtonBox, GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,))
 
 class PartsColourListStore(gpaint.ColourListStore):
-    Row = paint.BLOB
-    types = Row(colour=object, parts=int)
+    ROW = paint.BLOB
+    TYPES = ROW(colour=object, parts=int)
 
     def append_colour(self, colour):
-        self.append(self.Row(parts=0, colour=colour))
+        self.append(self.ROW(parts=0, colour=colour))
     def get_parts(self, colour):
         """
         Return the number of parts selected for the given colour
@@ -548,7 +551,7 @@ class PartsColourListStore(gpaint.ColourListStore):
         self.emit('contributions-changed', [])
     def get_contributions(self):
         """
-        Return a list of Model.Row() tuples where parts is greater than zero
+        Return a list of MODEL.ROW() tuples where parts is greater than zero
         """
         return [row for row in self.named() if row.parts > 0]
     def get_colour_users(self, colour):
@@ -569,13 +572,23 @@ class PartsColourListStore(gpaint.ColourListStore):
             elif row.parts > 0:
                 contributions.append(row)
         self.emit('contributions-changed', contributions)
-gobject.signal_new('contributions-changed', PartsColourListStore, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, ))
+    def _parts_value_changed_cb(self, cell, path, spinbutton):
+        """
+        Change the model for a change to a spinbutton value
+        """
+        new_parts = spinbutton.get_value_as_int()
+        row = self.get_row(self.get_iter(path))
+        self.process_parts_change(paint.BLOB(colour=row.colour, parts=new_parts))
+    def _notes_edited_cb(self, cell, path, new_text, index):
+        self[path][index].notes = new_text
+        self._notify_modification()
+GObject.signal_new('contributions-changed', PartsColourListStore, GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT, ))
 
 def notes_cell_data_func(column, cell, model, model_iter, *args):
     colour = model.get_value_named(model_iter, 'colour')
     cell.set_property('text', colour.notes)
-    cell.set_property('background', gtk.gdk.Color(*colour.rgb))
-    cell.set_property('foreground', gtkpwx.best_foreground(colour.rgb))
+    cell.set_property('background-gdk', Gdk.Color(*colour.rgb))
+    cell.set_property('foreground-gdk', gtkpwx.best_foreground(colour.rgb))
 
 def generate_colour_parts_list_spec(model):
     """
@@ -590,9 +603,10 @@ def generate_colour_parts_list_spec(model):
                 cell_renderer_spec=tlview.CellRendererSpec(
                     cell_renderer=tlview.CellRendererSpin,
                     expand=None,
+                    properties={'editable' : True, 'adjustment' : colour_parts_adjustment(), 'width-chars' : 8},
+                    signal_handlers = {"value-changed" : model._parts_value_changed_cb},
                     start=False
                 ),
-                properties={'editable' : True, 'adjustment' : colour_parts_adjustment(), 'width-chars' : 8},
                 cell_data_function_spec=None,
                 attributes={'text' : model.col_index('parts')}
             ),
@@ -605,11 +619,11 @@ def generate_colour_parts_list_spec(model):
         cells=[
             tlview.CellSpec(
                 cell_renderer_spec=tlview.CellRendererSpec(
-                    cell_renderer=gtk.CellRendererText,
+                    cell_renderer=Gtk.CellRendererText,
                     expand=None,
+                    properties={'editable' : True, },
                     start=False
                 ),
-                properties={'editable' : True, },
                 cell_data_function_spec=tlview.CellDataFunctionSpec(
                     function=notes_cell_data_func,
                 ),
@@ -621,7 +635,7 @@ def generate_colour_parts_list_spec(model):
     attr_cols_specs = [gpaint.colour_attribute_column_spec(tns) for tns in gpaint.COLOUR_ATTRS[1:]]
     return tlview.ViewSpec(
         properties={},
-        selection_mode=gtk.SELECTION_MULTIPLE,
+        selection_mode=Gtk.SelectionMode.MULTIPLE,
         columns=[parts_col_spec, name_col_spec, notes_col_spec] + attr_cols_specs
     )
 
@@ -634,16 +648,17 @@ class PartsColourListView(gpaint.ColourListView):
         </popup>
     </ui>
     '''
-    Model = PartsColourListStore
-    specification = generate_colour_parts_list_spec(PartsColourListStore)
+    MODEL = PartsColourListStore
+    SPECIFICATION = generate_colour_parts_list_spec(PartsColourListStore)
     def __init__(self, *args, **kwargs):
         gpaint.ColourListView.__init__(self, *args, **kwargs)
         self._set_cell_connections()
     def _set_cell_connections(self):
-        parts_cell = self.get_cell_with_title(_('Parts'))
-        parts_cell.connect('value-changed', self._value_changed_cb)
-        notes_cell = self.get_cell_with_title(_('Notes'))
-        notes_cell.connect('edited', self._notes_edited_cb, self.Model.col_index('colour'))
+        pass
+        #parts_cell = self.get_cell_with_title(_('Parts'))
+        #parts_cell.connect('value-changed', self._value_changed_cb)
+        #notes_cell = self.get_cell_with_title(_('Notes'))
+        #notes_cell.connect('edited', self._notes_edited_cb, self.MODEL.col_index('colour'))
     def _notes_edited_cb(self, cell, path, new_text, index):
         self.get_model()[path][index].notes = new_text
         self._notify_modification()
@@ -653,37 +668,37 @@ class PartsColourListView(gpaint.ColourListView):
         """
         self.action_groups[actions.AC_SELN_UNIQUE].add_actions(
             [
-                ('show_colour_details', gtk.STOCK_INFO, None, None,
+                ('show_colour_details', Gtk.STOCK_INFO, None, None,
                  _('Show a detailed description of the selected colour.'),
                 self._show_colour_details_cb),
             ],
         )
         self.action_groups[actions.AC_SELN_MADE].add_actions(
             [
-                ('remove_selected_colours', gtk.STOCK_REMOVE, None, None,
+                ('remove_selected_colours', Gtk.STOCK_REMOVE, None, None,
                  _('Remove the selected colours from the list.'), ),
             ]
         )
-    def _value_changed_cb(self, cell, path, spinbutton):
-        """
-        Let the model know about a change to a spinbutton value
-        """
-        model = self.get_model()
-        new_parts = spinbutton.get_value_as_int()
-        row = model.get_row(model.get_iter(path))
-        model.process_parts_change(paint.BLOB(colour=row.colour, parts=new_parts))
-    def _show_colour_details_cb(self, _action):
-        colour = self.get_selected_colours()[0]
-        gpaint.PaintColourInformationDialogue(colour).show()
+    #def _value_changed_cb(self, cell, path, spinbutton):
+        #"""
+        #Let the model know about a change to a spinbutton value
+        #"""
+        #model = self.get_model()
+        #new_parts = spinbutton.get_value_as_int()
+        #row = model.get_row(model.get_iter(path))
+        #model.process_parts_change(paint.BLOB(colour=row.colour, parts=new_parts))
+    #def _show_colour_details_cb(self, _action):
+        #colour = self.get_selected_colours()[0]
+        #gpaint.PaintColourInformationDialogue(colour).show()
 
 MATCH = collections.namedtuple('MATCH', ['colour', 'target_colour'])
 
 class MatchedColourListStore(gpaint.ColourListStore):
-    Row = MATCH
-    types = Row(colour=object, target_colour=object)
+    ROW = MATCH
+    TYPES = ROW(colour=object, target_colour=object)
 
     def append_colour(self, colour, target_colour):
-        self.append(self.Row(target_colour=target_colour, colour=colour))
+        self.append(self.ROW(target_colour=target_colour, colour=colour))
     def get_colour_users(self, colour):
         return [row.colour for row in self.named() if row.colour.contains_colour(colour)]
     def get_target_colour(self, colour):
@@ -697,7 +712,7 @@ class MatchedColourListStore(gpaint.ColourListStore):
 
 def match_cell_data_func(column, cell, model, model_iter, attribute):
     colour = model.get_value_named(model_iter, 'target_colour')
-    cell.set_property('background', gtk.gdk.Color(*colour.rgb))
+    cell.set_property('background-gdk', Gdk.Color(*colour.rgb))
 
 def generate_matched_colour_list_spec(model):
     """
@@ -710,11 +725,11 @@ def generate_matched_colour_list_spec(model):
         cells=[
             tlview.CellSpec(
                 cell_renderer_spec=tlview.CellRendererSpec(
-                    cell_renderer=gtk.CellRendererText,
+                    cell_renderer=Gtk.CellRendererText,
                     expand=None,
+                    properties=None,
                     start=False
                 ),
-                properties=None,
                 cell_data_function_spec=tlview.CellDataFunctionSpec(
                     function=match_cell_data_func,
                 ),
@@ -729,11 +744,11 @@ def generate_matched_colour_list_spec(model):
         cells=[
             tlview.CellSpec(
                 cell_renderer_spec=tlview.CellRendererSpec(
-                    cell_renderer=gtk.CellRendererText,
+                    cell_renderer=Gtk.CellRendererText,
                     expand=None,
+                    properties={'editable' : True, },
                     start=False
                 ),
-                properties={'editable' : True, },
                 cell_data_function_spec=tlview.CellDataFunctionSpec(
                     function=notes_cell_data_func,
                 ),
@@ -745,7 +760,7 @@ def generate_matched_colour_list_spec(model):
     attr_cols_specs = [gpaint.colour_attribute_column_spec(tns) for tns in gpaint.COLOUR_ATTRS[1:]]
     return tlview.ViewSpec(
         properties={},
-        selection_mode=gtk.SELECTION_MULTIPLE,
+        selection_mode=Gtk.SelectionMode.MULTIPLE,
         columns=[name_col_spec, matched_col_spec, notes_col_spec] + attr_cols_specs
     )
 
@@ -758,31 +773,32 @@ class MatchedColourListView(gpaint.ColourListView):
         </popup>
     </ui>
     '''
-    Model = MatchedColourListStore
-    specification = generate_matched_colour_list_spec(MatchedColourListStore)
+    MODEL = MatchedColourListStore
+    SPECIFICATION = generate_matched_colour_list_spec(MatchedColourListStore)
     def __init__(self, *args, **kwargs):
         gpaint.ColourListView.__init__(self, *args, **kwargs)
         self._set_cell_connections()
     def _set_cell_connections(self):
-        notes_cell = self.get_cell_with_title(_('Notes'))
-        notes_cell.connect('edited', self._notes_edited_cb, self.Model.col_index('colour'))
-    def _notes_edited_cb(self, cell, path, new_text, index):
-        self.get_model()[path][index].notes = new_text
-        self._notify_modification()
+        pass
+        #notes_cell = self.get_cell_with_title(_('Notes'))
+        #notes_cell.connect('edited', self._notes_edited_cb, self.MODEL.col_index('colour'))
+    #def _notes_edited_cb(self, cell, path, new_text, index):
+        #self.get_model()[path][index].notes = new_text
+        #self._notify_modification()
     def populate_action_groups(self):
         """
         Populate action groups ready for UI initialization.
         """
         self.action_groups[actions.AC_SELN_UNIQUE].add_actions(
             [
-                ('show_colour_details', gtk.STOCK_INFO, None, None,
+                ('show_colour_details', Gtk.STOCK_INFO, None, None,
                  _('Show a detailed description of the selected colour.'),
                 self._show_colour_details_cb),
             ],
         )
         self.action_groups[actions.AC_SELN_MADE].add_actions(
             [
-                ('remove_selected_colours', gtk.STOCK_REMOVE, None, None,
+                ('remove_selected_colours', Gtk.STOCK_REMOVE, None, None,
                  _('Remove the selected colours from the list.'), ),
             ]
         )
@@ -809,23 +825,23 @@ class SelectColourListView(gpaint.ColourListView):
         """
         self.action_groups[actions.AC_SELN_UNIQUE].add_actions(
             [
-                ('show_colour_details', gtk.STOCK_INFO, None, None,
+                ('show_colour_details', Gtk.STOCK_INFO, None, None,
                  _('Show a detailed description of the selected colour.'),),
             ]
         )
         self.action_groups[actions.AC_SELN_MADE].add_actions(
             [
-                ('add_colours_to_mixer', gtk.STOCK_ADD, None, None,
+                ('add_colours_to_mixer', Gtk.STOCK_ADD, None, None,
                  _('Add the selected colours to the mixer.'),),
             ]
         )
 
-class PaintColourSelector(gtk.VBox):
+class PaintColourSelector(Gtk.VBox):
     """
     A widget for adding paint colours to the mixer
     """
     def __init__(self, paint_series):
-        gtk.VBox.__init__(self)
+        Gtk.VBox.__init__(self)
         # components
         self.wheels = gpaint.HueWheelNotebook(popup='/colour_wheel_AI_popup')
         self.wheels.set_wheels_add_colour_acb(self._add_wheel_colour_to_mixer_cb)
@@ -835,18 +851,18 @@ class PaintColourSelector(gtk.VBox):
         for colour in paint_series.paint_colours.values():
             model.append_colour(colour)
             self.wheels.add_colour(colour)
-        maker = gtk.Label(_('Manufacturer: {0}'.format(paint_series.series_id.maker)))
-        sname = gtk.Label(_('Series Name: {0}'.format(paint_series.series_id.name)))
+        maker = Gtk.Label(label=_('Manufacturer: {0}'.format(paint_series.series_id.maker)))
+        sname = Gtk.Label(label=_('Series Name: {0}'.format(paint_series.series_id.name)))
         # make connections
         self.paint_colours_view.action_groups.connect_activate('show_colour_details', self._show_colour_details_cb)
         self.paint_colours_view.action_groups.connect_activate('add_colours_to_mixer', self._add_colours_to_mixer_cb)
         # lay the components out
-        self.pack_start(sname, expand=False)
-        self.pack_start(maker, expand=False)
-        hpaned = gtk.HPaned()
+        self.pack_start(sname, expand=False, fill=True, padding=0)
+        self.pack_start(maker, expand=False, fill=True, padding=0)
+        hpaned = Gtk.HPaned()
         hpaned.pack1(self.wheels, resize=True, shrink=False)
         hpaned.pack2(gtkpwx.wrap_in_scrolled_window(self.paint_colours_view), resize=True, shrink=False)
-        self.pack_start(hpaned, expand=True, fill=True)
+        self.pack_start(hpaned, expand=True, fill=True, padding=0)
         hpaned.set_position(recollect.get("paint_colour_selector", "hpaned_position"))
         hpaned.connect("notify", self._hpaned_notify_cb)
         self.show_all()
@@ -873,36 +889,36 @@ class PaintColourSelector(gtk.VBox):
         Add the currently selected colours to the mixer.
         """
         self.emit('add-paint-colours', [wheel.popup_colour])
-gobject.signal_new('add-paint-colours', PaintColourSelector, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))
+GObject.signal_new('add-paint-colours', PaintColourSelector, GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,))
 
-class PaintSeriesManager(gobject.GObject):
+class PaintSeriesManager(GObject.GObject):
     def __init__(self):
-        gobject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
         self.__target_colour = None
         self.__series_dict = dict()
         self._load_series_data()
         open_menu, remove_menu = self._build_submenus()
-        menu = gtk.Menu()
+        menu = Gtk.Menu()
         # Open
-        self.__open_item = gtk.MenuItem(_("Open"))
+        self.__open_item = Gtk.MenuItem(_("Open"))
         self.__open_item.set_submenu(open_menu)
         self.__open_item.set_tooltip_text(_("Open a paint series paint selector."))
         self.__open_item.show()
         menu.append(self.__open_item)
         # Add
-        add_menu = gtk.MenuItem(_("Load"))
+        add_menu = Gtk.MenuItem(_("Load"))
         add_menu.set_tooltip_text(_("Load a paint series from a file."))
         add_menu.show()
         add_menu.connect("activate", self._add_paint_series_cb)
         menu.append(add_menu)
         # Remove
-        self.__remove_item = gtk.MenuItem(_("Remove"))
+        self.__remove_item = Gtk.MenuItem(_("Remove"))
         self.__remove_item.set_submenu(remove_menu)
         self.__remove_item.set_tooltip_text(_("Remove a paint series from the application."))
         self.__remove_item.show()
         menu.append(self.__remove_item)
         #
-        self.__menu = gtk.MenuItem(_("Paint Colour Series"))
+        self.__menu = Gtk.MenuItem(_("Paint Colour Series"))
         self.__menu.set_submenu(menu)
     @property
     def menu(self):
@@ -955,12 +971,12 @@ class PaintSeriesManager(gobject.GObject):
             # Remove the offending files from the saved list
             config.write_series_file_names([value["filepath"] for value in self.__series_dict.values()])
     def _build_submenus(self):
-        open_menu = gtk.Menu()
-        remove_menu = gtk.Menu()
+        open_menu = Gtk.Menu()
+        remove_menu = Gtk.Menu()
         for series in sorted(self.__series_dict.keys()):
             label = "{0.maker}: {0.name}".format(series.series_id)
             for menu, cb in [(open_menu, self._open_paint_series_cb), (remove_menu, self._remove_paint_series_cb)]:
-                menu_item = gtk.MenuItem(label)
+                menu_item = Gtk.MenuItem(label)
                 menu_item.connect("activate", cb, series)
                 menu_item.show()
                 menu.append(menu_item)
@@ -972,11 +988,11 @@ class PaintSeriesManager(gobject.GObject):
         self.__remove_item.remove_submenu()
         self.__remove_item.set_submenu(remove_menu)
     def _add_paint_series_cb(self, widget):
-        dlg = gtk.FileChooserDialog(
+        dlg = Gtk.FileChooserDialog(
             title='Select Paint Series Description File',
             parent=None,
-            action=gtk.FILE_CHOOSER_ACTION_OPEN,
-            buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK)
+            action=Gtk.FileChooserAction.OPEN,
+            buttons=(Gtk.STOCK_CANCEL,Gtk.ResponseType.CANCEL,Gtk.STOCK_OPEN,Gtk.ResponseType.OK)
         )
         last_paint_file = recollect.get('paint_series_selector', 'last_file')
         last_paint_dir = None if last_paint_file is None else os.path.dirname(last_paint_file)
@@ -985,7 +1001,7 @@ class PaintSeriesManager(gobject.GObject):
         response = dlg.run()
         filepath = dlg.get_filename()
         dlg.destroy()
-        if response != gtk.RESPONSE_OK:
+        if response != Gtk.ResponseType.OK:
             return
         try:
             series = self._add_series_from_file(filepath)
@@ -1007,7 +1023,7 @@ class PaintSeriesManager(gobject.GObject):
             presenter.present()
             return
         # put it in a window and show it
-        window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
         last_size = recollect.get("paint_colour_selector", "last_size")
         if last_size:
             window.set_default_size(*eval(last_size))
@@ -1036,14 +1052,14 @@ class PaintSeriesManager(gobject.GObject):
     def _add_colours_to_mixer_cb(self, widget, paint_colours):
         # pass the parcel :-)
         self.emit('add-paint-colours', paint_colours)
-gobject.signal_new('add-paint-colours', PaintSeriesManager, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))
+GObject.signal_new('add-paint-colours', PaintSeriesManager, GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,))
 
-class TopLevelWindow(gtk.Window):
+class TopLevelWindow(Gtk.Window):
     """
     A top level window wrapper around a mixer
     """
     def __init__(self):
-        gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
+        Gtk.Window.__init__(self, Gtk.WindowType.TOPLEVEL)
         self.parse_geometry(recollect.get("mixer", "last_geometry"))
         self.set_icon_from_file(icons.APP_ICON_FILE)
         self.set_title('mcmmtk: Mixer')
@@ -1055,7 +1071,7 @@ class TopLevelWindow(gtk.Window):
     def _configure_event_cb(self, widget, event):
         recollect.set("mixer", "last_geometry", "{0.width}x{0.height}+{0.x}+{0.y}".format(event))
 
-class ReferenceImageViewer(gtk.Window, actions.CAGandUIManager):
+class ReferenceImageViewer(Gtk.Window, actions.CAGandUIManager):
     """
     A top level window for a colour sample file
     """
@@ -1071,7 +1087,7 @@ class ReferenceImageViewer(gtk.Window, actions.CAGandUIManager):
     '''
     TITLE_TEMPLATE = _('mcmmtk: Reference Image: {}')
     def __init__(self, parent):
-        gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
+        Gtk.Window.__init__(self, Gtk.WindowType.TOPLEVEL)
         actions.CAGandUIManager.__init__(self)
         last_size = recollect.get("reference_image_viewer", "last_size")
         if last_size:
@@ -1081,8 +1097,8 @@ class ReferenceImageViewer(gtk.Window, actions.CAGandUIManager):
         last_image_file = recollect.get('reference_image_viewer', 'last_file')
         if os.path.isfile(last_image_file):
             try:
-                pixbuf = gtk.gdk.pixbuf_new_from_file(last_image_file)
-            except glib.GError:
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file(last_image_file)
+            except GLib.GError:
                 pixbuf = None
                 last_image_file = None
         else:
@@ -1095,10 +1111,10 @@ class ReferenceImageViewer(gtk.Window, actions.CAGandUIManager):
             #'zoom_in',
             #'zoom_out',
         #])
-        vbox = gtk.VBox()
-        vbox.pack_start(self._menubar, expand=False)
-        vbox.pack_start(self.ref_image, expand=True, fill=True)
-        #vbox.pack_start(self.buttons, expand=False)
+        vbox = Gtk.VBox()
+        vbox.pack_start(self._menubar, expand=False, fill=True, padding=0)
+        vbox.pack_start(self.ref_image, expand=True, fill=True, padding=0)
+        #vbox.pack_start(self.buttons, expand=False, fill=True, padding=0)
         self.add(vbox)
         #self.set_transient_for(parent)
         self.connect("size-allocate", self._size_allocation_cb)
@@ -1110,10 +1126,10 @@ class ReferenceImageViewer(gtk.Window, actions.CAGandUIManager):
     def populate_action_groups(self):
         self.action_groups[actions.AC_DONT_CARE].add_actions([
             ('reference_image_file_menu', None, _('File')),
-            ('open_reference_image_file', gtk.STOCK_OPEN, None, None,
+            ('open_reference_image_file', Gtk.STOCK_OPEN, None, None,
             _('Load an image file for reference.'),
             self._open_reference_image_file_cb),
-            ('close_reference_image_viewer', gtk.STOCK_CLOSE, None, None,
+            ('close_reference_image_viewer', Gtk.STOCK_CLOSE, None, None,
             _('Close this window.'),
             self._close_reference_image_viewer_cb),
         ])
@@ -1122,28 +1138,28 @@ class ReferenceImageViewer(gtk.Window, actions.CAGandUIManager):
         Ask the user for the name of the file then open it.
         """
         parent = self.get_toplevel()
-        dlg = gtk.FileChooserDialog(
+        dlg = Gtk.FileChooserDialog(
             title=_('Open Image File'),
-            parent=parent if isinstance(parent, gtk.Window) else None,
-            action=gtk.FILE_CHOOSER_ACTION_OPEN,
-            buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK)
+            parent=parent if isinstance(parent, Gtk.Window) else None,
+            action=Gtk.FileChooserAction.OPEN,
+            buttons=(Gtk.STOCK_CANCEL,Gtk.ResponseType.CANCEL,Gtk.STOCK_OPEN,Gtk.ResponseType.OK)
         )
         last_image_file = recollect.get('reference_image_viewer', 'last_file')
         last_samples_dir = None if last_image_file is None else os.path.dirname(last_image_file)
         if last_samples_dir:
             dlg.set_current_folder(last_samples_dir)
-        gff = gtk.FileFilter()
+        gff = Gtk.FileFilter()
         gff.set_name(_('Image Files'))
         gff.add_pixbuf_formats()
         dlg.add_filter(gff)
-        if dlg.run() == gtk.RESPONSE_OK:
+        if dlg.run() == Gtk.ResponseType.OK:
             filepath = dlg.get_filename()
             dlg.destroy()
             try:
-                pixbuf = gtk.gdk.pixbuf_new_from_file(filepath)
-            except glib.GError:
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file(filepath)
+            except GLib.GError:
                 msg = _('{}: Problem extracting image from file.').format(filepath)
-                gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_CLOSE, message_format=msg).run()
+                Gtk.MessageDialog(type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CLOSE, message_format=msg).run()
                 return
             recollect.set('reference_image_viewer', 'last_file', filepath)
             self.set_title(self.TITLE_TEMPLATE.format(None if filepath is None else os.path.relpath(filepath)))
@@ -1153,31 +1169,31 @@ class ReferenceImageViewer(gtk.Window, actions.CAGandUIManager):
     def _close_reference_image_viewer_cb(self, _action):
         self.get_toplevel().destroy()
 
-class NewMixedColourDialogue(gtk.Dialog):
+class NewMixedColourDialogue(Gtk.Dialog):
     def __init__(self, number, parent=None):
-        gtk.Dialog.__init__(self, title=_("New Mixed Colour: #{:03d}").format(number),
+        Gtk.Dialog.__init__(self, title=_("New Mixed Colour: #{:03d}").format(number),
                             parent=parent,
-                            flags=gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
-                            buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT,
-                                     gtk.STOCK_OK, gtk.RESPONSE_ACCEPT)
+                            flags=Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                            buttons=(Gtk.STOCK_CANCEL, Gtk.ResponseType.REJECT,
+                                     Gtk.STOCK_OK, Gtk.ResponseType.ACCEPT)
                             )
         vbox = self.get_content_area()
         self.colour_description = gtkpwx.TextEntryAutoComplete(data.COLOUR_NAME_LEXICON)
         self.colour_description.connect("new-words", data.new_paint_words_cb)
         self.colour_description.connect('changed', self._description_changed_cb)
-        self.set_response_sensitive(gtk.RESPONSE_ACCEPT, len(self.colour_description.get_text()) > 0)
-        hbox = gtk.HBox()
-        hbox.pack_start(gtk.Label(_("Description:")), expand=False)
-        hbox.pack_start(self.colour_description, expand=True)
-        vbox.pack_start(hbox, expand=False)
+        self.set_response_sensitive(Gtk.ResponseType.ACCEPT, len(self.colour_description.get_text()) > 0)
+        hbox = Gtk.HBox()
+        hbox.pack_start(Gtk.Label(_("Description:")), expand=False, fill=True, padding=0)
+        hbox.pack_start(self.colour_description, expand=True, fill=True, padding=0)
+        vbox.pack_start(hbox, expand=False, fill=True, padding=0)
         self.colour_specifier = editor.ColourSampleMatcher(auto_match_on_paste=True)
-        vbox.pack_start(self.colour_specifier)
-        button = gtk.Button(_("Take Screen Sample"))
+        vbox.pack_start(self.colour_specifier, expand=True, fill=True, padding=0)
+        button = Gtk.Button(_("Take Screen Sample"))
         button.connect("clicked", gtkpwx.take_screen_sample)
-        vbox.pack_start(button, expand=False)
+        vbox.pack_start(button, expand=False, fill=True, padding=0)
         vbox.show_all()
     def _description_changed_cb(self, widget):
-        self.set_response_sensitive(gtk.RESPONSE_ACCEPT, len(self.colour_description.get_text()) > 0)
+        self.set_response_sensitive(Gtk.ResponseType.ACCEPT, len(self.colour_description.get_text()) > 0)
 
 def generate_components_list_spec(model):
     """
@@ -1190,11 +1206,11 @@ def generate_components_list_spec(model):
         cells=[
             tlview.CellSpec(
                 cell_renderer_spec=tlview.CellRendererSpec(
-                    cell_renderer=gtk.CellRendererText,
+                    cell_renderer=Gtk.CellRendererText,
                     expand=None,
+                    properties={'width-chars' : 8},
                     start=False
                 ),
-                properties={'width-chars' : 8},
                 cell_data_function_spec=None,
                 attributes={'text' : model.col_index('parts')}
             ),
@@ -1204,7 +1220,7 @@ def generate_components_list_spec(model):
     attr_cols_specs = [gpaint.colour_attribute_column_spec(tns) for tns in gpaint.COLOUR_ATTRS[1:]]
     return tlview.ViewSpec(
         properties={},
-        selection_mode=gtk.SELECTION_SINGLE,
+        selection_mode=Gtk.SelectionMode.SINGLE,
         columns=[parts_col_spec, name_col_spec] + attr_cols_specs
     )
 
@@ -1216,34 +1232,34 @@ class ComponentsListView(PartsColourListView):
         </popup>
     </ui>
     '''
-    Model = PartsColourListStore
-    specification = generate_components_list_spec(PartsColourListStore)
+    MODEL = PartsColourListStore
+    SPECIFICATION = generate_components_list_spec(PartsColourListStore)
 
     def _set_cell_connections(self):
         pass
 
-class MixedColourInformationDialogue(gtk.Dialog):
+class MixedColourInformationDialogue(Gtk.Dialog):
     """
     A dialog to display the detailed information for a mixed colour
     """
 
     def __init__(self, colour, target_colour, parent=None):
-        gtk.Dialog.__init__(self, title=_('Mixed Colour: {}').format(colour.name), parent=parent)
+        Gtk.Dialog.__init__(self, title=_('Mixed Colour: {}').format(colour.name), parent=parent)
         last_size = recollect.get("mixed_colour_information", "last_size")
         if last_size:
             self.set_default_size(*last_size)
         vbox = self.get_content_area()
-        vbox.pack_start(gtkpwx.ColouredLabel(colour.name, colour), expand=False)
-        vbox.pack_start(gtkpwx.ColouredLabel(colour.notes, colour), expand=False)
-        vbox.pack_start(gtkpwx.ColouredLabel(_("Target"), target_colour.rgb), expand=False)
+        vbox.pack_start(gtkpwx.ColouredLabel(colour.name, colour), expand=False, fill=True, padding=0)
+        vbox.pack_start(gtkpwx.ColouredLabel(colour.notes, colour), expand=False, fill=True, padding=0)
+        vbox.pack_start(gtkpwx.ColouredLabel(_("Target"), target_colour.rgb), expand=False, fill=True, padding=0)
         thcvd = gpaint.HCVDisplay(colour, target_colour)
-        vbox.pack_start(thcvd, expand=False)
-        vbox.pack_start(gtk.Label(colour.transparency.description()), expand=False)
-        vbox.pack_start(gtk.Label(colour.finish.description()), expand=False)
+        vbox.pack_start(thcvd, expand=False, fill=True, padding=0)
+        vbox.pack_start(Gtk.Label(colour.transparency.description()), expand=False, fill=True, padding=0)
+        vbox.pack_start(Gtk.Label(colour.finish.description()), expand=False, fill=True, padding=0)
         self.cview = ComponentsListView()
         for component in colour.blobs:
             self.cview.model.append(component)
-        vbox.pack_start(self.cview, expand=False)
+        vbox.pack_start(self.cview, expand=False, fill=True, padding=0)
         self.connect("configure-event", self._configure_event_cb)
         vbox.show_all()
     def _configure_event_cb(self, widget, allocation):

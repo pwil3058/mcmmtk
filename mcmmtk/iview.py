@@ -19,8 +19,10 @@ A viewer for digital images
 
 import fractions
 
-import gtk
-import gobject
+from gi.repository import Gdk
+from gi.repository import GdkPixbuf
+from gi.repository import Gtk
+from gi.repository import GObject
 
 from . import actions
 from . import gtkpwx
@@ -28,11 +30,11 @@ from . import printer
 
 class ZoomedPixbuf(object):
     """
-    A scaled gtk.gdk.Pixbuf and some handy methods
+    A scaled GdkPixbuf.Pixbuf and some handy methods
     """
     def __init__(self, pixbuf):
         """
-        pixbuf: an instance of gtk.gdk.Pixbuf
+        pixbuf: an instance of GdkPixbuf.Pixbuf
         """
         self.__uz_pixbuf = self.__z_pixbuf = pixbuf
         self.__zoom = fractions.Fraction(1)
@@ -90,7 +92,7 @@ class ZoomedPixbuf(object):
         """
         new_width = int(round(self.__uz_pixbuf.get_width() * zoom))
         new_height = int(round(self.__uz_pixbuf.get_height() * zoom))
-        self.__z_pixbuf = self.__uz_pixbuf.scale_simple(new_width, new_height, gtk.gdk.INTERP_BILINEAR)
+        self.__z_pixbuf = self.__uz_pixbuf.scale_simple(new_width, new_height, GdkPixbuf.InterpType.BILINEAR)
         # make sure reported zoom matches what was set so user code doesn't
         # get stuck in endless loops
         self.__zoom = zoom
@@ -99,7 +101,7 @@ class ZoomedPixbuf(object):
         Set the size of the zoomed Pixbuf to the specified sie
         """
         assert self.aspect_ratio_matches(new_zsize)
-        self.__z_pixbuf = self.__uz_pixbuf.scale_simple(new_zsize.width, new_zsize.height, gtk.gdk.INTERP_BILINEAR)
+        self.__z_pixbuf = self.__uz_pixbuf.scale_simple(new_zsize.width, new_zsize.height, GdkPixbuf.InterpType.BILINEAR)
         self.__zoom = (self.hzoom + self.wzoom) / 2
     def calc_zooms_for(self, wharg):
         """
@@ -110,7 +112,7 @@ class ZoomedPixbuf(object):
         hzoom = fractions.Fraction(wharg.height, usize.height)
         return gtkpwx.WH(wzoom, hzoom)
 
-class PixbufView(gtk.ScrolledWindow, actions.CAGandUIManager):
+class PixbufView(Gtk.ScrolledWindow, actions.CAGandUIManager):
     UI_DESCR = '''
         <ui>
             <popup name='pixbuf_view_popup'>
@@ -128,17 +130,17 @@ class PixbufView(gtk.ScrolledWindow, actions.CAGandUIManager):
         """
         A drawing area to contain a single image
         """
-        gtk.ScrolledWindow.__init__(self)
+        Gtk.ScrolledWindow.__init__(self)
         actions.CAGandUIManager.__init__(self, popup='/pixbuf_view_popup')
         self.__pixbuf = None
-        self.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-        self.__da = gtk.DrawingArea()
-        self.__da.connect('expose-event', self._expose_cb)
+        self.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+        self.__da = Gtk.DrawingArea()
+        self.__da.connect("draw", self._expose_cb)
         self.__size_allocate_cb_id = self.connect('size-allocate', self._size_allocate_cb)
         self.add_with_viewport(self.__da)
         self.__last_alloc = None
         #
-        self.add_events(gtk.gdk.SCROLL_MASK)
+        self.add_events(Gdk.EventMask.SCROLL_MASK)
         self.connect('scroll_event', self._scroll_ecb)
         #
         self.__seln = XYSelection(self.__da)
@@ -154,7 +156,7 @@ class PixbufView(gtk.ScrolledWindow, actions.CAGandUIManager):
     def populate_action_groups(self):
         self.action_groups[self.AC_SELN_MADE].add_actions(
             [
-                ('copy_to_clipboard', gtk.STOCK_COPY, None, None,
+                ('copy_to_clipboard', Gtk.STOCK_COPY, None, None,
                  _('Copy the selection to the clipboard.'),
                  self._copy_to_clipboard_acb
                 ),
@@ -162,15 +164,15 @@ class PixbufView(gtk.ScrolledWindow, actions.CAGandUIManager):
         )
         self.action_groups[self.AC_PIXBUF_SET].add_actions(
             [
-                ('print_pixbuf', gtk.STOCK_PRINT, None, None,
+                ('print_pixbuf', Gtk.STOCK_PRINT, None, None,
                  _('Print this image.'),
                  self._print_pixbuf_acb
                 ),
-                ('zoom_in', gtk.STOCK_ZOOM_IN, None, None,
+                ('zoom_in', Gtk.STOCK_ZOOM_IN, None, None,
                  _('Enlarge the image.'),
                  self.zoom_in
                 ),
-                ('zoom_out', gtk.STOCK_ZOOM_OUT, None, None,
+                ('zoom_out', Gtk.STOCK_ZOOM_OUT, None, None,
                  _('Shrink the image.'),
                  self.zoom_out
                 ),
@@ -191,13 +193,13 @@ class PixbufView(gtk.ScrolledWindow, actions.CAGandUIManager):
         self.__da.set_size_request(new_size.width, new_size.height)
         sizediff = self.get_allocation() - new_size
         if sizediff.width >= 0 and sizediff.height >= 0:
-            self.set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
+            self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER)
         else:
-            self.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+            self.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         self.handler_unblock(self.__size_allocate_cb_id)
     def set_pixbuf(self, pixbuf):
         """
-        pixbuf: a gtk.gdk.Pixbuf instance (to be displayed) or None.
+        pixbuf: a GdkPixbuf.Pixbuf instance (to be displayed) or None.
         """
         if pixbuf is not None:
             self.__pixbuf = ZoomedPixbuf(pixbuf)
@@ -215,23 +217,24 @@ class PixbufView(gtk.ScrolledWindow, actions.CAGandUIManager):
         else:
             self.__pixbuf = None
             self.action_groups.update_condns(actions.MaskedCondns(0, self.AC_PICBUF_MASK))
-    def _expose_cb(self, _widget, _event):
+    def _expose_cb(self, _widget, cairo_ctxt):
         """
         Repaint the drawing area
         """
-        self.__da.window.clear()
-
         if self.__pixbuf is not None:
-            gc = self.__da.window.new_gc()
-            self.__da.window.draw_pixbuf(gc, self.__pixbuf.zoomed_pixbuf, 0, 0, 0, 0)
+            sfc = Gdk.cairo_surface_create_from_pixbuf(self.__pixbuf.zoomed_pixbuf, 0, None)
+            cairo_ctxt.set_source_surface(sfc, 0, 0)
+            cairo_ctxt.paint()
             if self.__seln.in_progress() or self.__seln.seln_made():
                 scale = self.__pixbuf.zoom / self.__seln_zoom
                 rect = self.__seln.get_scaled_rectangle(scale)
                 if self.__seln.seln_made():
-                    gc.set_values(line_style=gtk.gdk.LINE_SOLID, function=gtk.gdk.INVERT)
+                    cairo_ctxt.set_dash([])
                 else:
-                    gc.set_values(line_style=gtk.gdk.LINE_ON_OFF_DASH, function=gtk.gdk.INVERT)
-                self.window.draw_rectangle(gc, False, *rect)
+                    cairo_ctxt.set_dash([3])
+                cairo_ctxt.rectangle(*rect)
+                cairo_ctxt.set_source_rgb(0, 0, 0)
+                cairo_ctxt.stroke()
         return True
     def _size_allocate_cb(self, _widget, _event):
         """
@@ -263,9 +266,9 @@ class PixbufView(gtk.ScrolledWindow, actions.CAGandUIManager):
                 self.__pixbuf.set_zoom(zoom)
                 self._resize_da()
             elif zoomed_sizediff.width < 0 or zoomed_sizediff.height < 0:
-                self.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+                self.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
             else:
-                self.set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
+                self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER)
         elif delta_alloc.width <= 0 and delta_alloc.height <= 0:
             # We're getting smaller
             if zoomed_sizediff.width > 10 or zoomed_sizediff.height > 10:
@@ -278,9 +281,9 @@ class PixbufView(gtk.ScrolledWindow, actions.CAGandUIManager):
                     self.__pixbuf.set_zoom(zoom)
                     self._resize_da()
             elif zoomed_sizediff.width < 0 or zoomed_sizediff.height < 0:
-                self.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+                self.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
             else:
-                self.set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
+                self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER)
     def _seln_status_change_cb(self, _widget, seln_made):
         """
         Record the "zoom" value at the time of status change so that
@@ -313,7 +316,7 @@ class PixbufView(gtk.ScrolledWindow, actions.CAGandUIManager):
             current_zoom = self.__pixbuf.zoom
             min_zoom = max(self.__pixbuf.calc_zooms_for(self.__last_alloc))
             if current_zoom <= min_zoom:
-                gtk.gdk.beep()
+                Gdk.beep()
             else:
                 self.__pixbuf.set_zoom(max(current_zoom / self.ZOOM_FACTOR, min_zoom))
                 self._resize_da()
@@ -324,22 +327,22 @@ class PixbufView(gtk.ScrolledWindow, actions.CAGandUIManager):
         """
         Manage use of the scroll wheel for zooming and scrolling
         """
-        if event.state & gtk.gdk.CONTROL_MASK:
-            if event.direction == gtk.gdk.SCROLL_DOWN:
+        if event.get_state() & Gdk.ModifierType.CONTROL_MASK:
+            if event.direction == Gdk.ScrollDirection.DOWN:
                 self.zoom_in()
                 return True
-            elif event.direction == gtk.gdk.SCROLL_UP:
+            elif event.direction == Gdk.ScrollDirection.UP:
                 self.zoom_out()
                 return True
-        elif event.state & gtk.gdk.SHIFT_MASK:
-            if event.direction == gtk.gdk.SCROLL_UP:
-                self.emit('scroll-child', gtk.SCROLL_STEP_FORWARD, True)
-            elif event.direction == gtk.gdk.SCROLL_DOWN:
-                self.emit('scroll-child', gtk.SCROLL_STEP_BACKWARD, True)
+        elif event.get_state() & Gdk.ModifierType.SHIFT_MASK:
+            if event.direction == Gdk.ScrollDirection.UP:
+                self.emit('scroll-child', Gtk.SCROLL_STEP_FORWARD, True)
+            elif event.direction == Gdk.ScrollDirection.DOWN:
+                self.emit('scroll-child', Gtk.SCROLL_STEP_BACKWARD, True)
             return True
     # Careful not to override CAGandUIManager method
     def _da_button_press_cb(self, widget, event):
-        if event.button == 1 and event.state & gtk.gdk.CONTROL_MASK:
+        if event.button == 1 and event.get_state() & Gdk.ModifierType.CONTROL_MASK:
             self.__last_xy = gtkpwx.XY(event.x, event.y)
             for cb_id in self.__cb_ids:
                 widget.handler_unblock(cb_id)
@@ -370,8 +373,8 @@ class PixbufView(gtk.ScrolledWindow, actions.CAGandUIManager):
         """
         scale = self.__pixbuf.zoom / self.__seln_zoom
         rect = self.__seln.get_scaled_rectangle(scale)
-        pixbuf = self.__pixbuf.zoomed_pixbuf.subpixbuf(*rect)
-        cbd = gtk.clipboard_get()
+        pixbuf = self.__pixbuf.zoomed_pixbuf.new_subpixbuf(*rect)
+        cbd = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         cbd.set_image(pixbuf)
     def _print_pixbuf_acb(self, _action):
         """
@@ -379,7 +382,7 @@ class PixbufView(gtk.ScrolledWindow, actions.CAGandUIManager):
         """
         printer.print_pixbuf(self.__pixbuf.unzoomed_pixbuf)
 
-class XYSelection(gobject.GObject):
+class XYSelection(GObject.GObject):
     """
     A generic XY selection widget
     """
@@ -387,11 +390,11 @@ class XYSelection(gobject.GObject):
         """
         source: the widget on which the selection is to be made
         """
-        gobject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
         self.__source = source
         self.__seln_made = False
         self.__start_xy = self.__end_xy = None
-        source.add_events(gtk.gdk.POINTER_MOTION_MASK|gtk.gdk.BUTTON_PRESS_MASK|gtk.gdk.BUTTON_RELEASE_MASK|gtk.gdk.LEAVE_NOTIFY_MASK)
+        source.add_events(Gdk.EventMask.POINTER_MOTION_MASK|Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.BUTTON_RELEASE_MASK|Gdk.EventMask.LEAVE_NOTIFY_MASK)
         self.__press_cb_id = source.connect('button_press_event', self._button_press_cb)
         self.__cb_ids = []
         self.__cb_ids.append(source.connect('button_release_event', self._button_release_cb))
@@ -448,7 +451,7 @@ class XYSelection(gobject.GObject):
         """
         Start the selection
         """
-        if event.button == 1 and event.state & gtk.gdk.CONTROL_MASK == 0:
+        if event.button == 1 and event.get_state() & Gdk.ModifierType.CONTROL_MASK == 0:
             self.__start_xy = self.__end_xy = gtkpwx.XY(event.x, event.y)
             self.__seln_made = False
             for cb_id in self.__cb_ids:
@@ -490,6 +493,6 @@ class XYSelection(gobject.GObject):
             widget.handler_block(cb_id)
         self.emit('status-changed', True)
         return True
-gobject.type_register(XYSelection)
-gobject.signal_new('status-changed', XYSelection, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_BOOLEAN,))
-gobject.signal_new('motion-notify', XYSelection, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ())
+GObject.type_register(XYSelection)
+GObject.signal_new('status-changed', XYSelection, GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_BOOLEAN,))
+GObject.signal_new('motion-notify', XYSelection, GObject.SignalFlags.RUN_LAST, None, ())

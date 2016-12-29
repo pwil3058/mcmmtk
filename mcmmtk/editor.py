@@ -22,9 +22,11 @@ import os
 import hashlib
 import fractions
 
-import gtk
-import gobject
-import glib
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GdkPixbuf
+from gi.repository import GObject
+from gi.repository import GLib
 
 from . import options
 from . import recollect
@@ -38,36 +40,36 @@ from . import icons
 from . import iview
 from . import rgbh
 
-class UnacceptedChangesDialogue(gtk.Dialog):
+class UnacceptedChangesDialogue(Gtk.Dialog):
     # TODO: make a better UnacceptedChangesDialogue()
     ACCEPT_CHANGES_AND_CONTINUE, CONTINUE_DISCARDING_CHANGES = range(1, 3)
     def __init__(self, parent, message):
-        buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
+        buttons = (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
         buttons += (_('Accept and Continue'), UnacceptedChangesDialogue.ACCEPT_CHANGES_AND_CONTINUE)
         buttons += (_('Continue (Discarding Changes)'), UnacceptedChangesDialogue.CONTINUE_DISCARDING_CHANGES)
-        gtk.Dialog.__init__(self,
+        Gtk.Dialog.__init__(self,
             parent=parent,
-            flags=gtk.DIALOG_MODAL,
+            flags=Gtk.DialogFlags.MODAL,
             buttons=buttons,
         )
-        self.vbox.pack_start(gtk.Label(message))
+        self.vbox.pack_start(Gtk.Label(message), expand=True, fill=True, padding=0)
         self.show_all()
 
-class UnaddedNewColourDialogue(gtk.Dialog):
+class UnaddedNewColourDialogue(Gtk.Dialog):
     # TODO: make a better UnaddedNewColourDialogue()
     DISCARD_AND_CONTINUE = 1
     def __init__(self, parent, message):
-        buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
+        buttons = (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
         buttons += (_('Discard and Continue'), UnaddedNewColourDialogue.DISCARD_AND_CONTINUE)
-        gtk.Dialog.__init__(self,
+        Gtk.Dialog.__init__(self,
             parent=parent,
-            flags=gtk.DIALOG_MODAL,
+            flags=Gtk.DialogFlags.MODAL,
             buttons=buttons,
         )
-        self.vbox.pack_start(gtk.Label(message))
+        self.vbox.pack_start(Gtk.Label(message), expand=True, fill=True, padding=0)
         self.show_all()
 
-class PaintSeriesEditor(gtk.HPaned, actions.CAGandUIManager):
+class PaintSeriesEditor(Gtk.HPaned, actions.CAGandUIManager):
     UI_DESCR = '''
     <ui>
       <menubar name='paint_series_editor_menubar'>
@@ -87,7 +89,7 @@ class PaintSeriesEditor(gtk.HPaned, actions.CAGandUIManager):
     '''
     AC_HAS_COLOUR, AC_NOT_HAS_COLOUR, AC_HAS_FILE, AC_ID_READY, AC_MASK = actions.ActionCondns.new_flags_and_mask(4)
     def __init__(self):
-        gtk.HPaned.__init__(self)
+        Gtk.HPaned.__init__(self)
         actions.CAGandUIManager.__init__(self)
         #
         self.set_file_path(None)
@@ -113,25 +115,25 @@ class PaintSeriesEditor(gtk.HPaned, actions.CAGandUIManager):
         self.manufacturer_name = gtkpwx.TextEntryAutoComplete(data.GENERAL_WORDS_LEXICON, multiword=False)
         self.manufacturer_name.connect('new-words', data.new_general_words_cb)
         self.manufacturer_name.connect('changed', self._id_changed_cb)
-        mnlabel = gtk.Label(_('Manufacturer:'))
+        mnlabel = Gtk.Label(label=_('Manufacturer:'))
         self.series_name = gtkpwx.TextEntryAutoComplete(data.GENERAL_WORDS_LEXICON)
         self.series_name.connect('new-words', data.new_general_words_cb)
         self.series_name.connect('changed', self._id_changed_cb)
-        snlabel = gtk.Label(_('Series:'))
+        snlabel = Gtk.Label(label=_('Series:'))
         self.set_current_colour(None)
         # Now arrange them
-        vbox = gtk.VBox()
-        table = gtk.Table(rows=2, columns=2, homogeneous=False)
+        vbox = Gtk.VBox()
+        table = Gtk.Table(rows=2, columns=2, homogeneous=False)
         table.attach(mnlabel, 0, 1, 0, 1, xoptions=0)
         table.attach(snlabel, 0, 1, 1, 2, xoptions=0)
         table.attach(self.manufacturer_name, 1, 2, 0, 1)
         table.attach(self.series_name, 1, 2, 1, 2)
-        vbox.pack_start(table, expand=False)
-        vbox.pack_start(self.paint_colours, expand=True, fill=True)
+        vbox.pack_start(table, expand=False, fill=True, padding=0)
+        vbox.pack_start(self.paint_colours, expand=True, fill=True, padding=0)
         self.pack1(vbox, resize=True, shrink=False)
-        vbox = gtk.VBox()
-        vbox.pack_start(self.paint_editor, expand=True, fill=True)
-        vbox.pack_start(self.buttons, expand=False)
+        vbox = Gtk.VBox()
+        vbox.pack_start(self.paint_editor, expand=True, fill=True, padding=0)
+        vbox.pack_start(self.buttons, expand=False, fill=True, padding=0)
         self.pack2(vbox, resize=True, shrink=False)
         self.set_position(recollect.get("editor", "hpaned_position"))
         self.connect("notify", self._notify_cb)
@@ -156,12 +158,12 @@ class PaintSeriesEditor(gtk.HPaned, actions.CAGandUIManager):
             self._accept_colour_changes_cb),
         ])
         self.action_groups[self.AC_HAS_FILE|self.AC_ID_READY].add_actions([
-            ('save_paint_series_to_file', gtk.STOCK_SAVE, None, None,
+            ('save_paint_series_to_file', Gtk.STOCK_SAVE, None, None,
             _('Save the current series definition to file.'),
             self._save_paint_series_to_file_cb),
         ])
         self.action_groups[self.AC_ID_READY].add_actions([
-            ('save_paint_series_as_file', gtk.STOCK_SAVE_AS, None, None,
+            ('save_paint_series_as_file', Gtk.STOCK_SAVE_AS, None, None,
             _('Save the current series definition to a user chosen file.'),
             self._save_paint_series_as_file_cb),
         ])
@@ -172,7 +174,7 @@ class PaintSeriesEditor(gtk.HPaned, actions.CAGandUIManager):
             ('reset_colour_editor', None, _('Reset'), None,
             _('Reset the colour editor to its default state.'),
             self._reset_colour_editor_cb),
-            ('open_paint_series_file', gtk.STOCK_OPEN, None, None,
+            ('open_paint_series_file', Gtk.STOCK_OPEN, None, None,
             _('Load a paint series from a file for editing.'),
             self._open_paint_series_file_cb),
             ('take_screen_sample', None, _('Take Sample'), None,
@@ -181,10 +183,10 @@ class PaintSeriesEditor(gtk.HPaned, actions.CAGandUIManager):
             ('open_sample_viewer', None, _('Open Sample Viewer'), None,
             _('Open a graphics file containing colour samples.'),
             self._open_sample_viewer_cb),
-            ('close_colour_editor', gtk.STOCK_CLOSE, None, None,
+            ('close_colour_editor', Gtk.STOCK_CLOSE, None, None,
             _('Close this window.'),
             self._close_colour_editor_cb),
-            ('new_paint_series', gtk.STOCK_NEW, None, None,
+            ('new_paint_series', Gtk.STOCK_NEW, None, None,
             _('Start a new paint colour series.'),
             self._new_paint_series_cb),
         ])
@@ -211,16 +213,16 @@ class PaintSeriesEditor(gtk.HPaned, actions.CAGandUIManager):
         if manl == 0 and serl == 0 and coll == 0:
             return True
         dtext = self.get_definition_text()
-        if hashlib.sha1(dtext).digest() == self.saved_hash:
+        if hashlib.sha1(dtext.encode()).digest() == self.saved_hash:
             return True
         parent = self.get_toplevel()
         dlg = gtkpwx.UnsavedChangesDialogue(
-            parent=parent if isinstance(parent, gtk.Window) else None,
+            parent=parent if isinstance(parent, Gtk.Window) else None,
             message=_("The series definition has unsaved changes.")
         )
         response = dlg.run()
         dlg.destroy()
-        if response == gtk.RESPONSE_CANCEL:
+        if response == Gtk.ResponseType.CANCEL:
             return False
         elif response == gtkpwx.UnsavedChangesDialogue.CONTINUE_UNSAVED:
             return True
@@ -276,7 +278,7 @@ class PaintSeriesEditor(gtk.HPaned, actions.CAGandUIManager):
             if self.paint_editor.colour_name.get_text_length() > 0:
                 parent = self.get_toplevel()
                 msg = _("New colour \"{0}\" has not been added to the series.").format(self.paint_editor.colour_name.get_text())
-                dlg = UnaddedNewColourDialogue(parent=parent if isinstance(parent, gtk.Window) else None,message=msg)
+                dlg = UnaddedNewColourDialogue(parent=parent if isinstance(parent, Gtk.Window) else None,message=msg)
                 response = dlg.run()
                 dlg.destroy()
                 return response == UnaddedNewColourDialogue.DISCARD_AND_CONTINUE
@@ -294,7 +296,7 @@ class PaintSeriesEditor(gtk.HPaned, actions.CAGandUIManager):
             if changed:
                 parent = self.get_toplevel()
                 msg = _("Colour \"{0}\" has changes that have not been accepted.").format(edit_colour.name)
-                dlg = UnacceptedChangesDialogue(parent=parent if isinstance(parent, gtk.Window) else None,message=msg)
+                dlg = UnacceptedChangesDialogue(parent=parent if isinstance(parent, Gtk.Window) else None,message=msg)
                 response = dlg.run()
                 dlg.destroy()
                 if response == UnacceptedChangesDialogue.ACCEPT_CHANGES_AND_CONTINUE:
@@ -314,11 +316,11 @@ class PaintSeriesEditor(gtk.HPaned, actions.CAGandUIManager):
         title = _('Duplicate Colour Name')
         msg = _('A colour with the name "{0}" already exists.\n Overwrite?').format(name)
         dlg = gtkpwx.CancelOKDialog(title=title, parent=self.get_toplevel())
-        dlg.get_content_area().pack_start(gtk.Label(msg))
+        dlg.get_content_area().pack_start(Gtk.Label(msg), expand=True, fill=True, padding=0)
         dlg.show_all()
         response = dlg.run()
         dlg.destroy()
-        return response == gtk.RESPONSE_OK
+        return response == Gtk.ResponseType.OK
     def _accept_colour_changes_cb(self, _widget=None):
         edited_colour = self.paint_editor.get_colour()
         if edited_colour.name != self.current_colour.name:
@@ -388,7 +390,7 @@ class PaintSeriesEditor(gtk.HPaned, actions.CAGandUIManager):
         self.manufacturer_name.set_text(series.series_id.maker)
         self.series_name.set_text(series.series_id.name)
         self.set_file_path(filepath)
-        self.saved_hash = hashlib.sha1(text).digest()
+        self.saved_hash = hashlib.sha1(text.encode()).digest()
     def _open_paint_series_file_cb(self, _action):
         """
         Ask the user for the name of the file then open it.
@@ -396,11 +398,11 @@ class PaintSeriesEditor(gtk.HPaned, actions.CAGandUIManager):
         if not self.unsaved_changes_ok():
             return
         parent = self.get_toplevel()
-        dlg = gtk.FileChooserDialog(
+        dlg = Gtk.FileChooserDialog(
             title=_('Load Paint Series Description'),
-            parent=parent if isinstance(parent, gtk.Window) else None,
-            action=gtk.FILE_CHOOSER_ACTION_OPEN,
-            buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK)
+            parent=parent if isinstance(parent, Gtk.Window) else None,
+            action=Gtk.FileChooserAction.OPEN,
+            buttons=(Gtk.STOCK_CANCEL,Gtk.ResponseType.CANCEL,Gtk.STOCK_OPEN,Gtk.ResponseType.OK)
         )
         if self.file_path:
             lastdir = os.path.dirname(self.file_path)
@@ -410,7 +412,7 @@ class PaintSeriesEditor(gtk.HPaned, actions.CAGandUIManager):
             if last_file:
                 lastdir = os.path.dirname(last_file)
                 dlg.set_current_folder(lastdir)
-        if dlg.run() == gtk.RESPONSE_OK:
+        if dlg.run() == Gtk.ResponseType.OK:
             filepath = dlg.get_filename()
             self.load_fm_file(filepath)
         dlg.destroy()
@@ -437,7 +439,7 @@ class PaintSeriesEditor(gtk.HPaned, actions.CAGandUIManager):
             fobj.close()
             # save was successful so set our filepath
             self.set_file_path(filepath)
-            self.saved_hash = hashlib.sha1(definition).digest()
+            self.saved_hash = hashlib.sha1(definition.encode()).digest()
         except IOError as edata:
             return gtkpwx.report_io_error(edata)
     def _save_paint_series_to_file_cb(self, _action):
@@ -450,11 +452,11 @@ class PaintSeriesEditor(gtk.HPaned, actions.CAGandUIManager):
         Ask the user for the name of the file then open it.
         """
         parent = self.get_toplevel()
-        dlg = gtk.FileChooserDialog(
+        dlg = Gtk.FileChooserDialog(
             title='Save Paint Series Description',
-            parent=parent if isinstance(parent, gtk.Window) else None,
-            action=gtk.FILE_CHOOSER_ACTION_SAVE,
-            buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK)
+            parent=parent if isinstance(parent, Gtk.Window) else None,
+            action=Gtk.FileChooserAction.SAVE,
+            buttons=(Gtk.STOCK_CANCEL,Gtk.ResponseType.CANCEL,Gtk.STOCK_OPEN,Gtk.ResponseType.OK)
         )
         dlg.set_do_overwrite_confirmation(True)
         if self.file_path:
@@ -465,7 +467,7 @@ class PaintSeriesEditor(gtk.HPaned, actions.CAGandUIManager):
             if last_file:
                 lastdir = os.path.dirname(last_file)
                 dlg.set_current_folder(lastdir)
-        if dlg.run() == gtk.RESPONSE_OK:
+        if dlg.run() == Gtk.ResponseType.OK:
             filepath = dlg.get_filename()
             self.save_to_file(filepath)
         dlg.destroy()
@@ -483,39 +485,39 @@ class PaintSeriesEditor(gtk.HPaned, actions.CAGandUIManager):
         """
         if not self.__closed and not self.unsaved_changes_ok():
             return
-        gtk.main_quit()
-gobject.signal_new('file_changed', PaintSeriesEditor, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))
+        Gtk.main_quit()
+GObject.signal_new('file_changed', PaintSeriesEditor, GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,))
 
-class PaintEditor(gtk.VBox):
+class PaintEditor(Gtk.VBox):
     AC_READY, AC_NOT_READY, AC_MASK = actions.ActionCondns.new_flags_and_mask(2)
 
     def __init__(self):
-        gtk.VBox.__init__(self)
+        Gtk.VBox.__init__(self)
         #
-        table = gtk.Table(rows=3, columns=2, homogeneous=False)
+        table = Gtk.Table(rows=3, columns=2, homogeneous=False)
         # Colour Name
-        stext =  gtk.Label(_('Colour Name:'))
+        stext =  Gtk.Label(label=_('Colour Name:'))
         table.attach(stext, 0, 1, 0, 1, xoptions=0)
         self.colour_name = gtkpwx.TextEntryAutoComplete(data.COLOUR_NAME_LEXICON)
         self.colour_name.connect('new-words', data.new_paint_words_cb)
         self.colour_name.connect('changed', self._changed_cb)
         table.attach(self.colour_name, 1, 2, 0, 1)
         # Colour Transparence
-        stext =  gtk.Label(_('Transparency:'))
+        stext =  Gtk.Label(label=_('Transparency:'))
         table.attach(stext, 0, 1, 1, 2, xoptions=0)
         self.colour_transparency = gpaint.TransparencyChoice()
         self.colour_transparency.connect('changed', self._changed_cb)
         table.attach(self.colour_transparency, 1, 2, 1, 2)
         # Colour Finish
-        stext =  gtk.Label(_('Finish:'))
+        stext =  Gtk.Label(label=_('Finish:'))
         table.attach(stext, 0, 1, 2, 3, xoptions=0)
         self.colour_finish = gpaint.FinishChoice()
         self.colour_finish.connect('changed', self._changed_cb)
         table.attach(self.colour_finish, 1, 2, 2, 3)
-        self.pack_start(table, expand=False)
+        self.pack_start(table, expand=False, fill=True, padding=0)
         # Matcher
         self.colour_matcher = ColourSampleMatcher()
-        self.pack_start(self.colour_matcher, expand=True, fill=True)
+        self.pack_start(self.colour_matcher, expand=True, fill=True, padding=0)
         #
         self.show_all()
     def _changed_cb(self, widget):
@@ -548,9 +550,9 @@ class PaintEditor(gtk.VBox):
         if self.colour_transparency.get_active() == -1:
             return actions.MaskedCondns(self.AC_NOT_READY, self.AC_MASK)
         return actions.MaskedCondns(self.AC_READY, self.AC_MASK)
-gobject.signal_new('changed', PaintEditor, gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))
+GObject.signal_new('changed', PaintEditor, GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,))
 
-class ColourSampleMatcher(gtk.VBox):
+class ColourSampleMatcher(Gtk.VBox):
     HUE_DISPLAY_SPAN =  math.pi / 10
     VALUE_DISPLAY_INCR = fractions.Fraction(1, 10)
     DEFAULT_COLOUR = paint.Colour(paint.RGB_WHITE / 2)
@@ -599,51 +601,51 @@ class ColourSampleMatcher(gtk.VBox):
         def set_colour(self, colour):
             gtkpwx.ColouredButton.set_colour(self, colour.hcv.hue_rgb_for_value())
     def __init__(self, auto_match_on_paste=False):
-        gtk.VBox.__init__(self)
+        Gtk.VBox.__init__(self)
         self._delta = 256 # must be a power of two
         self.auto_match_on_paste = auto_match_on_paste
         # Add RGB entry field
         self.rgb_entry = gpaint.RGBEntryBox()
         self.rgb_entry.connect("colour-changed", self._rgb_entry_changed_cb)
-        self.pack_start(self.rgb_entry, expand=False)
+        self.pack_start(self.rgb_entry, expand=False, fill=True, padding=0)
         self.hcv_display = gpaint.HCVDisplay()
-        self.pack_start(self.hcv_display, expand=False)
+        self.pack_start(self.hcv_display, expand=False, fill=True, padding=0)
         # Add value modification buttons
         # Lighten
-        hbox = gtk.HBox()
+        hbox = Gtk.HBox()
         self.incr_value_button = self.IncrValueButton()
-        hbox.pack_start(self.incr_value_button, expand=True, fill=True)
+        hbox.pack_start(self.incr_value_button, expand=True, fill=True, padding=0)
         self.incr_value_button.connect('clicked', self.incr_value_cb)
-        self.pack_start(hbox, expand=False)
+        self.pack_start(hbox, expand=False, fill=True, padding=0)
         # Add anti clockwise hue angle modification button
-        hbox = gtk.HBox()
+        hbox = Gtk.HBox()
         self.hue_acw_button = self.HueAntiClockwiseButton()
-        hbox.pack_start(self.hue_acw_button, expand=False)
+        hbox.pack_start(self.hue_acw_button, expand=False, fill=True, padding=0)
         self.hue_acw_button.connect('clicked', self.modify_hue_acw_cb)
         # Add the sample display panel
         self.sample_display = gpaint.ColourSampleArea()
         self.sample_display.connect("samples_changed", self._sample_change_cb)
-        hbox.pack_start(self.sample_display, expand=True, fill=True)
+        hbox.pack_start(self.sample_display, expand=True, fill=True, padding=0)
         # Add anti clockwise hue angle modification button
         self.hue_cw_button = self.HueClockwiseButton()
-        hbox.pack_start(self.hue_cw_button, expand=False)
+        hbox.pack_start(self.hue_cw_button, expand=False, fill=True, padding=0)
         self.hue_cw_button.connect('clicked', self.modify_hue_cw_cb)
-        self.pack_start(hbox, expand=True)
+        self.pack_start(hbox, expand=True, fill=True, padding=0)
         # Darken
-        hbox = gtk.HBox()
+        hbox = Gtk.HBox()
         self.decr_value_button = self.DecrValueButton()
-        hbox.pack_start(self.decr_value_button, expand=True, fill=True)
+        hbox.pack_start(self.decr_value_button, expand=True, fill=True, padding=0)
         self.decr_value_button.connect('clicked', self.decr_value_cb)
-        self.pack_start(hbox, expand=False)
+        self.pack_start(hbox, expand=False, fill=True, padding=0)
         # Grayness
-        hbox = gtk.HBox()
+        hbox = Gtk.HBox()
         self.decr_grayness_button = self.DecrGraynessButton()
-        hbox.pack_start(self.decr_grayness_button, expand=True, fill=True)
+        hbox.pack_start(self.decr_grayness_button, expand=True, fill=True, padding=0)
         self.decr_grayness_button.connect('clicked', self.decr_grayness_cb)
         self.incr_grayness_button = self.IncrGraynessButton()
-        hbox.pack_start(self.incr_grayness_button, expand=True, fill=True)
+        hbox.pack_start(self.incr_grayness_button, expand=True, fill=True, padding=0)
         self.incr_grayness_button.connect('clicked', self.incr_grayness_cb)
-        self.pack_start(hbox, expand=False)
+        self.pack_start(hbox, expand=False, fill=True, padding=0)
         #
         self.set_colour(None)
         #
@@ -674,7 +676,7 @@ class ColourSampleMatcher(gtk.VBox):
             rs = sample.get_rowstride()
             width = sample.get_width()
             n_rows = sample.get_height()
-            data = [ord(b) for b in sample.get_pixels()]
+            data = list(sample.get_pixels())
             for row_num in range(n_rows):
                 row_start = row_num * rs
                 for j in range(width):
@@ -682,7 +684,7 @@ class ColourSampleMatcher(gtk.VBox):
                     for i in range(3):
                         total[i] += data[offset + i]
             npixels += width * n_rows
-        rgb = paint.RGB(*((total[i] << 8) / npixels for i in range(3)))
+        rgb = paint.RGB(*(paint.RGB.ROUND((total[i] << 8) / npixels) for i in range(3)))
         if raw:
             self.set_colour(rgb)
         else:
@@ -697,9 +699,9 @@ class ColourSampleMatcher(gtk.VBox):
     def _rgb_entry_changed_cb(self, entry):
         self.set_colour(entry.get_colour())
     def _get_delta_index(self, modifier_button_states):
-        if modifier_button_states & gtk.gdk.CONTROL_MASK:
+        if modifier_button_states & Gdk.ModifierType.CONTROL_MASK:
             return 0
-        elif modifier_button_states & gtk.gdk.SHIFT_MASK:
+        elif modifier_button_states & Gdk.ModifierType.SHIFT_MASK:
             return 2
         else:
             return 1
@@ -708,47 +710,47 @@ class ColourSampleMatcher(gtk.VBox):
             self._set_colour_fm_manipulator()
         else:
             # let the user know that we're at the limit
-            gtk.gdk.beep()
+            Gdk.beep()
     def decr_grayness_cb(self, button, state):
         if self.rgb_manipulator.incr_chroma(self.DELTA_CHROMA[self._get_delta_index(state)]):
             self._set_colour_fm_manipulator()
         else:
             # let the user know that we're at the limit
-            gtk.gdk.beep()
+            Gdk.beep()
     def incr_value_cb(self, button, state):
         if self.rgb_manipulator.incr_value(self.DELTA_VALUE[self._get_delta_index(state)]):
             self._set_colour_fm_manipulator()
         else:
             # let the user know that we're at the limit
-            gtk.gdk.beep()
+            Gdk.beep()
     def decr_value_cb(self, button, state):
         if self.rgb_manipulator.decr_value(self.DELTA_VALUE[self._get_delta_index(state)]):
             self._set_colour_fm_manipulator()
         else:
             # let the user know that we're at the limit
-            gtk.gdk.beep()
+            Gdk.beep()
     def modify_hue_acw_cb(self, button, state):
         if not options.get('colour_wheel', 'red_to_yellow_clockwise'):
             if self.rgb_manipulator.rotate_hue(self.DELTA_HUE[self._get_delta_index(state)]):
                 self._set_colour_fm_manipulator()
             else:
-                gtk.gdk.beep()
+                Gdk.beep()
         else:
             if self.rgb_manipulator.rotate_hue(-self.DELTA_HUE[self._get_delta_index(state)]):
                 self._set_colour_fm_manipulator()
             else:
-                gtk.gdk.beep()
+                Gdk.beep()
     def modify_hue_cw_cb(self, button, state):
         if not options.get('colour_wheel', 'red_to_yellow_clockwise'):
             if self.rgb_manipulator.rotate_hue(-self.DELTA_HUE[self._get_delta_index(state)]):
                 self._set_colour_fm_manipulator()
             else:
-                gtk.gdk.beep()
+                Gdk.beep()
         else:
             if self.rgb_manipulator.rotate_hue(self.DELTA_HUE[self._get_delta_index(state)]):
                 self._set_colour_fm_manipulator()
             else:
-                gtk.gdk.beep()
+                Gdk.beep()
 
 class PaintColourNotebook(gpaint.HueWheelNotebook):
     class ColourListView(gpaint.ColourListView):
@@ -767,14 +769,14 @@ class PaintColourNotebook(gpaint.HueWheelNotebook):
             gpaint.ColourListView.populate_action_groups(self)
             self.action_groups[actions.AC_SELN_UNIQUE].add_actions(
                 [
-                    ('edit_selected_colour', gtk.STOCK_EDIT, None, None,
+                    ('edit_selected_colour', Gtk.STOCK_EDIT, None, None,
                      _('Load the selected colour into the paint editor.'), ),
                 ]
             )
     def __init__(self):
         gpaint.HueWheelNotebook.__init__(self)
         self.paint_list = PaintColourNotebook.ColourListView()
-        self.append_page(gtkpwx.wrap_in_scrolled_window(self.paint_list), gtk.Label(_('Paint Colours')))
+        self.append_page(gtkpwx.wrap_in_scrolled_window(self.paint_list), Gtk.Label(label=_('Paint Colours')))
         self.paint_list.get_model().connect('colour-removed', self._colour_removed_cb)
     def __len__(self):
         """
@@ -810,12 +812,12 @@ class PaintColourNotebook(gpaint.HueWheelNotebook):
         """
         return self.paint_list.get_model().get_colours()
 
-class TopLevelWindow(gtk.Window):
+class TopLevelWindow(Gtk.Window):
     """
     A top level window wrapper around a palette
     """
     def __init__(self):
-        gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
+        Gtk.Window.__init__(self, Gtk.WindowType.TOPLEVEL)
         self.parse_geometry(recollect.get("editor", "last_geometry"))
         self.set_icon_from_file(icons.APP_ICON_FILE)
         self.editor = PaintSeriesEditor()
@@ -825,9 +827,9 @@ class TopLevelWindow(gtk.Window):
         self._menubar = self.editor.ui_manager.get_widget('/paint_series_editor_menubar')
         self.connect("destroy", self.editor._exit_colour_editor_cb)
         self.connect("configure-event", self._configure_event_cb)
-        vbox = gtk.VBox()
-        vbox.pack_start(self._menubar, expand=False)
-        vbox.pack_start(self.editor, expand=True, fill=True)
+        vbox = Gtk.VBox()
+        vbox.pack_start(self._menubar, expand=False, fill=True, padding=0)
+        vbox.pack_start(self.editor, expand=True, fill=True, padding=0)
         self.add(vbox)
         self.show_all()
     def _file_changed_cb(self, widget, file_path):
@@ -835,7 +837,7 @@ class TopLevelWindow(gtk.Window):
     def _configure_event_cb(self, widget, event):
         recollect.set("editor", "last_geometry", "{0.width}x{0.height}+{0.x}+{0.y}".format(event))
 
-class SampleViewer(gtk.Window, actions.CAGandUIManager):
+class SampleViewer(Gtk.Window, actions.CAGandUIManager):
     """
     A top level window for a colour sample file
     """
@@ -851,7 +853,7 @@ class SampleViewer(gtk.Window, actions.CAGandUIManager):
     '''
     TITLE_TEMPLATE = _('mcmmtk: Colour Sample: {}')
     def __init__(self, parent):
-        gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
+        Gtk.Window.__init__(self, Gtk.WindowType.TOPLEVEL)
         actions.CAGandUIManager.__init__(self)
         last_size = recollect.get("sample_viewer", "last_size")
         if last_size:
@@ -861,8 +863,8 @@ class SampleViewer(gtk.Window, actions.CAGandUIManager):
         last_samples_file = recollect.get('sample_viewer', 'last_file')
         if os.path.isfile(last_samples_file):
             try:
-                pixbuf = gtk.gdk.pixbuf_new_from_file(last_samples_file)
-            except glib.GError:
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file(last_samples_file)
+            except GLib.GError:
                 pixbuf = None
                 last_samples_file = None
         else:
@@ -875,10 +877,10 @@ class SampleViewer(gtk.Window, actions.CAGandUIManager):
             'zoom_in',
             'zoom_out',
         ])
-        vbox = gtk.VBox()
-        vbox.pack_start(self._menubar, expand=False)
-        vbox.pack_start(self.pixbuf_view, expand=True, fill=True)
-        vbox.pack_start(self.buttons, expand=False)
+        vbox = Gtk.VBox()
+        vbox.pack_start(self._menubar, expand=False, fill=True, padding=0)
+        vbox.pack_start(self.pixbuf_view, expand=True, fill=True, padding=0)
+        vbox.pack_start(self.buttons, expand=False, fill=True, padding=0)
         self.add(vbox)
         self.connect("size-allocate", self._size_allocation_cb)
         self.show_all()
@@ -886,10 +888,10 @@ class SampleViewer(gtk.Window, actions.CAGandUIManager):
     def populate_action_groups(self):
         self.action_groups[actions.AC_DONT_CARE].add_actions([
             ('colour_sample_file_menu', None, _('File')),
-            ('open_colour_sample_file', gtk.STOCK_OPEN, None, None,
+            ('open_colour_sample_file', Gtk.STOCK_OPEN, None, None,
             _('Load a colour sample file.'),
             self._open_colour_sample_file_cb),
-            ('close_colour_sample_viewer', gtk.STOCK_CLOSE, None, None,
+            ('close_colour_sample_viewer', Gtk.STOCK_CLOSE, None, None,
             _('Close this window.'),
             self._close_colour_sample_viewer_cb),
         ])
@@ -900,28 +902,28 @@ class SampleViewer(gtk.Window, actions.CAGandUIManager):
         Ask the user for the name of the file then open it.
         """
         parent = self.get_toplevel()
-        dlg = gtk.FileChooserDialog(
+        dlg = Gtk.FileChooserDialog(
             title=_('Open Colour Sample File'),
-            parent=parent if isinstance(parent, gtk.Window) else None,
-            action=gtk.FILE_CHOOSER_ACTION_OPEN,
-            buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK)
+            parent=parent if isinstance(parent, Gtk.Window) else None,
+            action=Gtk.FileChooserAction.OPEN,
+            buttons=(Gtk.STOCK_CANCEL,Gtk.ResponseType.CANCEL,Gtk.STOCK_OPEN,Gtk.ResponseType.OK)
         )
         last_samples_file = recollect.get('sample_viewer', 'last_file')
         last_samples_dir = None if last_samples_file is None else os.path.dirname(last_samples_file)
         if last_samples_dir:
             dlg.set_current_folder(last_samples_dir)
-        gff = gtk.FileFilter()
+        gff = Gtk.FileFilter()
         gff.set_name(_('Image Files'))
         gff.add_pixbuf_formats()
         dlg.add_filter(gff)
-        if dlg.run() == gtk.RESPONSE_OK:
+        if dlg.run() == Gtk.ResponseType.OK:
             filepath = dlg.get_filename()
             dlg.destroy()
             try:
-                pixbuf = gtk.gdk.pixbuf_new_from_file(filepath)
-            except glib.GError:
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file(filepath)
+            except GLib.GError:
                 msg = _('{}: Problem extracting image from file.').format(filepath)
-                gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_CLOSE, message_format=msg).run()
+                Gtk.MessageDialog(type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CLOSE, message_format=msg).run()
                 return
             recollect.set('sample_viewer', 'last_file', filepath)
             self.set_title(self.TITLE_TEMPLATE.format(None if filepath is None else os.path.relpath(filepath)))

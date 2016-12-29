@@ -33,45 +33,23 @@ class RGB(rgbh.RGB16):
     def __add__(self, other):
         '''
         Add two RGB values together
-        >>> RGB(1, 2, 3) + RGB(7, 5, 3)
-        RGB(red=8, green=7, blue=6)
-        >>> RGB(1.0, 2.0, 3.0) + RGB(7.0, 5.0, 3.0)
-        RGB(red=8.0, green=7.0, blue=6.0)
         '''
         return RGB(red=self.red + other.red, green=self.green + other.green, blue=self.blue + other.blue)
     def __sub__(self, other):
         '''
         Subtract one RGB value from another
-        >>> RGB(1, 2, 3) - RGB(7, 5, 3)
-        RGB(red=-6, green=-3, blue=0)
-        >>> RGB(1.0, 2.0, 3.0) - RGB(7.0, 5.0, 3.0)
-        RGB(red=-6.0, green=-3.0, blue=0.0)
         '''
         return RGB(red=self.red - other.red, green=self.green - other.green, blue=self.blue - other.blue)
     def __mul__(self, mul):
         '''
         Multiply all components by a fraction preserving component type
-        >>> from fractions import Fraction
-        >>> RGB(1, 2, 3) * Fraction(3)
-        RGB(red=3, green=6, blue=9)
-        >>> RGB(7.0, 2.0, 5.0) * Fraction(3)
-        RGB(red=21.0, green=6.0, blue=15.0)
-        >>> RGB(Fraction(7), Fraction(2, 3), Fraction(5, 2)) * Fraction(3, 2)
-        RGB(red=Fraction(21, 2), green=Fraction(1, 1), blue=Fraction(15, 4))
         '''
-        return RGB(*(int(self[i] * mul + 0.5) for i in range(3)))
-    def __div__(self, div):
+        return RGB(*(self.ROUND(self[i] * mul) for i in range(3)))
+    def __truediv__(self, div):
         '''
         Divide all components by a value
-        >>> from fractions import Fraction
-        >>> RGB(1, 2, 3) / 3
-        RGB(red=0, green=0, blue=1)
-        >>> RGB(7.0, 2.0, 5.0) / Fraction(2)
-        RGB(red=3.5, green=1.0, blue=2.5)
-        >>> RGB(Fraction(7), Fraction(2, 3), Fraction(5, 2)) / 5
-        RGB(red=Fraction(7, 5), green=Fraction(2, 15), blue=Fraction(1, 2))
         '''
-        return RGB(*(int(self[i] / div + 0.5) for i in range(3)))
+        return RGB(*(self.ROUND(self[i] / div) for i in range(3)))
     def __str__(self):
         return 'RGB(0x{0:X}, 0x{1:X}, 0x{2:X})'.format(*self)
     @staticmethod
@@ -96,7 +74,7 @@ RGB_BLACK = RGB(*((0,) * 3))
 IDEAL_RGB_COLOURS = [RGB_WHITE, RGB_MAGENTA, RGB_RED, RGB_YELLOW, RGB_GREEN, RGB_CYAN, RGB_BLUE, RGB_BLACK]
 IDEAl_COLOUR_NAMES = ['WHITE', 'MAGENTA', 'RED', 'YELLOW', 'GREEN', 'CYAN', 'BLUE', 'BLACK']
 
-class HCV(object):
+class HCV:
     def __init__(self, rgb):
         self.rgb = RGB(*rgb)
         self.value = self.rgb.get_value()
@@ -157,7 +135,7 @@ class MappedFloat(object):
     class BadValue(Exception): pass
     MAP = None
     def __init__(self, ival=0.0):
-        if isinstance(ival, (str, unicode)):
+        if isinstance(ival, str):
             self.val = None
             for mapi in self.MAP:
                 if ival == mapi.abbrev or ival == mapi.descr:
@@ -188,7 +166,7 @@ class MappedFloat(object):
     def __iadd__(self, other):
         self.val += other.val
         return self
-    def __idiv__(self, divisor):
+    def __itruediv__(self, divisor):
         self.val /= divisor
         return self
     # And sorting (Python 3.0 compatible)

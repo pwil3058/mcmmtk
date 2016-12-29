@@ -15,17 +15,11 @@
 
 import sys
 
+import gi
+gi.require_version("Gtk", "3.0")
+gi.require_version("PangoCairo", "1.0")
+
+from gi.repository import Gtk
+
 # Importing i18n here means that _() is defined for all package modules
 from . import i18n
-
-# We can also check PyGTK versions here to avoid duplication in other
-# modules.
-import pygtk
-pygtk.require('2.0')
-
-import gtk
-REQUIRED_VERSION = (2, 24, 0)
-if gtk.pygtk_version < REQUIRED_VERSION:
-    msg = 'Unusable PyGTK version {0} found.\nVersion {1} or later is required'.format(gtk.pygtk_version, REQUIRED_VERSION)
-    gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_CLOSE, message_format=msg).run()
-    sys.exit(1)

@@ -31,8 +31,13 @@ if __name__ == '__main__':
 def RGB_TUPLE(name):
     return collections.namedtuple(name, ["red", "green", "blue"])
 
+class ConversionMixin:
+    @classmethod
+    def convert_chnl_value(cls, chnl_value, to_cls):
+        return to_cls.ROUND((chnl_value * to_cls.ONE) / cls.ONE )
+
 # 8 bits per channel specific constants
-class BPC8:
+class BPC8(ConversionMixin):
     ZERO = 0
     BITS_PER_CHANNEL = 8
     ONE = (1 << BITS_PER_CHANNEL) - 1
@@ -45,7 +50,7 @@ class BPC8:
         return int(x + 0.5)
 
 # 16 bits per channel specific constants
-class BPC16:
+class BPC16(ConversionMixin):
     ZERO = 0
     BITS_PER_CHANNEL = 16
     ONE = (1 << BITS_PER_CHANNEL) - 1
@@ -58,7 +63,7 @@ class BPC16:
         return int(x + 0.5)
 
 # Proportion (i.e. real numbers in the range 0 to 1.0) channel constants
-class PROPN_CHANNELS:
+class PROPN_CHANNELS(ConversionMixin):
     ZERO = 0.0
     BITS_PER_CHANNEL = None
     ONE = 1.0
@@ -75,6 +80,7 @@ class RGBNG:
         total = sum(self)
         return total / self.ONE if self.BITS_PER_CHANNEL is None else fractions.Fraction(sum(self), self.THREE)
     def converted_to(self, rgbt):
+        # TODO: use ConversionMixin here
         return rgbt(*[rgbt.ROUND((chnl * rgbt.ONE) / self.ONE) for chnl in self])
     @property
     def _class_name(self):
@@ -283,6 +289,8 @@ class HueNG(collections.namedtuple('Hue', ['io', 'other', 'angle', 'chroma_corre
         result[self.io[0]] = self.ONE
         result[self.io[1]] = self.other
         return result
+    def rgb_converted_to(self, rgbt):
+        return rgbt(*[self.convert_chnl_value(chnl, rgbt) for chnl in self.rgb])
     def max_chroma_value(self):
         mct = self.ONE + self.other
         return mct / self.THREE if self.BITS_PER_CHANNEL is None else fractions.Fraction(mct, self.THREE)
@@ -315,12 +323,12 @@ class HueNG(collections.namedtuple('Hue', ['io', 'other', 'angle', 'chroma_corre
             result[self.io[0]] = self.ONE
             result[self.io[1]] = self.other
         elif shortfall < 0:
-            result[self.io[0]] = self.ONE * req_total / cur_total
-            result[self.io[1]] = self.other * req_total / cur_total
+            result[self.io[0]] = self.ROUND(self.ONE * req_total / cur_total)
+            result[self.io[1]] = self.ROUND(self.other * req_total / cur_total)
         else:
             result[self.io[0]] = self.ONE
             # it's simpler two work out the weakest component first
-            result[self.io[2]] = (shortfall * self.ONE) / (2 * self.ONE - self.other)
+            result[self.io[2]] = self.ROUND((shortfall * self.ONE) / (2 * self.ONE - self.other))
             result[self.io[1]] = self.other + shortfall - result[self.io[2]]
         return result
     def rgb_with_value(self, value):
