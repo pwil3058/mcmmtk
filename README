@@ -12,9 +12,8 @@ this time.
 REQUIREMENTS:
 
 This software requires:
- - Python 2.7 or later
- - PyGTK2 2.24 or later
- - PyCairo 1.8.10 or later
+ - Python 3.5 or later
+ - PyGObject 3.22 or later
 
 INSTALLATION:
 
