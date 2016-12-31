@@ -28,6 +28,8 @@ from gi.repository import GdkPixbuf
 from gi.repository import GObject
 from gi.repository import Pango
 
+from .gtx import dialogue
+
 # TODO: make gtkpwx.py pure
 from . import utils
 
@@ -324,7 +326,7 @@ GObject.signal_new('clicked', ColouredButton, GObject.SignalFlags.RUN_LAST, None
 
 ### Dialogues
 
-class ScrolledMessageDialog(Gtk.Dialog):
+class ScrolledMessageDialog(dialogue.Dialog):
     icons = {
         Gtk.MessageType.INFO: Gtk.STOCK_DIALOG_INFO,
         Gtk.MessageType.WARNING: Gtk.STOCK_DIALOG_WARNING,
@@ -341,7 +343,7 @@ class ScrolledMessageDialog(Gtk.Dialog):
     def copy_cb(tview):
         tview.get_buffer().copy_clipboard(Gtk.clipboard_get())
     def __init__(self, parent=None, flags=Gtk.DialogFlags.MODAL|Gtk.DialogFlags.DESTROY_WITH_PARENT, type=Gtk.MessageType.INFO, buttons=None, message_format=None):
-        Gtk.Dialog.__init__(self, title='{0}: {1}'.format(sys.argv[0], self.labels[type]), parent=parent, flags=flags, buttons=buttons)
+        dialogue.Dialog.__init__(self, title='{0}: {1}'.format(sys.argv[0], self.labels[type]), parent=parent, flags=flags, buttons=buttons)
         hbox = Gtk.HBox()
         icon = Gtk.Image()
         icon.set_from_stock(self.icons[type], Gtk.IconSize.DIALOG)
@@ -403,11 +405,11 @@ def report_format_error(edata, *args):
     dlg.destroy()
     return False
 
-class CancelOKDialog(Gtk.Dialog):
+class CancelOKDialog(dialogue.Dialog):
     def __init__(self, title=None, parent=None):
         flags = Gtk.DialogFlags.MODAL|Gtk.DialogFlags.DESTROY_WITH_PARENT
         buttons = (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OK, Gtk.ResponseType.OK)
-        Gtk.Dialog.__init__(self, title, parent, flags, buttons)
+        dialogue.Dialog.__init__(self, title, parent, flags, buttons)
 
 class TextEntryDialog(CancelOKDialog):
     def __init__(self, title=None, prompt=None, suggestion="", parent=None):
@@ -423,14 +425,14 @@ class TextEntryDialog(CancelOKDialog):
         self.hbox.pack_start(self.entry, expand=True, fill=True, padding=0)
         self.show_all()
 
-class UnsavedChangesDialogue(Gtk.Dialog):
+class UnsavedChangesDialogue(dialogue.Dialog):
     # TODO: make a better UnsavedChangesDialogue()
     SAVE_AND_CONTINUE, CONTINUE_UNSAVED = range(1, 3)
     def __init__(self, parent, message):
         buttons = (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
         buttons += (_('Save and Continue'), UnsavedChangesDialogue.SAVE_AND_CONTINUE)
         buttons += (_('Continue Without Saving'), UnsavedChangesDialogue.CONTINUE_UNSAVED)
-        Gtk.Dialog.__init__(self,
+        dialogue.Dialog.__init__(self,
             parent=parent,
             flags=Gtk.DialogFlags.MODAL,
             buttons=buttons,

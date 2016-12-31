@@ -28,6 +28,7 @@ from gi.repository import Gdk
 from gi.repository import GObject
 
 from .gtx import actions
+from .gtx import dialogue
 from .gtx import tlview
 from .gtx import recollect
 
@@ -1053,12 +1054,12 @@ class RGBEntryBox(Gtk.HBox):
                 self.red.entry.grab_focus()
 GObject.signal_new("colour-changed", RGBEntryBox, GObject.SignalFlags.RUN_LAST, None, ())
 
-class PaintColourInformationDialogue(Gtk.Dialog):
+class PaintColourInformationDialogue(dialogue.Dialog):
     """
     A dialog to display the detailed information for a paint colour
     """
     def __init__(self, colour, parent=None):
-        Gtk.Dialog.__init__(self, title=_('Paint Colour: {}').format(colour.name), parent=parent)
+        dialogue.Dialog.__init__(self, title=_('Paint Colour: {}').format(colour.name), parent=parent)
         last_size = recollect.get("paint_colour_information", "last_size")
         if last_size:
             self.set_default_size(*eval(last_size))

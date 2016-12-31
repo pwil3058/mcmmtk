@@ -1148,9 +1148,9 @@ class ReferenceImageViewer(Gtk.Window, actions.CAGandUIManager):
     def _close_reference_image_viewer_cb(self, _action):
         self.get_toplevel().destroy()
 
-class NewMixedColourDialogue(Gtk.Dialog):
+class NewMixedColourDialogue(dialogue.Dialog):
     def __init__(self, number, parent=None):
-        Gtk.Dialog.__init__(self, title=_("New Mixed Colour: #{:03d}").format(number),
+        dialogue.Dialog.__init__(self, title=_("New Mixed Colour: #{:03d}").format(number),
                             parent=parent,
                             flags=Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
                             buttons=(Gtk.STOCK_CANCEL, Gtk.ResponseType.REJECT,
@@ -1217,13 +1217,13 @@ class ComponentsListView(PartsColourListView):
     def _set_cell_connections(self):
         pass
 
-class MixedColourInformationDialogue(Gtk.Dialog):
+class MixedColourInformationDialogue(dialogue.Dialog):
     """
     A dialog to display the detailed information for a mixed colour
     """
 
     def __init__(self, colour, target_colour, parent=None):
-        Gtk.Dialog.__init__(self, title=_('Mixed Colour: {}').format(colour.name), parent=parent)
+        dialogue.Dialog.__init__(self, title=_('Mixed Colour: {}').format(colour.name), parent=parent)
         last_size = recollect.get("mixed_colour_information", "last_size")
         if last_size:
             self.set_default_size(*last_size)

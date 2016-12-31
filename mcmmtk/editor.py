@@ -42,14 +42,14 @@ from . import icons
 from . import iview
 from . import rgbh
 
-class UnacceptedChangesDialogue(Gtk.Dialog):
+class UnacceptedChangesDialogue(dialogue.Dialog):
     # TODO: make a better UnacceptedChangesDialogue()
     ACCEPT_CHANGES_AND_CONTINUE, CONTINUE_DISCARDING_CHANGES = range(1, 3)
     def __init__(self, parent, message):
         buttons = (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
         buttons += (_('Accept and Continue'), UnacceptedChangesDialogue.ACCEPT_CHANGES_AND_CONTINUE)
         buttons += (_('Continue (Discarding Changes)'), UnacceptedChangesDialogue.CONTINUE_DISCARDING_CHANGES)
-        Gtk.Dialog.__init__(self,
+        dialogue.Dialog.__init__(self,
             parent=parent,
             flags=Gtk.DialogFlags.MODAL,
             buttons=buttons,
@@ -57,13 +57,13 @@ class UnacceptedChangesDialogue(Gtk.Dialog):
         self.vbox.pack_start(Gtk.Label(message), expand=True, fill=True, padding=0)
         self.show_all()
 
-class UnaddedNewColourDialogue(Gtk.Dialog):
+class UnaddedNewColourDialogue(dialogue.Dialog):
     # TODO: make a better UnaddedNewColourDialogue()
     DISCARD_AND_CONTINUE = 1
     def __init__(self, parent, message):
         buttons = (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
         buttons += (_('Discard and Continue'), UnaddedNewColourDialogue.DISCARD_AND_CONTINUE)
-        Gtk.Dialog.__init__(self,
+        dialogue.Dialog.__init__(self,
             parent=parent,
             flags=Gtk.DialogFlags.MODAL,
             buttons=buttons,

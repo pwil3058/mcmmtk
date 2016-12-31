@@ -377,8 +377,12 @@ class PixbufView(Gtk.ScrolledWindow, actions.CAGandUIManager):
         scale = self.__pixbuf.zoom / self.__seln_zoom
         rect = self.__seln.get_scaled_rectangle(scale)
         pixbuf = self.__pixbuf.zoomed_pixbuf.new_subpixbuf(*rect)
-        cbd = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        cbd.set_image(pixbuf)
+        if pixbuf:
+            cbd = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+            cbd.set_image(pixbuf)
+        else:
+            # TODO: inform user that copy image failed
+            pass
     def _print_pixbuf_acb(self, _action):
         """
         Print this pixbuf
