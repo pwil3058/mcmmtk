@@ -25,3 +25,15 @@ from gi.repository import Gtk
 from . import i18n
 from .options import _USER_CONFIG_DIR_PATH as CONFIG_DIR_PATH
 from . import recollect # Temporary until definitions get moved
+
+__all__ = []
+__author__ = "Peter Williams <pwil3058@gmail.com>"
+__version__ = "0.0"
+
+APP_NAME = "mcmmtk"
+
+PGND_CONFIG_DIR_PATH = None
+
+ISSUES_URL = "<https://github.com/pwil3058/mcmmtk/issues>"
+ISSUES_EMAIL = __author__
+ISSUES_VERSION = __version__

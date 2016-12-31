@@ -29,6 +29,7 @@ from gi.repository import GObject
 from gi.repository import GLib
 
 from .gtx import actions
+from .gtx import dialogue
 from .gtx import tlview
 from .gtx import recollect
 
@@ -1032,12 +1033,12 @@ class PaintSeriesManager(GObject.GObject):
         self.emit('add-paint-colours', paint_colours)
 GObject.signal_new('add-paint-colours', PaintSeriesManager, GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,))
 
-class TopLevelWindow(Gtk.Window):
+class TopLevelWindow(dialogue.MainWindow):
     """
     A top level window wrapper around a mixer
     """
     def __init__(self):
-        Gtk.Window.__init__(self, Gtk.WindowType.TOPLEVEL)
+        dialogue.MainWindow.__init__(self)
         self.parse_geometry(recollect.get("mixer", "last_geometry"))
         self.set_icon_from_file(icons.APP_ICON_FILE)
         self.set_title('mcmmtk: Mixer')

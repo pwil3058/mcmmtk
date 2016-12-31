@@ -29,6 +29,7 @@ from gi.repository import GObject
 from gi.repository import GLib
 
 from .gtx import actions
+from .gtx import dialogue
 from .gtx import recollect
 
 from . import options
@@ -812,12 +813,12 @@ class PaintColourNotebook(gpaint.HueWheelNotebook):
         """
         return self.paint_list.get_model().get_colours()
 
-class TopLevelWindow(Gtk.Window):
+class TopLevelWindow(dialogue.MainWindow):
     """
     A top level window wrapper around a palette
     """
     def __init__(self):
-        Gtk.Window.__init__(self, Gtk.WindowType.TOPLEVEL)
+        dialogue.MainWindow.__init__(self)
         self.parse_geometry(recollect.get("editor", "last_geometry"))
         self.set_icon_from_file(icons.APP_ICON_FILE)
         self.editor = PaintSeriesEditor()

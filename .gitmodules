@@ -1,3 +1,6 @@
 [submodule "mcmmtk/gtx"]
 	path = mcmmtk/gtx
 	url = git@github.com:pwil3058/pysm_gtx.git
+[submodule "mcmmtk/bab"]
+	path = mcmmtk/bab
+	url = git@github.com:pwil3058/pysm_bab.git
