@@ -27,13 +27,14 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
 
+from .gtx import actions
+from .gtx import tlview
+from .gtx import recollect
+
 from . import options
 from . import utils
-from . import actions
-from . import tlview
 from . import gtkpwx
 from . import paint
-from . import recollect
 from . import rgbh
 
 if __name__ == '__main__':

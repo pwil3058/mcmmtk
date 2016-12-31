@@ -28,9 +28,10 @@ from gi.repository import Gtk
 from gi.repository import GObject
 from gi.repository import GLib
 
-from . import recollect
-from . import actions
-from . import tlview
+from .gtx import actions
+from .gtx import tlview
+from .gtx import recollect
+
 from . import gtkpwx
 from . import gpaint
 from . import paint
@@ -663,12 +664,12 @@ class PartsColourListView(gpaint.ColourListView):
                 self._show_colour_details_cb),
             ],
         )
-        self.action_groups[actions.AC_SELN_MADE].add_actions(
-            [
-                ('remove_selected_colours', Gtk.STOCK_REMOVE, None, None,
-                 _('Remove the selected colours from the list.'), ),
-            ]
-        )
+        #self.action_groups[actions.AC_SELN_MADE].add_actions(
+            #[
+                #('remove_selected_colours', Gtk.STOCK_REMOVE, None, None,
+                 #_('Remove the selected colours from the list.'), ),
+            #]
+        #)
     def _show_colour_details_cb(self, _action):
         colour = self.get_selected_colours()[0]
         gpaint.PaintColourInformationDialogue(colour).show()
@@ -762,14 +763,6 @@ class MatchedColourListView(gpaint.ColourListView):
     SPECIFICATION = generate_matched_colour_list_spec
     def __init__(self, *args, **kwargs):
         gpaint.ColourListView.__init__(self, *args, **kwargs)
-        self._set_cell_connections()
-    def _set_cell_connections(self):
-        pass
-        #notes_cell = self.get_cell_with_title(_('Notes'))
-        #notes_cell.connect('edited', self._notes_edited_cb, self.MODEL.col_index('colour'))
-    #def _notes_edited_cb(self, cell, path, new_text, index):
-        #self.get_model()[path][index].notes = new_text
-        #self._notify_modification()
     def populate_action_groups(self):
         """
         Populate action groups ready for UI initialization.
@@ -781,12 +774,12 @@ class MatchedColourListView(gpaint.ColourListView):
                 self._show_colour_details_cb),
             ],
         )
-        self.action_groups[actions.AC_SELN_MADE].add_actions(
-            [
-                ('remove_selected_colours', Gtk.STOCK_REMOVE, None, None,
-                 _('Remove the selected colours from the list.'), ),
-            ]
-        )
+        #self.action_groups[actions.AC_SELN_MADE].add_actions(
+            #[
+                #('remove_selected_colours', Gtk.STOCK_REMOVE, None, None,
+                 #_('Remove the selected colours from the list.'), ),
+            #]
+        #)
     def _show_colour_details_cb(self, _action):
         selected_rows = self.MODEL.get_selected_rows(self.get_selection())
         colour = selected_rows[0].colour

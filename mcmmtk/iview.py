@@ -25,7 +25,8 @@ from gi.repository import GdkPixbuf
 from gi.repository import Gtk
 from gi.repository import GObject
 
-from . import actions
+from .gtx import actions
+
 from . import gtkpwx
 from . import printer
 

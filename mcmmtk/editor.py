@@ -28,10 +28,11 @@ from gi.repository import GdkPixbuf
 from gi.repository import GObject
 from gi.repository import GLib
 
+from .gtx import actions
+from .gtx import recollect
+
 from . import options
-from . import recollect
 from . import utils
-from . import actions
 from . import gtkpwx
 from . import paint
 from . import gpaint
@@ -766,7 +767,6 @@ class PaintColourNotebook(gpaint.HueWheelNotebook):
             """
             Populate action groups ready for UI initialization.
             """
-            gpaint.ColourListView.populate_action_groups(self)
             self.action_groups[actions.AC_SELN_UNIQUE].add_actions(
                 [
                     ('edit_selected_colour', Gtk.STOCK_EDIT, None, None,

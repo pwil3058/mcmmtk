@@ -23,3 +23,5 @@ from gi.repository import Gtk
 
 # Importing i18n here means that _() is defined for all package modules
 from . import i18n
+from .options import _USER_CONFIG_DIR_PATH as CONFIG_DIR_PATH
+from . import recollect # Temporary until definitions get moved
