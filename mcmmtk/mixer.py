@@ -53,7 +53,7 @@ def pango_rgb_str(rgb, bits_per_channel=16):
         string += '{0:02X}'.format(rgb[i] >> (bits_per_channel - 8))
     return string
 
-class Mixer(Gtk.VBox, actions.CAGandUIManager):
+class Mixer(Gtk.VBox, actions.CAGandUIManager, dialogue.AskerMixin):
     UI_DESCR = '''
     <ui>
         <menubar name='mixer_menubar'>
@@ -323,7 +323,7 @@ class Mixer(Gtk.VBox, actions.CAGandUIManager):
             string = _('Colour: "{0}" is used in:\n').format(colour)
             for user in users:
                 string += '\t{0}\n'.format(user.name)
-            dlg = gtkpwx.ScrolledMessageDialog(message_format=string)
+            dlg = dialogue.ScrolledMessageDialog(text=string)
             Gdk.beep()
             dlg.run()
             dlg.destroy()
@@ -337,7 +337,7 @@ class Mixer(Gtk.VBox, actions.CAGandUIManager):
         for colour in colours:
             msg += "\t{0}: {1}\n".format(colour.name, colour.notes)
         msg += _("and will not be recoverable. OK?")
-        if gtkpwx.ask_user_to_confirm(msg):
+        if gtkpwx.ask_ok_cancel(msg):
             for colour in colours:
                 self.del_mixed(colour)
     def _remove_unused_paints_cb(self, _action):
@@ -870,7 +870,7 @@ class PaintColourSelector(Gtk.VBox):
         self.emit('add-paint-colours', [wheel.popup_colour])
 GObject.signal_new('add-paint-colours', PaintColourSelector, GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,))
 
-class PaintSeriesManager(GObject.GObject):
+class PaintSeriesManager(GObject.GObject, dialogue.ReporterMixin):
     def __init__(self):
         GObject.GObject.__init__(self)
         self.__target_colour = None
@@ -914,7 +914,7 @@ class PaintSeriesManager(GObject.GObject):
         # Check and see if this file is already loaded
         for series, sdata in self.__series_dict.items():
             if filepath == sdata["filepath"]:
-                gtkpwx.warn_user(_("File \"{0}\" is already loaded providing series \"{1.series_id.maker}: {1.series_id.name}\".\nAborting.").format(filepath, series))
+                self.alert_user(_("File \"{0}\" is already loaded providing series \"{1.series_id.maker}: {1.series_id.name}\".\nAborting.").format(filepath, series))
                 return None
         # We let the clients handle any exceptions
         fobj = open(filepath, 'r')
@@ -946,7 +946,7 @@ class PaintSeriesManager(GObject.GObject):
                 msg += "\t{0}: {1}\n".format(edata.filename, edata.strerror)
             for edata, filepath in format_errors:
                 msg += "\t{0}: Format Error: {1}\n".format(filepath, str(edata))
-            gtkpwx.report_error(msg)
+            self.alert_error(msg)
             # Remove the offending files from the saved list
             config.write_series_file_names([value["filepath"] for value in self.__series_dict.values()])
     def _build_submenus(self):
@@ -985,9 +985,9 @@ class PaintSeriesManager(GObject.GObject):
         try:
             series = self._add_series_from_file(filepath)
         except IOError as edata:
-            return gtkpwx.report_io_error(edata)
+            return self.report_io_error(edata)
         except paint.Series.ParseError as edata:
-            return gtkpwx.report_format_error(edata, filepath)
+            return self.alert_user(_("Format Error:  {}: {}").format(edata, filepath))
         if series is None:
             return
         # All OK this series is in our dictionary
@@ -1138,7 +1138,7 @@ class ReferenceImageViewer(Gtk.Window, actions.CAGandUIManager):
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(filepath)
             except GLib.GError:
                 msg = _('{}: Problem extracting image from file.').format(filepath)
-                Gtk.MessageDialog(type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CLOSE, message_format=msg).run()
+                dialogue.MessageDialog(type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CLOSE, text=msg).run()
                 return
             recollect.set('reference_image_viewer', 'last_file', filepath)
             self.set_title(self.TITLE_TEMPLATE.format(None if filepath is None else os.path.relpath(filepath)))

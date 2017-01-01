@@ -60,7 +60,7 @@ def print_text(text, parent=None):
 
     if res == Gtk.PrintOperationResult.ERROR:
         emsg = prop.get_error()
-        error_dialog = Gtk.MessageDialog(parent,
+        error_dialog = dialogue.MessageDialog(parent,
             Gtk.DialogFlags.DESTROY_WITH_PARENT,
             Gtk.MessageType.ERROR,
             Gtk.ButtonsType.CLOSE,
@@ -125,7 +125,7 @@ def print_markup_chunks(chunks, parent=None):
     #
     if res == Gtk.PrintOperationResult.ERROR:
         emsg = prop.get_error()
-        error_dialog = Gtk.MessageDialog(parent,
+        error_dialog = dialogue.MessageDialog(parent,
             Gtk.DialogFlags.DESTROY_WITH_PARENT,
             Gtk.MessageType.ERROR,
             Gtk.ButtonsType.CLOSE,
@@ -196,7 +196,7 @@ def print_pixbuf(pixbuf, parent=None):
     #
     if res == Gtk.PrintOperationResult.ERROR:
         emsg = prop.get_error()
-        error_dialog = Gtk.MessageDialog(parent,
+        error_dialog = dialogue.MessageDialog(parent,
             Gtk.DialogFlags.DESTROY_WITH_PARENT,
             Gtk.MessageType.ERROR,
             Gtk.ButtonsType.CLOSE,

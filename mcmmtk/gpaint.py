@@ -145,11 +145,11 @@ class ColourSampleArea(Gtk.DrawingArea, actions.CAGandUIManager):
         cbd.request_image(self._image_from_clipboard_cb, (self._ptr_x, self._ptr_y))
     def _image_from_clipboard_cb(self, cbd, img, posn):
         if img is None:
-            dlg = Gtk.MessageDialog(
+            dlg = dialogue.MessageDialog(
                 parent=self.get_toplevel(),
                 flags=Gtk.DialogFlags.MODAL|Gtk.DialogFlags.DESTROY_WITH_PARENT,
                 buttons=Gtk.ButtonsType.OK,
-                message_format=_('No image data on clipboard.')
+                text=_('No image data on clipboard.')
             )
             dlg.run()
             dlg.destroy()
@@ -981,7 +981,7 @@ def generate_colour_list_spec(model):
         columns=colour_attribute_column_specs(model)
     )
 
-class ColourListView(tlview.View, actions.CAGandUIManager):
+class ColourListView(tlview.View, actions.CAGandUIManager, dialogue.AskerMixin):
     MODEL = ColourListStore
     SPECIFICATION = generate_colour_list_spec(ColourListStore)
     UI_DESCR = '''
@@ -1015,7 +1015,7 @@ class ColourListView(tlview.View, actions.CAGandUIManager):
         for colour in colours:
             msg += "\t{0}\n".format(colour.name)
         msg += _("and will not be recoverable. OK?")
-        if gtkpwx.ask_user_to_confirm(msg):
+        if self.ask_ok_cancel(msg):
             self.model.remove_colours(colours)
     def get_selected_colours(self):
         """

@@ -71,7 +71,7 @@ class UnaddedNewColourDialogue(dialogue.Dialog):
         self.vbox.pack_start(Gtk.Label(message), expand=True, fill=True, padding=0)
         self.show_all()
 
-class PaintSeriesEditor(Gtk.HPaned, actions.CAGandUIManager):
+class PaintSeriesEditor(Gtk.HPaned, actions.CAGandUIManager, dialogue.ReporterMixin):
     UI_DESCR = '''
     <ui>
       <menubar name='paint_series_editor_menubar'>
@@ -317,7 +317,7 @@ class PaintSeriesEditor(Gtk.HPaned, actions.CAGandUIManager):
     def _ask_overwrite_ok(self, name):
         title = _('Duplicate Colour Name')
         msg = _('A colour with the name "{0}" already exists.\n Overwrite?').format(name)
-        dlg = gtkpwx.CancelOKDialog(title=title, parent=self.get_toplevel())
+        dlg = dialogue.CancelOKDialog(title=title, parent=self.get_toplevel())
         dlg.get_content_area().pack_start(Gtk.Label(msg), expand=True, fill=True, padding=0)
         dlg.show_all()
         response = dlg.run()
@@ -377,11 +377,11 @@ class PaintSeriesEditor(Gtk.HPaned, actions.CAGandUIManager):
             text = fobj.read()
             fobj.close()
         except IOError as edata:
-            return gtkpwx.report_io_error(edata)
+            return self.report_io_error(edata)
         try:
             series = paint.Series.fm_definition(text)
         except paint.Series.ParseError as edata:
-            return gtkpwx.report_format_error(edata, filepath)
+            return self.alert_user(_("Format Error:  {}: {}").format(edata, filepath))
         # All OK so clear the paint editor and ditch the current colours
         self.paint_editor.reset()
         self.set_current_colour(None)
@@ -443,7 +443,7 @@ class PaintSeriesEditor(Gtk.HPaned, actions.CAGandUIManager):
             self.set_file_path(filepath)
             self.saved_hash = hashlib.sha1(definition.encode()).digest()
         except IOError as edata:
-            return gtkpwx.report_io_error(edata)
+            return self.report_io_error(edata)
     def _save_paint_series_to_file_cb(self, _action):
         """
         Save the paint series to the current file
@@ -924,7 +924,7 @@ class SampleViewer(Gtk.Window, actions.CAGandUIManager):
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(filepath)
             except GLib.GError:
                 msg = _('{}: Problem extracting image from file.').format(filepath)
-                Gtk.MessageDialog(type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CLOSE, message_format=msg).run()
+                dialogue.MessageDialog(type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CLOSE, text=msg).run()
                 return
             recollect.set('sample_viewer', 'last_file', filepath)
             self.set_title(self.TITLE_TEMPLATE.format(None if filepath is None else os.path.relpath(filepath)))
