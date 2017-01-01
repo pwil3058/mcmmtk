@@ -32,6 +32,7 @@ from .gtx import actions
 from .gtx import dialogue
 from .gtx import tlview
 from .gtx import recollect
+from .gtx import screen
 
 from . import gtkpwx
 from . import gpaint
@@ -1168,7 +1169,7 @@ class NewMixedColourDialogue(dialogue.Dialog):
         self.colour_specifier = editor.ColourSampleMatcher(auto_match_on_paste=True)
         vbox.pack_start(self.colour_specifier, expand=True, fill=True, padding=0)
         button = Gtk.Button(_("Take Screen Sample"))
-        button.connect("clicked", gtkpwx.take_screen_sample)
+        button.connect("clicked", lambda _button: screen.take_screen_sample())
         vbox.pack_start(button, expand=False, fill=True, padding=0)
         vbox.show_all()
     def _description_changed_cb(self, widget):

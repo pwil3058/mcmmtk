@@ -31,6 +31,7 @@ from gi.repository import GLib
 from .gtx import actions
 from .gtx import dialogue
 from .gtx import recollect
+from .gtx import screen
 
 from . import options
 from . import utils
@@ -181,7 +182,7 @@ class PaintSeriesEditor(Gtk.HPaned, actions.CAGandUIManager, dialogue.ReporterMi
             self._open_paint_series_file_cb),
             ('take_screen_sample', None, _('Take Sample'), None,
             _('Take a sample of an arbitrary selected section of the screen and add it to the clipboard.'),
-            gtkpwx.take_screen_sample),
+            lambda _action: screen.take_screen_sample()),
             ('open_sample_viewer', None, _('Open Sample Viewer'), None,
             _('Open a graphics file containing colour samples.'),
             self._open_sample_viewer_cb),
