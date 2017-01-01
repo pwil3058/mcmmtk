@@ -56,31 +56,6 @@ def gdk_color_to_rgb(gcol):
         return [int(gcol_str[i*2:(i+1) * 2] * 2, 16) for i in range(3)]
     return [int(gcol_str[i*4:(i+1) * 4], 16) for i in range(3)]
 
-def wrap_in_scrolled_window(widget, policy=(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC), with_frame=True, label=None):
-    scrw = Gtk.ScrolledWindow()
-    scrw.set_policy(policy[0], policy[1])
-    if isinstance(widget, Gtk.Container):
-        scrw.add(widget)
-    else:
-        scrw.add_with_viewport(widget)
-    if with_frame:
-        frame = Gtk.Frame(label=label)
-        frame.add(scrw)
-        frame.show_all()
-        return frame
-    else:
-        scrw.show_all()
-        return scrw
-
-def wrap_in_frame(widget, shadow_type=Gtk.ShadowType.NONE):
-    """
-    Wrap the widget in a frame with the requested shadow type
-    """
-    frame = Gtk.Frame()
-    frame.set_shadow_type(shadow_type)
-    frame.add(widget)
-    return frame
-
 ### Useful Named Tuples
 
 class WH(collections.namedtuple("WH", ["width", "height"])):

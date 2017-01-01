@@ -29,6 +29,7 @@ from gi.repository import GObject
 
 from .gtx import actions
 from .gtx import dialogue
+from .gtx import gutils
 from .gtx import tlview
 from .gtx import recollect
 
@@ -545,11 +546,11 @@ class HCVDisplay(Gtk.VBox):
         #
         w, h = size
         self.hue = HueDisplay(colour=colour, target_colour=target_colour, size=(w, h / 4))
-        self.pack_start(gtkpwx.wrap_in_frame(self.hue, stype), expand=False, fill=True, padding=0)
+        self.pack_start(gutils.wrap_in_frame(self.hue, stype), expand=False, fill=True, padding=0)
         self.value = ValueDisplay(colour=colour, target_colour=target_colour, size=(w, h / 4))
-        self.pack_start(gtkpwx.wrap_in_frame(self.value, stype), expand=False, fill=True, padding=0)
+        self.pack_start(gutils.wrap_in_frame(self.value, stype), expand=False, fill=True, padding=0)
         self.chroma = ChromaDisplay(colour=colour, target_colour=target_colour, size=(w, h / 4))
-        self.pack_start(gtkpwx.wrap_in_frame(self.chroma, stype), expand=False, fill=True, padding=0)
+        self.pack_start(gutils.wrap_in_frame(self.chroma, stype), expand=False, fill=True, padding=0)
         self.show()
     def set_colour(self, new_colour):
         self.chroma.set_colour(new_colour)

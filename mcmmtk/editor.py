@@ -31,6 +31,7 @@ from gi.repository import GLib
 from .gtx import actions
 from .gtx import dialogue
 from .gtx import entries
+from .gtx import gutils
 from .gtx import recollect
 from .gtx import screen
 
@@ -779,7 +780,7 @@ class PaintColourNotebook(gpaint.HueWheelNotebook):
     def __init__(self):
         gpaint.HueWheelNotebook.__init__(self)
         self.paint_list = PaintColourNotebook.ColourListView()
-        self.append_page(gtkpwx.wrap_in_scrolled_window(self.paint_list), Gtk.Label(label=_('Paint Colours')))
+        self.append_page(gutils.wrap_in_scrolled_window(self.paint_list), Gtk.Label(label=_('Paint Colours')))
         self.paint_list.get_model().connect('colour-removed', self._colour_removed_cb)
     def __len__(self):
         """

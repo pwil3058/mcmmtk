@@ -31,6 +31,7 @@ from gi.repository import GLib
 from .gtx import actions
 from .gtx import dialogue
 from .gtx import entries
+from .gtx import gutils
 from .gtx import recollect
 from .gtx import screen
 from .gtx import tlview
@@ -117,7 +118,7 @@ class Mixer(Gtk.VBox, actions.CAGandUIManager, dialogue.AskerMixin):
         vhbox.pack_start(self.current_colour_description, expand=True, fill=True, padding=0)
         vbox.pack_start(vhbox, expand=False, fill=True, padding=0)
         vbox.pack_start(self.hcvw_display, expand=False, fill=True, padding=0)
-        vbox.pack_start(gtkpwx.wrap_in_frame(self.mixpanel, Gtk.ShadowType.ETCHED_IN), expand=True, fill=True, padding=0)
+        vbox.pack_start(gutils.wrap_in_frame(self.mixpanel, Gtk.ShadowType.ETCHED_IN), expand=True, fill=True, padding=0)
         hpaned.pack2(vbox, resize=True, shrink=False)
         vpaned = Gtk.VPaned()
         vpaned.pack1(hpaned, resize=True, shrink=False)
@@ -127,7 +128,7 @@ class Mixer(Gtk.VBox, actions.CAGandUIManager, dialogue.AskerMixin):
         hbox.pack_start(self.paint_colours, expand=True, fill=True, padding=0)
         vbox.pack_start(hbox, expand=False, fill=True, padding=0)
         vbox.pack_start(self.buttons, expand=False, fill=True, padding=0)
-        vbox.pack_start(gtkpwx.wrap_in_scrolled_window(self.mixed_colours_view), expand=True, fill=True, padding=0)
+        vbox.pack_start(gutils.wrap_in_scrolled_window(self.mixed_colours_view), expand=True, fill=True, padding=0)
         vpaned.pack2(vbox, resize=True, shrink=False)
         self.pack_start(vpaned, expand=True, fill=True, padding=0)
         vpaned.set_position(recollect.get("mixer", "vpaned_position"))
@@ -842,7 +843,7 @@ class PaintColourSelector(Gtk.VBox):
         self.pack_start(maker, expand=False, fill=True, padding=0)
         hpaned = Gtk.HPaned()
         hpaned.pack1(self.wheels, resize=True, shrink=False)
-        hpaned.pack2(gtkpwx.wrap_in_scrolled_window(self.paint_colours_view), resize=True, shrink=False)
+        hpaned.pack2(gutils.wrap_in_scrolled_window(self.paint_colours_view), resize=True, shrink=False)
         self.pack_start(hpaned, expand=True, fill=True, padding=0)
         hpaned.set_position(recollect.get("paint_colour_selector", "hpaned_position"))
         hpaned.connect("notify", self._hpaned_notify_cb)
