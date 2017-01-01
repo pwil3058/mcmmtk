@@ -30,6 +30,7 @@ from gi.repository import GLib
 
 from .gtx import actions
 from .gtx import dialogue
+from .gtx import entries
 from .gtx import recollect
 from .gtx import screen
 
@@ -115,11 +116,11 @@ class PaintSeriesEditor(Gtk.HPaned, actions.CAGandUIManager, dialogue.ReporterMi
         self.paint_colours.set_size_request(480, 480)
         self.paint_colours.paint_list.action_groups.connect_activate('edit_selected_colour', self._edit_selected_colour_cb)
         # as these are company names don't split them up for autocompletion
-        self.manufacturer_name = gtkpwx.TextEntryAutoComplete(data.GENERAL_WORDS_LEXICON, multiword=False)
+        self.manufacturer_name = entries.TextEntryAutoComplete(data.GENERAL_WORDS_LEXICON, multiword=False)
         self.manufacturer_name.connect('new-words', data.new_general_words_cb)
         self.manufacturer_name.connect('changed', self._id_changed_cb)
         mnlabel = Gtk.Label(label=_('Manufacturer:'))
-        self.series_name = gtkpwx.TextEntryAutoComplete(data.GENERAL_WORDS_LEXICON)
+        self.series_name = entries.TextEntryAutoComplete(data.GENERAL_WORDS_LEXICON)
         self.series_name.connect('new-words', data.new_general_words_cb)
         self.series_name.connect('changed', self._id_changed_cb)
         snlabel = Gtk.Label(label=_('Series:'))
@@ -501,7 +502,7 @@ class PaintEditor(Gtk.VBox):
         # Colour Name
         stext =  Gtk.Label(label=_('Colour Name:'))
         table.attach(stext, 0, 1, 0, 1, xoptions=0)
-        self.colour_name = gtkpwx.TextEntryAutoComplete(data.COLOUR_NAME_LEXICON)
+        self.colour_name = entries.TextEntryAutoComplete(data.COLOUR_NAME_LEXICON)
         self.colour_name.connect('new-words', data.new_paint_words_cb)
         self.colour_name.connect('changed', self._changed_cb)
         table.attach(self.colour_name, 1, 2, 0, 1)

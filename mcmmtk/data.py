@@ -66,7 +66,7 @@ def read_paint_words():
     if os.path.isfile(PAINT_WORDS_FILE_PATH):
         for line in open(PAINT_WORDS_FILE_PATH, 'r').readlines():
             paint_word = line.strip()
-            if len(line) == 0:
+            if len(paint_word) == 0:
                 continue
             paint_words.append(paint_word)
     return paint_words
@@ -94,7 +94,7 @@ def read_general_words():
     if os.path.isfile(PAINT_WORDS_FILE_PATH):
         for line in open(PAINT_WORDS_FILE_PATH, 'r').readlines():
             paint_word = line.strip()
-            if len(line) == 0:
+            if len(paint_word) == 0:
                 continue
             general_words.append(paint_word)
     return general_words

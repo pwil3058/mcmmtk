@@ -30,9 +30,10 @@ from gi.repository import GLib
 
 from .gtx import actions
 from .gtx import dialogue
-from .gtx import tlview
+from .gtx import entries
 from .gtx import recollect
 from .gtx import screen
+from .gtx import tlview
 
 from . import gtkpwx
 from . import gpaint
@@ -75,11 +76,11 @@ class Mixer(Gtk.VBox, actions.CAGandUIManager, dialogue.AskerMixin):
         actions.CAGandUIManager.__init__(self)
         self.action_groups.update_condns(actions.MaskedCondns(self.AC_DONT_HAVE_TARGET, self.AC_TARGET_MASK))
         # Components
-        self.notes = gtkpwx.TextEntryAutoComplete(data.GENERAL_WORDS_LEXICON)
+        self.notes = entries.TextEntryAutoComplete(data.GENERAL_WORDS_LEXICON)
         self.notes.connect("new-words", data.new_general_words_cb)
         self.next_name_label = Gtk.Label(label=_("#???:"))
         self.current_target_colour = None
-        self.current_colour_description = gtkpwx.TextEntryAutoComplete(data.COLOUR_NAME_LEXICON)
+        self.current_colour_description = entries.TextEntryAutoComplete(data.COLOUR_NAME_LEXICON)
         self.current_colour_description.connect("new-words", data.new_paint_words_cb)
         self.mixpanel = gpaint.ColourMatchArea()
         self.mixpanel.set_size_request(240, 240)
@@ -1158,7 +1159,7 @@ class NewMixedColourDialogue(dialogue.Dialog):
                                      Gtk.STOCK_OK, Gtk.ResponseType.ACCEPT)
                             )
         vbox = self.get_content_area()
-        self.colour_description = gtkpwx.TextEntryAutoComplete(data.COLOUR_NAME_LEXICON)
+        self.colour_description = entries.TextEntryAutoComplete(data.COLOUR_NAME_LEXICON)
         self.colour_description.connect("new-words", data.new_paint_words_cb)
         self.colour_description.connect('changed', self._description_changed_cb)
         self.set_response_sensitive(Gtk.ResponseType.ACCEPT, len(self.colour_description.get_text()) > 0)
