@@ -45,6 +45,21 @@ from . import data
 from . import icons
 from . import rgbh
 
+class UnsavedChangesDialogue(dialogue.Dialog):
+    # TODO: make a better UnsavedChangesDialogue()
+    SAVE_AND_CONTINUE, CONTINUE_UNSAVED = range(1, 3)
+    def __init__(self, parent, message):
+        buttons = (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
+        buttons += (_("Save and Continue"), UnsavedChangesDialogue.SAVE_AND_CONTINUE)
+        buttons += (_("Continue Without Saving"), UnsavedChangesDialogue.CONTINUE_UNSAVED)
+        dialogue.Dialog.__init__(self,
+            parent=parent,
+            flags=Gtk.DialogFlags.MODAL,
+            buttons=buttons,
+        )
+        self.vbox.pack_start(Gtk.Label(message), expand=True, fill=True, padding=0)
+        self.show_all()
+
 class UnacceptedChangesDialogue(dialogue.Dialog):
     # TODO: make a better UnacceptedChangesDialogue()
     ACCEPT_CHANGES_AND_CONTINUE, CONTINUE_DISCARDING_CHANGES = range(1, 3)
@@ -221,7 +236,7 @@ class PaintSeriesEditor(Gtk.HPaned, actions.CAGandUIManager, dialogue.ReporterMi
         if hashlib.sha1(dtext.encode()).digest() == self.saved_hash:
             return True
         parent = self.get_toplevel()
-        dlg = gtkpwx.UnsavedChangesDialogue(
+        dlg = UnsavedChangesDialogue(
             parent=parent if isinstance(parent, Gtk.Window) else None,
             message=_("The series definition has unsaved changes.")
         )
@@ -229,7 +244,7 @@ class PaintSeriesEditor(Gtk.HPaned, actions.CAGandUIManager, dialogue.ReporterMi
         dlg.destroy()
         if response == Gtk.ResponseType.CANCEL:
             return False
-        elif response == gtkpwx.UnsavedChangesDialogue.CONTINUE_UNSAVED:
+        elif response == UnsavedChangesDialogue.CONTINUE_UNSAVED:
             return True
         elif self.file_path is not None:
             self.save_to_file(None)

@@ -167,21 +167,6 @@ GObject.signal_new("clicked", ColouredButton, GObject.SignalFlags.RUN_LAST, None
 
 ### Dialogues
 
-class UnsavedChangesDialogue(dialogue.Dialog):
-    # TODO: make a better UnsavedChangesDialogue()
-    SAVE_AND_CONTINUE, CONTINUE_UNSAVED = range(1, 3)
-    def __init__(self, parent, message):
-        buttons = (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
-        buttons += (_("Save and Continue"), UnsavedChangesDialogue.SAVE_AND_CONTINUE)
-        buttons += (_("Continue Without Saving"), UnsavedChangesDialogue.CONTINUE_UNSAVED)
-        dialogue.Dialog.__init__(self,
-            parent=parent,
-            flags=Gtk.DialogFlags.MODAL,
-            buttons=buttons,
-        )
-        self.vbox.pack_start(Gtk.Label(message), expand=True, fill=True, padding=0)
-        self.show_all()
-
 class Key:
     ESCAPE = Gdk.keyval_from_name("Escape")
     RETURN = Gdk.keyval_from_name("Return")
@@ -196,6 +181,7 @@ class ArrowButton(Gtk.Button):
         self.add(Gtk.Arrow(arrow_type, shadow_type))
 
 class HexSpinButton(Gtk.HBox, dialogue.ReporterMixin):
+    #TODO: find out why HexSpinnButtons are so tall
     OFF, INCR, DECR = range(3)
     PAUSE = 500
     INTERVAL = 5
