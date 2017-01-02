@@ -29,6 +29,7 @@ from gi.repository import GObject
 from gi.repository import GLib
 
 from .gtx import actions
+from .gtx import coloured
 from .gtx import dialogue
 from .gtx import entries
 from .gtx import gutils
@@ -580,46 +581,46 @@ class ColourSampleMatcher(Gtk.VBox):
     DELTA_VALUE = [0.0025, 0.005, 0.01]
     DELTA_CHROMA = [0.0025, 0.005, 0.01]
     DEFAULT_AUTO_MATCH_RAW = True
-    class HueClockwiseButton(gtkpwx.ColouredButton):
+    class HueClockwiseButton(coloured.ColouredButton):
         def __init__(self):
-            gtkpwx.ColouredButton.__init__(self, label='->')
+            coloured.ColouredButton.__init__(self, label='->')
         def set_colour(self, colour):
             if options.get('colour_wheel', 'red_to_yellow_clockwise'):
                 new_colour = colour.hcv.get_rotated_rgb(ColourSampleMatcher.HUE_DISPLAY_SPAN)
             else:
                 new_colour = colour.hcv.get_rotated_rgb(-ColourSampleMatcher.HUE_DISPLAY_SPAN)
-            gtkpwx.ColouredButton.set_colour(self, new_colour)
-    class HueAntiClockwiseButton(gtkpwx.ColouredButton):
+            coloured.ColouredButton.set_colour(self, new_colour)
+    class HueAntiClockwiseButton(coloured.ColouredButton):
         def __init__(self):
-            gtkpwx.ColouredButton.__init__(self, label='<-')
+            coloured.ColouredButton.__init__(self, label='<-')
         def set_colour(self, colour):
             if options.get('colour_wheel', 'red_to_yellow_clockwise'):
                 new_colour = colour.hcv.get_rotated_rgb(-ColourSampleMatcher.HUE_DISPLAY_SPAN)
             else:
                 new_colour = colour.hcv.get_rotated_rgb(ColourSampleMatcher.HUE_DISPLAY_SPAN)
-            gtkpwx.ColouredButton.set_colour(self, new_colour)
-    class IncrValueButton(gtkpwx.ColouredButton):
+            coloured.ColouredButton.set_colour(self, new_colour)
+    class IncrValueButton(coloured.ColouredButton):
         def __init__(self):
-            gtkpwx.ColouredButton.__init__(self, label=_('Value')+'++')
+            coloured.ColouredButton.__init__(self, label=_('Value')+'++')
         def set_colour(self, colour):
             value = min(colour.hcv.value + ColourSampleMatcher.VALUE_DISPLAY_INCR, fractions.Fraction(1))
-            gtkpwx.ColouredButton.set_colour(self, colour.hcv.hue_rgb_for_value(value))
-    class DecrValueButton(gtkpwx.ColouredButton):
+            coloured.ColouredButton.set_colour(self, colour.hcv.hue_rgb_for_value(value))
+    class DecrValueButton(coloured.ColouredButton):
         def __init__(self):
-            gtkpwx.ColouredButton.__init__(self, label=_('Value')+'--')
+            coloured.ColouredButton.__init__(self, label=_('Value')+'--')
         def set_colour(self, colour):
             value = max(colour.hcv.value - ColourSampleMatcher.VALUE_DISPLAY_INCR, fractions.Fraction(0))
-            gtkpwx.ColouredButton.set_colour(self, colour.hcv.hue_rgb_for_value(value))
-    class IncrGraynessButton(gtkpwx.ColouredButton):
+            coloured.ColouredButton.set_colour(self, colour.hcv.hue_rgb_for_value(value))
+    class IncrGraynessButton(coloured.ColouredButton):
         def __init__(self):
-            gtkpwx.ColouredButton.__init__(self, label=_('Grayness') + '++')
+            coloured.ColouredButton.__init__(self, label=_('Grayness') + '++')
         def set_colour(self, colour):
-            gtkpwx.ColouredButton.set_colour(self, colour.value_rgb())
-    class DecrGraynessButton(gtkpwx.ColouredButton):
+            coloured.ColouredButton.set_colour(self, colour.value_rgb())
+    class DecrGraynessButton(coloured.ColouredButton):
         def __init__(self):
-            gtkpwx.ColouredButton.__init__(self, label=_('Grayness') + '--')
+            coloured.ColouredButton.__init__(self, label=_('Grayness') + '--')
         def set_colour(self, colour):
-            gtkpwx.ColouredButton.set_colour(self, colour.hcv.hue_rgb_for_value())
+            coloured.ColouredButton.set_colour(self, colour.hcv.hue_rgb_for_value())
     def __init__(self, auto_match_on_paste=False):
         Gtk.VBox.__init__(self)
         self._delta = 256 # must be a power of two

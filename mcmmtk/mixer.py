@@ -29,6 +29,7 @@ from gi.repository import GObject
 from gi.repository import GLib
 
 from .gtx import actions
+from .gtx import coloured
 from .gtx import dialogue
 from .gtx import entries
 from .gtx import gutils
@@ -392,7 +393,7 @@ class ColourPartsSpinButton(Gtk.EventBox, actions.CAGandUIManager):
         frame = Gtk.Frame()
         frame.set_shadow_type(Gtk.ShadowType.ETCHED_IN)
         hbox = Gtk.HBox()
-        hbox.pack_start(gtkpwx.ColouredLabel(self.colour.name, self.colour), expand=True, fill=True, padding=0)
+        hbox.pack_start(coloured.ColouredLabel(self.colour.name, self.colour), expand=True, fill=True, padding=0)
         vbox = Gtk.VBox()
         vbox.pack_start(gpaint.ColouredRectangle(self.colour), expand=True, fill=True, padding=0)
         vbox.pack_start(self.entry, expand=False, fill=True, padding=0)
@@ -1231,9 +1232,9 @@ class MixedColourInformationDialogue(dialogue.Dialog):
         if last_size:
             self.set_default_size(*last_size)
         vbox = self.get_content_area()
-        vbox.pack_start(gtkpwx.ColouredLabel(colour.name, colour), expand=False, fill=True, padding=0)
-        vbox.pack_start(gtkpwx.ColouredLabel(colour.notes, colour), expand=False, fill=True, padding=0)
-        vbox.pack_start(gtkpwx.ColouredLabel(_("Target"), target_colour.rgb), expand=False, fill=True, padding=0)
+        vbox.pack_start(coloured.ColouredLabel(colour.name, colour), expand=False, fill=True, padding=0)
+        vbox.pack_start(coloured.ColouredLabel(colour.notes, colour), expand=False, fill=True, padding=0)
+        vbox.pack_start(coloured.ColouredLabel(_("Target"), target_colour.rgb), expand=False, fill=True, padding=0)
         thcvd = gpaint.HCVDisplay(colour, target_colour)
         vbox.pack_start(thcvd, expand=False, fill=True, padding=0)
         vbox.pack_start(Gtk.Label(colour.transparency.description()), expand=False, fill=True, padding=0)

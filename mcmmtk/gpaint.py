@@ -30,6 +30,7 @@ from gi.repository import GObject
 from .bab import nmd_tuples
 
 from .gtx import actions
+from .gtx import coloured
 from .gtx import dialogue
 from .gtx import gutils
 from .gtx import tlview
@@ -1029,13 +1030,13 @@ class ColourListView(tlview.View, actions.CAGandUIManager, dialogue.AskerMixin):
 class RGBEntryBox(Gtk.HBox):
     def __init__(self, initial_colour=paint.BLACK):
         Gtk.HBox.__init__(self)
-        self.red = gtkpwx.HexSpinButton(0xFFFF, gtkpwx.ColouredLabel(_("Red"), paint.RED))
+        self.red = gtkpwx.HexSpinButton(0xFFFF, coloured.ColouredLabel(_("Red"), paint.RED))
         self.red.connect("value-changed", self._spinners_changed_cb)
         self.pack_start(self.red, expand=True, fill=True, padding=0)
-        self.green = gtkpwx.HexSpinButton(0xFFFF, gtkpwx.ColouredLabel(_("Green"), paint.GREEN))
+        self.green = gtkpwx.HexSpinButton(0xFFFF, coloured.ColouredLabel(_("Green"), paint.GREEN))
         self.green.connect("value-changed", self._spinners_changed_cb)
         self.pack_start(self.green, expand=True, fill=True, padding=0)
-        self.blue = gtkpwx.HexSpinButton(0xFFFF, gtkpwx.ColouredLabel(_("Blue"), paint.BLUE))
+        self.blue = gtkpwx.HexSpinButton(0xFFFF, coloured.ColouredLabel(_("Blue"), paint.BLUE))
         self.blue.connect("value-changed", self._spinners_changed_cb)
         self.pack_start(self.blue, expand=True, fill=True, padding=0)
         self.set_colour(initial_colour)
@@ -1067,10 +1068,10 @@ class PaintColourInformationDialogue(dialogue.Dialog):
         if last_size:
             self.set_default_size(*eval(last_size))
         vbox = self.get_content_area()
-        vbox.pack_start(gtkpwx.ColouredLabel(colour.name, colour), expand=False, fill=True, padding=0)
+        vbox.pack_start(coloured.ColouredLabel(colour.name, colour), expand=False, fill=True, padding=0)
         if isinstance(colour, paint.PaintColour):
-            vbox.pack_start(gtkpwx.ColouredLabel(colour.series.series_id.name, colour), expand=False, fill=True, padding=0)
-            vbox.pack_start(gtkpwx.ColouredLabel(colour.series.series_id.maker, colour), expand=False, fill=True, padding=0)
+            vbox.pack_start(coloured.ColouredLabel(colour.series.series_id.name, colour), expand=False, fill=True, padding=0)
+            vbox.pack_start(coloured.ColouredLabel(colour.series.series_id.maker, colour), expand=False, fill=True, padding=0)
         vbox.pack_start(HCVDisplay(colour=colour), expand=False, fill=True, padding=0)
         if isinstance(colour, paint.PaintColour):
             vbox.pack_start(Gtk.Label(colour.transparency.description()), expand=False, fill=True, padding=0)
