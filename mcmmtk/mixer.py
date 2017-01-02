@@ -32,6 +32,8 @@ from .gtx import actions
 from .gtx import dialogue
 from .gtx import entries
 from .gtx import gutils
+from .gtx import iview
+from .gtx import printer
 from .gtx import recollect
 from .gtx import screen
 from .gtx import tlview
@@ -39,9 +41,7 @@ from .gtx import tlview
 from . import gtkpwx
 from . import gpaint
 from . import paint
-from . import printer
 from . import icons
-from . import iview
 from . import data
 from . import editor
 from . import utils
