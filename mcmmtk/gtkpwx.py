@@ -58,45 +58,6 @@ def gdk_color_to_rgb(gcol):
 
 ### Useful Named Tuples
 
-class WH(collections.namedtuple("WH", ["width", "height"])):
-    __slots__ = ()
-    # These operations are compatible with Gdk.Rectangle
-    def __sub__(self, other):
-        # don't assume other is WH just that it has width and height attributes
-        return WH(width=self.width - other.width, height=self.height - other.height)
-    def __rsub__(self, other):
-        # don't assume other is WH just that it has width and height attributes
-        return WH(width=other.width - self.width, height=other.height - self.height)
-    def __eq__(self, other):
-        # don't assume other is WH just that it has width and height attributes
-        return other.width == self.width and other.height == self.height
-
-class XY(collections.namedtuple("XY", ["x", "y"])):
-    __slots__ = ()
-    # These operations are compatible with Gdk.Rectangle
-    def __add__(self, other):
-        # don't assume other is XY just that it has x and y attributes
-        return XY(x=self.x + other.x, y=self.y + other.y)
-    def __sub__(self, other):
-        # don't assume other is XY just that it has x and y attributes
-        return XY(x=self.x - other.x, y=self.y - other.y)
-    def __rsub__(self, other):
-        # don't assume other is XY just that it has x and y attributes
-        return XY(x=other.x - self.x, y=other.y - self.y)
-    def __mul__(self, other):
-        # allow scaling
-        return XY(x=self.x * other, y=self.y * other)
-    def __eq__(self, other):
-        # don't assume other is XY just that it has x and y attributes
-        return other.x == self.x and other.y == self.y
-
-# A named tuple compatible with Gdk.Rectangle
-class RECT(collections.namedtuple("XY", ["x", "y", "width", "height"])):
-    __slots__ = ()
-    @staticmethod
-    def from_xy_wh(xy, wh):
-        return RECT(x=xy.x, y=xy.y, width=wh.width, height=wh.height)
-
 ### Text Entry
 
 ### Miscellaneous Data Entry

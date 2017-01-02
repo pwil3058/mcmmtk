@@ -25,9 +25,10 @@ from gi.repository import GdkPixbuf
 from gi.repository import Gtk
 from gi.repository import GObject
 
+from .bab import nmd_tuples
+
 from .gtx import actions
 
-from . import gtkpwx
 from . import printer
 
 class ZoomedPixbuf(object):
@@ -74,12 +75,12 @@ class ZoomedPixbuf(object):
         """
         Return a WH tuple with the unzoomed size of the Pixbuf
         """
-        return gtkpwx.WH(self.__uz_pixbuf.get_width(), self.__uz_pixbuf.get_height())
+        return nmd_tuples.WH(self.__uz_pixbuf.get_width(), self.__uz_pixbuf.get_height())
     def get_zoomed_size(self):
         """
         Return a WH tuple with the zoomed size of the Pixbuf
         """
-        return gtkpwx.WH(self.__z_pixbuf.get_width(), self.__z_pixbuf.get_height())
+        return nmd_tuples.WH(self.__z_pixbuf.get_width(), self.__z_pixbuf.get_height())
     def aspect_ratio_matches(self, wharg):
         """
         Does our Pixbuf's aspect ratio match the dimensions in wharg
@@ -112,7 +113,7 @@ class ZoomedPixbuf(object):
         usize = self.get_unzoomed_size()
         wzoom = fractions.Fraction(wharg.width, usize.width)
         hzoom = fractions.Fraction(wharg.height, usize.height)
-        return gtkpwx.WH(wzoom, hzoom)
+        return nmd_tuples.WH(wzoom, hzoom)
 
 class PixbufView(Gtk.ScrolledWindow, actions.CAGandUIManager):
     UI_DESCR = '''
@@ -247,14 +248,14 @@ class PixbufView(Gtk.ScrolledWindow, actions.CAGandUIManager):
         if self.__last_alloc is None:
             self.__zin_adj = (alloc.width * self.ZOOM_IN_ADJ, alloc.height * self.ZOOM_IN_ADJ)
             self.__zout_adj = (alloc.width * self.ZOOM_OUT_ADJ, alloc.height * self.ZOOM_OUT_ADJ)
-            self.__last_alloc = gtkpwx.WH(alloc.width, alloc.height)
+            self.__last_alloc = nmd_tuples.WH(alloc.width, alloc.height)
             return
         elif alloc == self.__last_alloc:
             return
         self.__zin_adj = (alloc.width * self.ZOOM_IN_ADJ, alloc.height * self.ZOOM_IN_ADJ)
         self.__zout_adj = (alloc.width * self.ZOOM_OUT_ADJ, alloc.height * self.ZOOM_OUT_ADJ)
         delta_alloc = alloc - self.__last_alloc
-        self.__last_alloc = gtkpwx.WH(alloc.width, alloc.height)
+        self.__last_alloc = nmd_tuples.WH(alloc.width, alloc.height)
         if self.__pixbuf is None:
             return False
         zoomed_sizediff = alloc - self.__pixbuf.get_zoomed_size()
@@ -346,12 +347,12 @@ class PixbufView(Gtk.ScrolledWindow, actions.CAGandUIManager):
     # Careful not to override CAGandUIManager method
     def _da_button_press_cb(self, widget, event):
         if event.button == 1 and event.get_state() & Gdk.ModifierType.CONTROL_MASK:
-            self.__last_xy = gtkpwx.XY(event.x, event.y)
+            self.__last_xy = nmd_tuples.XY(event.x, event.y)
             for cb_id in self.__cb_ids:
                 widget.handler_unblock(cb_id)
             return True
     def _da_motion_notify_cb(self, widget, event):
-        this_xy = gtkpwx.XY(event.x, event.y)
+        this_xy = nmd_tuples.XY(event.x, event.y)
         delta_xy = this_xy - self.__last_xy
         size = self.__last_alloc
         self.__last_xy = this_xy
@@ -421,7 +422,7 @@ class XYSelection(GObject.GObject):
         return self.__end_xy
     def get_scaled_rectangle(self, scale=1.0):
         """
-        Return a gtkpwx.RECT with integer values suitable for drawable
+        Return a nmd_tuples.RECT with integer values suitable for drawable
         and pixbuf method arguments
         """
         if self.__start_xy is None:
@@ -445,7 +446,7 @@ class XYSelection(GObject.GObject):
         else:
             yy = rint(end.y)
             hh = rint(-delta.y)
-        return gtkpwx.RECT(x=xx, y=yy, width=ww, height=hh)
+        return nmd_tuples.RECT(x=xx, y=yy, width=ww, height=hh)
     def _clear(self):
         self.__seln_made = False
         self.__start_xy = self.__end_xy = None
@@ -459,7 +460,7 @@ class XYSelection(GObject.GObject):
         Start the selection
         """
         if event.button == 1 and event.get_state() & Gdk.ModifierType.CONTROL_MASK == 0:
-            self.__start_xy = self.__end_xy = gtkpwx.XY(event.x, event.y)
+            self.__start_xy = self.__end_xy = nmd_tuples.XY(event.x, event.y)
             self.__seln_made = False
             for cb_id in self.__cb_ids:
                 widget.handler_unblock(cb_id)
@@ -477,7 +478,7 @@ class XYSelection(GObject.GObject):
         """
         Record the position and pass on the "motion-notify" signal
         """
-        self.__end_xy = gtkpwx.XY(event.x, event.y)
+        self.__end_xy = nmd_tuples.XY(event.x, event.y)
         self.emit('motion-notify')
         return True
     def _leave_notify_cb(self, widget, event):
@@ -494,7 +495,7 @@ class XYSelection(GObject.GObject):
         """
         if event.button != 1 or not self.in_progress():
             return
-        self.__end_xy = gtkpwx.XY(event.x, event.y)
+        self.__end_xy = nmd_tuples.XY(event.x, event.y)
         self.__seln_made = True
         for cb_id in self.__cb_ids:
             widget.handler_block(cb_id)

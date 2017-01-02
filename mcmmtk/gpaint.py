@@ -27,6 +27,8 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
 
+from .bab import nmd_tuples
+
 from .gtx import actions
 from .gtx import dialogue
 from .gtx import gutils
@@ -617,9 +619,9 @@ class ColourWheel(Gtk.DrawingArea, actions.CAGandUIManager):
         self.one = 100 * self.scale
         self.size = 3
         self.scaled_size = self.size * self.scale
-        self.centre = gtkpwx.XY(0, 0)
-        self.offset = gtkpwx.XY(0, 0)
-        self.__last_xy = gtkpwx.XY(0, 0)
+        self.centre = nmd_tuples.XY(0, 0)
+        self.offset = nmd_tuples.XY(0, 0)
+        self.__last_xy = nmd_tuples.XY(0, 0)
         self.paint_colours = {}
         self.mixed_colours = {}
         self.target_colours = {}
@@ -748,7 +750,7 @@ class ColourWheel(Gtk.DrawingArea, actions.CAGandUIManager):
         #
         dw = widget.get_allocated_width()
         dh = widget.get_allocated_height()
-        self.centre = gtkpwx.XY(dw / 2, dh / 2) + self.offset
+        self.centre = nmd_tuples.XY(dw / 2, dh / 2) + self.offset
         #
         # calculate a scale factor to use for drawing the graph based
         # on the minimum available width or height
@@ -783,13 +785,13 @@ class ColourWheel(Gtk.DrawingArea, actions.CAGandUIManager):
     # Careful not to override CAGandUIManager method
     def _button_press_cb(self, widget, event):
         if event.button == 1:
-            self.__last_xy = gtkpwx.XY(int(event.x), int(event.y))
+            self.__last_xy = nmd_tuples.XY(int(event.x), int(event.y))
             for cb_id in self.__cb_ids:
                 widget.handler_unblock(cb_id)
             return True
         return actions.CAGandUIManager._button_press_cb(self, widget, event)
     def _motion_notify_cb(self, widget, event):
-        this_xy = gtkpwx.XY(int(event.x), int(event.y))
+        this_xy = nmd_tuples.XY(int(event.x), int(event.y))
         delta_xy = this_xy - self.__last_xy
         self.__last_xy = this_xy
         # TODO: limit offset values
