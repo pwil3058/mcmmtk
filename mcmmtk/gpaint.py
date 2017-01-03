@@ -30,6 +30,7 @@ from gi.repository import GObject
 from .bab import nmd_tuples
 
 from .gtx import actions
+from .gtx import buttons
 from .gtx import coloured
 from .gtx import dialogue
 from .gtx import gutils
@@ -1030,13 +1031,13 @@ class ColourListView(tlview.View, actions.CAGandUIManager, dialogue.AskerMixin):
 class RGBEntryBox(Gtk.HBox):
     def __init__(self, initial_colour=paint.BLACK):
         Gtk.HBox.__init__(self)
-        self.red = gtkpwx.HexSpinButton(0xFFFF, coloured.ColouredLabel(_("Red"), paint.RED))
+        self.red = buttons.HexSpinButton(0xFFFF, coloured.ColouredLabel(_("Red"), paint.RED))
         self.red.connect("value-changed", self._spinners_changed_cb)
         self.pack_start(self.red, expand=True, fill=True, padding=0)
-        self.green = gtkpwx.HexSpinButton(0xFFFF, coloured.ColouredLabel(_("Green"), paint.GREEN))
+        self.green = buttons.HexSpinButton(0xFFFF, coloured.ColouredLabel(_("Green"), paint.GREEN))
         self.green.connect("value-changed", self._spinners_changed_cb)
         self.pack_start(self.green, expand=True, fill=True, padding=0)
-        self.blue = gtkpwx.HexSpinButton(0xFFFF, coloured.ColouredLabel(_("Blue"), paint.BLUE))
+        self.blue = buttons.HexSpinButton(0xFFFF, coloured.ColouredLabel(_("Blue"), paint.BLUE))
         self.blue.connect("value-changed", self._spinners_changed_cb)
         self.pack_start(self.blue, expand=True, fill=True, padding=0)
         self.set_colour(initial_colour)
