@@ -28,6 +28,8 @@ from gi.repository import GdkPixbuf
 from gi.repository import GObject
 from gi.repository import GLib
 
+from .bab import mathx
+
 from .gtx import actions
 from .gtx import coloured
 from .gtx import dialogue
@@ -38,7 +40,6 @@ from .gtx import recollect
 from .gtx import screen
 
 from . import options
-from . import utils
 from . import paint
 from . import gpaint
 from . import data
@@ -576,7 +577,7 @@ class ColourSampleMatcher(Gtk.VBox):
     HUE_DISPLAY_SPAN =  math.pi / 10
     VALUE_DISPLAY_INCR = fractions.Fraction(1, 10)
     DEFAULT_COLOUR = paint.Colour(paint.RGB_WHITE / 2)
-    DELTA_HUE = [utils.Angle(math.pi / x) for x in [200, 100, 50]]
+    DELTA_HUE = [mathx.Angle(math.pi / x) for x in [200, 100, 50]]
     DELTA_VALUE = [0.0025, 0.005, 0.01]
     DELTA_CHROMA = [0.0025, 0.005, 0.01]
     DEFAULT_AUTO_MATCH_RAW = True

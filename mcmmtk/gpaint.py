@@ -27,6 +27,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
 
+from .bab import mathx
 from .bab import nmd_tuples
 
 from .gtx import actions
@@ -38,7 +39,6 @@ from .gtx import tlview
 from .gtx import recollect
 
 from . import options
-from . import utils
 from . import paint
 from . import rgbh
 
@@ -789,7 +789,7 @@ class ColourWheel(Gtk.DrawingArea, actions.CAGandUIManager):
             draw_circle(cairo_ctxt, self.centre.x, self.centre.y, int(round(radius * self.zoom)))
         #
         cairo_ctxt.set_line_width(2)
-        for angle in [utils.PI_60 * i for i in range(6)]:
+        for angle in [mathx.PI_60 * i for i in range(6)]:
             hue = paint.Hue.from_angle(angle)
             cairo_ctxt.set_source_rgb(*hue.rgb_converted_to(rgbh.RGBPN))
             cairo_ctxt.move_to(self.centre.x, self.centre.y)
@@ -843,7 +843,7 @@ class ColourWheel(Gtk.DrawingArea, actions.CAGandUIManager):
             """
             Set up colour values ready for drawing
             """
-            self.colour_angle = self.colour.hue.angle if not self.colour.hue.is_grey() else utils.Angle(math.pi / 2)
+            self.colour_angle = self.colour.hue.angle if not self.colour.hue.is_grey() else mathx.Angle(math.pi / 2)
             self.fg_colour = self.colour.rgb #self.parent.new_colour(self.colour.rgb)
             self.value_colour = paint.BLACK #self.parent.new_colour(paint.BLACK)
             self.chroma_colour = self.colour.hcv.chroma_side() #self.parent.new_colour(self.colour.hcv.chroma_side())

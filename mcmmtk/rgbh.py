@@ -22,7 +22,7 @@ import math
 import array
 import fractions
 
-from . import utils
+from .bab import mathx
 
 if __name__ == '__main__':
     import doctest
@@ -30,6 +30,15 @@ if __name__ == '__main__':
 
 def RGB_TUPLE(name):
     return collections.namedtuple(name, ["red", "green", "blue"])
+
+
+def best_foreground(rgb, threshold=0.5, one=1.0):
+    wval = (rgb[0] * 0.299 + rgb[1] * 0.587 + rgb[2] * 0.114)
+    if wval > one * threshold:
+        return (0, 0, 0)
+    else:
+        return (one, one, one)
+
 
 class ConversionMixin:
     @classmethod
@@ -160,46 +169,46 @@ class RGBNG:
         case of 2 non zero components this change is undesirable and
         needs to be avoided by using a higher level wrapper function
         that is aware of item types and maximum allowed value per component.
-        import utils
-        >>> RGB.rotated((1, 2, 3), utils.Angle(0))
+        from .bab import mathx
+        >>> RGB.rotated((1, 2, 3), mathx.Angle(0))
         (1, 2, 3)
-        >>> RGB.rotated((1, 2, 3), utils.PI_120)
+        >>> RGB.rotated((1, 2, 3), mathx.PI_120)
         (3, 1, 2)
-        >>> RGB.rotated((1, 2, 3), -utils.PI_120)
+        >>> RGB.rotated((1, 2, 3), -mathx.PI_120)
         (2, 3, 1)
-        >>> RGB.rotated((2, 0, 0), utils.PI_60)
+        >>> RGB.rotated((2, 0, 0), mathx.PI_60)
         (1, 1, 0)
-        >>> RGB.rotated((2, 0, 0), -utils.PI_60)
+        >>> RGB.rotated((2, 0, 0), -mathx.PI_60)
         (1, 0, 1)
-        >>> RGB.rotated((1.0, 0.0, 0.0), utils.PI_60)
+        >>> RGB.rotated((1.0, 0.0, 0.0), mathx.PI_60)
         (0.5, 0.5, 0.0)
-        >>> RGB.rotated((100, 0, 0), utils.Angle(math.radians(150)))
+        >>> RGB.rotated((100, 0, 0), mathx.Angle(math.radians(150)))
         (0, 66, 33)
-        >>> RGB.rotated((100, 0, 0), utils.Angle(math.radians(-150)))
+        >>> RGB.rotated((100, 0, 0), mathx.Angle(math.radians(-150)))
         (0, 33, 66)
-        >>> RGB.rotated((100, 100, 0), -utils.PI_60)
+        >>> RGB.rotated((100, 100, 0), -mathx.PI_60)
         (100, 50, 50)
-        >>> RGB.rotated((100, 100, 10), -utils.PI_60)
+        >>> RGB.rotated((100, 100, 10), -mathx.PI_60)
         (100, 55, 55)
         """
         def calc_ks(delta_hue_angle):
             a = math.sin(delta_hue_angle)
-            b = math.sin(utils.PI_120 - delta_hue_angle)
+            b = math.sin(mathx.PI_120 - delta_hue_angle)
             c = a + b
             k1 = b / c
             k2 = a / c
             return (k1, k2)
         f = lambda c1, c2: cls.ROUND(rgb[c1] * k1 + rgb[c2] * k2)
         if delta_hue_angle > 0:
-            if delta_hue_angle > utils.PI_120:
-                k1, k2 = calc_ks(delta_hue_angle - utils.PI_120)
+            if delta_hue_angle > mathx.PI_120:
+                k1, k2 = calc_ks(delta_hue_angle - mathx.PI_120)
                 return array.array(cls.TYPECODE, (f(2, 1), f(0, 2), f(1, 0)))
             else:
                 k1, k2 = calc_ks(delta_hue_angle)
                 return array.array(cls.TYPECODE, (f(0, 2), f(1, 0), f(2, 1)))
         elif delta_hue_angle < 0:
-            if delta_hue_angle < -utils.PI_120:
-                k1, k2 = calc_ks(abs(delta_hue_angle) - utils.PI_120)
+            if delta_hue_angle < -mathx.PI_120:
+                k1, k2 = calc_ks(abs(delta_hue_angle) - mathx.PI_120)
                 return array.array(cls.TYPECODE, (f(1, 2), f(2, 0), f(0, 1)))
             else:
                 k1, k2 = calc_ks(abs(delta_hue_angle))
@@ -238,23 +247,23 @@ class HueNG(collections.namedtuple('Hue', ['io', 'other', 'angle', 'chroma_corre
             return cls(io=None, other=cls.ONE, angle=angle, chroma_correction=1.0)
         assert abs(angle) <= math.pi
         def calc_other(oa):
-            scale = math.sin(oa) / math.sin(utils.PI_120 - oa)
+            scale = math.sin(oa) / math.sin(mathx.PI_120 - oa)
             return cls.ROUND(cls.ONE * scale)
         aha = abs(angle)
-        if aha <= utils.PI_60:
+        if aha <= mathx.PI_60:
             other = calc_other(aha)
             io = (0, 1, 2) if angle >= 0 else (0, 2, 1)
-        elif aha <= utils.PI_120:
-            other = calc_other(utils.PI_120 - aha)
+        elif aha <= mathx.PI_120:
+            other = calc_other(mathx.PI_120 - aha)
             io = (1, 0, 2) if angle >= 0 else (2, 0, 1)
         else:
-            other = calc_other(aha - utils.PI_120)
+            other = calc_other(aha - mathx.PI_120)
             io = (1, 2, 0) if angle >= 0 else (2, 1, 0)
         a = cls.ONE
         b = other
         # avoid floating point inaccuracies near 1
         cc = 1.0 if a == b or b == 0 else a / math.sqrt(a * a + b * b - a * b)
-        return cls(io=io, other=other, angle=utils.Angle(angle), chroma_correction=cc)
+        return cls(io=io, other=other, angle=mathx.Angle(angle), chroma_correction=cc)
     @classmethod
     def from_rgb(cls, rgb):
         return cls.from_angle(XY.from_rgb(rgb).get_angle())
@@ -301,7 +310,7 @@ class HueNG(collections.namedtuple('Hue', ['io', 'other', 'angle', 'chroma_corre
         if mct > total:
             return total / mct
         else:
-            angle = self.angle if self.io[0] == 0 else (self.angle - utils.PI_120 if self.io[0] == 1 else self.angle + utils.PI_120)
+            angle = self.angle if self.io[0] == 0 else (self.angle - mathx.PI_120 if self.io[0] == 1 else self.angle + mathx.PI_120)
             return ((self.THREE - total) / (2.0 * math.cos(angle))) * self.chroma_correction
     def max_chroma_for_value(self, value):
         return self.max_chroma_for_total(value * self.THREE)
@@ -358,9 +367,9 @@ class Hue16(HueNG, BPC16):
 class HuePN(HueNG, PROPN_CHANNELS):
     pass
 
-SIN_60 = math.sin(utils.PI_60)
-SIN_120 = math.sin(utils.PI_120)
-COS_120 = -0.5 # math.cos(utils.PI_120) is slightly out
+SIN_60 = math.sin(mathx.PI_60)
+SIN_120 = math.sin(mathx.PI_120)
+COS_120 = -0.5 # math.cos(mathx.PI_120) is slightly out
 
 class FRGB(RGB_TUPLE("FRGB")):
     def converted_to(self, rgbt):

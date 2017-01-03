@@ -22,6 +22,8 @@ import math
 import re
 import fractions
 
+from .bab import mathx
+
 from . import rgbh
 
 if __name__ == '__main__':
@@ -112,8 +114,8 @@ class HCV:
         '''
         Return a copy of our rgb rotated by the given amount but with
         the same value and without unavoidable chroma change.
-        import utils
-        >>> HCV((10, 10, 0)).get_rotated_rgb(-utils.PI_60)
+        from .bab import mathx
+        >>> HCV((10, 10, 0)).get_rotated_rgb(-mathx.PI_60)
         RGB(red=20, green=0, blue=0)
         '''
         if RGB.ncomps(self.rgb) == 2:

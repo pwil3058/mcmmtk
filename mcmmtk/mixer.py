@@ -28,6 +28,8 @@ from gi.repository import Gtk
 from gi.repository import GObject
 from gi.repository import GLib
 
+from .bab import mathx
+
 from .gtx import actions
 from .gtx import coloured
 from .gtx import dialogue
@@ -44,7 +46,6 @@ from . import paint
 from . import icons
 from . import data
 from . import editor
-from . import utils
 from . import config
 
 def pango_rgb_str(rgb, bits_per_channel=16):
@@ -512,7 +513,7 @@ class ColourPartsSpinButtonBox(Gtk.VBox):
         """
         return [spinbutton.get_blob() for spinbutton in self.__spinbuttons if spinbutton.get_parts() > 0]
     def simplify_parts(self):
-        gcd = utils.gcd(*[sb.get_parts() for sb in self.__spinbuttons])
+        gcd = mathx.gcd(*[sb.get_parts() for sb in self.__spinbuttons])
         if gcd is not None and gcd > 1:
             self.__suppress_change_notification = True
             for spinbutton in self.__spinbuttons:
