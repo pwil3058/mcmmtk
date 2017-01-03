@@ -55,23 +55,3 @@ def gdk_color_to_rgb(gcol):
     elif len(gcol_str) == 6:
         return [int(gcol_str[i*2:(i+1) * 2] * 2, 16) for i in range(3)]
     return [int(gcol_str[i*4:(i+1) * 4], 16) for i in range(3)]
-
-### Useful Named Tuples
-
-### Text Entry
-
-### Miscellaneous Data Entry
-
-class Choice(Gtk.ComboBox):
-    def __init__(self, choices):
-        Gtk.ComboBox.__init__(self, model=Gtk.ListStore(str))
-        cell = Gtk.CellRendererText()
-        self.pack_start(cell, expand=True)
-        self.add_attribute(cell, "text", 0)
-        for choice in choices:
-            self.get_model().append([choice])
-    def get_selection(self):
-        index = self.get_active()
-        return index if index >= 0 else None
-    def set_selection(self, index):
-        self.set_active(index if index is not None else -1)

@@ -47,18 +47,21 @@ if __name__ == '__main__':
     _ = lambda x: x
     import doctest
 
-class MappedFloatChoice(gtkpwx.Choice):
+class MappedFloatChoice(Gtk.ComboBoxText):
     MFDC = None
     def __init__(self):
-        choices = ['{0}\t- {1}'.format(item[0], item[1]) for item in self.MFDC.MAP]
-        gtkpwx.Choice.__init__(self, choices=choices)
+        Gtk.ComboBoxText.__init__(self)
+        for choice in ('{0}\t- {1}'.format(item[0], item[1]) for item in self.MFDC.MAP):
+            self.append_text(choice)
     def get_selection(self):
-        return self.MFDC(self.MFDC.MAP[gtkpwx.Choice.get_selection(self)].abbrev)
+        index = self.get_active()
+        rating = self.MFDC.MAP[index if index >= 0 else None]
+        return self.MFDC(rating.abbrev)
     def set_selection(self, mapped_float):
         abbrev = str(mapped_float)
-        for i, rating in enumerate(self.MFDC.MAP):
+        for index, rating in enumerate(self.MFDC.MAP):
             if abbrev == rating.abbrev:
-                gtkpwx.Choice.set_selection(self, i)
+                self.set_active(index if index is not None else -1)
                 return
         raise paint.MappedFloat.BadValue()
 
