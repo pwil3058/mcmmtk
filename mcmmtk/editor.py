@@ -39,7 +39,6 @@ from .gtx import screen
 
 from . import options
 from . import utils
-from . import gtkpwx
 from . import paint
 from . import gpaint
 from . import data

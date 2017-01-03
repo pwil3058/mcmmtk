@@ -39,7 +39,6 @@ from .gtx import recollect
 from .gtx import screen
 from .gtx import tlview
 
-from . import gtkpwx
 from . import gpaint
 from . import paint
 from . import icons
@@ -341,7 +340,7 @@ class Mixer(Gtk.VBox, actions.CAGandUIManager, dialogue.AskerMixin):
         for colour in colours:
             msg += "\t{0}: {1}\n".format(colour.name, colour.notes)
         msg += _("and will not be recoverable. OK?")
-        if gtkpwx.ask_ok_cancel(msg):
+        if self.ask_ok_cancel(msg):
             for colour in colours:
                 self.del_mixed(colour)
     def _remove_unused_paints_cb(self, _action):
@@ -593,7 +592,7 @@ def notes_cell_data_func(column, cell, model, model_iter, *args):
     colour = model.get_value_named(model_iter, 'colour')
     cell.set_property('text', colour.notes)
     cell.set_property('background-gdk', Gdk.Color(*colour.rgb))
-    cell.set_property('foreground-gdk', gtkpwx.best_foreground(colour.rgb))
+    cell.set_property('foreground-gdk', gpaint.best_foreground(colour.rgb))
 
 def generate_colour_parts_list_spec(view, model):
     """

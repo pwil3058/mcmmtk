@@ -39,13 +39,34 @@ from .gtx import recollect
 
 from . import options
 from . import utils
-from . import gtkpwx
 from . import paint
 from . import rgbh
 
 if __name__ == '__main__':
     _ = lambda x: x
     import doctest
+
+# TODO: find a better home for best_foreground
+GDK_BITS_PER_CHANNEL = 16
+GDK_ONE = (1 << GDK_BITS_PER_CHANNEL) - 1
+
+def best_foreground(rgb, threshold=0.5):
+    wval = (rgb[0] * 0.299 + rgb[1] * 0.587 + rgb[2] * 0.114)
+    if wval > GDK_ONE * threshold:
+        return Gdk.Color(0, 0, 0)
+    else:
+        return Gdk.Color(GDK_ONE, GDK_ONE, GDK_ONE)
+
+def gdk_color_to_rgb(gcol):
+    gcol_str = gcol.to_string()[1:]
+    if len(gcol_str) == 3:
+        return paint.RGB(*[int(gcol_str[i:(i+1)] * 4, 16) for i in range(3)])
+    elif len(gcol_str) == 6:
+        return paint.RGB(*[int(gcol_str[i*2:(i+1) * 2] * 2, 16) for i in range(3)])
+    return paint.RGB(*[int(gcol_str[i*4:(i+1) * 4], 16) for i in range(3)])
+
+def best_foreground_rgb(rgb, threshold=0.5):
+    return gdk_color_to_rgb(best_foreground(rgb=rgb, threshold=threshold))
 
 class MappedFloatChoice(Gtk.ComboBoxText):
     MFDC = None
@@ -269,9 +290,6 @@ def generate_spectral_rgb_buf(hue, spread, width, height, backwards=False):
     buf = row * height
     return buffer(buf)
 
-def gdk_color_to_rgb(colour):
-    return paint.RGB(*gtkpwx.gdk_color_to_rgb(colour))
-
 def get_rgb(colour):
     if isinstance(colour, Gdk.Color):
         return gdk_color_to_rgb(colour)
@@ -332,7 +350,7 @@ class GenericAttrDisplay(Gtk.DrawingArea):
         Gtk.DrawingArea.__init__(self)
         self.set_size_request(size[0], size[1])
         self.colour = colour
-        self.target_fg_colour = self.fg_colour = gtkpwx.best_foreground_rgb(colour)
+        self.target_fg_colour = self.fg_colour = best_foreground_rgb(colour)
         self.indicator_val = 0.5
         # Set these to none so _set_colour() won't crash
         self.target_colour = None
@@ -446,7 +464,7 @@ class HueDisplay(GenericAttrDisplay):
         elif colour.hue.is_grey():
             self.indicator_val = None
         else:
-            self.fg_colour = gtkpwx.best_foreground_rgb(colour.hue_rgb)
+            self.fg_colour = best_foreground_rgb(colour.hue_rgb)
             if self.target_val is None:
                 self.indicator_val = 0.5
             elif options.get('colour_wheel', 'red_to_yellow_clockwise'):
@@ -459,7 +477,7 @@ class HueDisplay(GenericAttrDisplay):
         elif colour.hue.is_grey():
             self.target_val = None
         else:
-            self.target_fg_colour = gtkpwx.best_foreground_rgb(colour.hue_rgb)
+            self.target_fg_colour = best_foreground_rgb(colour.hue_rgb)
             self.target_val = 0.5
             if self.indicator_val is not None:
                 offset = 0.5 * (self.colour.hue - colour.hue) / math.pi
@@ -499,7 +517,7 @@ class ValueDisplay(GenericAttrDisplay):
         if colour is None:
             self.indicator_val = None
         else:
-            self.fg_colour = gtkpwx.best_foreground_rgb(colour)
+            self.fg_colour = best_foreground_rgb(colour)
             self.indicator_val = colour.value
     def _set_target_colour(self, colour):
         """
@@ -508,7 +526,7 @@ class ValueDisplay(GenericAttrDisplay):
         if colour is None:
             self.target_val = None
         else:
-            self.target_fg_colour = gtkpwx.best_foreground_rgb(colour)
+            self.target_fg_colour = best_foreground_rgb(colour)
             self.target_val = colour.value
 
 class ChromaDisplay(ValueDisplay):
@@ -527,7 +545,7 @@ class ChromaDisplay(ValueDisplay):
             if self.target_colour is None:
                 self.start_colour = self.colour.hcv.chroma_side()
                 self.end_colour = colour.hue_rgb
-            self.fg_colour = gtkpwx.best_foreground_rgb(self.start_colour)
+            self.fg_colour = best_foreground_rgb(self.start_colour)
             self.indicator_val = colour.chroma
     def _set_target_colour(self, colour):
         """
@@ -543,7 +561,7 @@ class ChromaDisplay(ValueDisplay):
         else:
             self.start_colour = colour.hcv.zero_chroma_rgb()
             self.end_colour = colour.hue_rgb
-            self.target_fg_colour = gtkpwx.best_foreground_rgb(self.start_colour)
+            self.target_fg_colour = best_foreground_rgb(self.start_colour)
             self.target_val = colour.chroma
 
 
@@ -929,11 +947,11 @@ def paint_cell_data_func(column, cell, model, model_iter, attribute):
     if attribute == 'name':
         cell.set_property('text', colour.name)
         cell.set_property('background-gdk', Gdk.Color(*colour.rgb))
-        cell.set_property('foreground-gdk', gtkpwx.best_foreground(colour.rgb))
+        cell.set_property('foreground-gdk', best_foreground(colour.rgb))
     elif attribute == 'value':
         cell.set_property('text', str(float(round(colour.value, 2))))
         cell.set_property('background-gdk', Gdk.Color(*colour.value_rgb()))
-        cell.set_property('foreground-gdk', gtkpwx.best_foreground(colour.value_rgb()))
+        cell.set_property('foreground-gdk', best_foreground(colour.value_rgb()))
     elif attribute == 'hue':
         cell.set_property('background-gdk', Gdk.Color(*colour.hue_rgb))
     elif attribute == 'finish':
