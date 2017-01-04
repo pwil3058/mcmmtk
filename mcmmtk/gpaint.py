@@ -104,7 +104,7 @@ class ColouredRectangle(Gtk.DrawingArea):
         Gtk.DrawingArea.__init__(self)
         if size_request is not None:
             self.set_size_request(*size_request)
-        self.colour = get_colour(paint.RGB_WHITE) if colour is None else get_colour(colour)
+        self.colour = get_colour(paint.RGB.WHITE) if colour is None else get_colour(colour)
         self.connect("draw", self.expose_cb)
     def expose_cb(self, _widget, cairo_ctxt):
         cairo_ctxt.set_source_rgb(*self.colour)
@@ -131,7 +131,7 @@ class ColourSampleArea(Gtk.DrawingArea, actions.CAGandUIManager):
         self._ptr_x = self._ptr_y = 100
         self._sample_images = []
         self._single_sample = single_sample
-        self.default_bg_colour = self.bg_colour = get_colour(paint.RGB_WHITE) if default_bg is None else get_colour(default_bg)
+        self.default_bg_colour = self.bg_colour = get_colour(paint.RGB.WHITE) if default_bg is None else get_colour(default_bg)
 
         self.add_events(Gdk.EventMask.POINTER_MOTION_MASK|Gdk.EventMask.BUTTON_PRESS_MASK)
         self.connect("draw", self.expose_cb)
@@ -232,7 +232,7 @@ class ColourMatchArea(Gtk.DrawingArea):
 
         self.set_size_request(100, 100)
         self._ptr_x = self._ptr_y = 100
-        self.default_bg_colour = self.bg_colour = get_colour(paint.RGB_WHITE) if default_bg is None else get_colour(default_bg)
+        self.default_bg_colour = self.bg_colour = get_colour(paint.RGB.WHITE) if default_bg is None else get_colour(default_bg)
         self.target_colour = get_colour(target_colour) if target_colour is not None else None
         self.add_events(Gdk.EventMask.POINTER_MOTION_MASK|Gdk.EventMask.BUTTON_PRESS_MASK)
         self.connect("draw", self.expose_cb)
@@ -768,7 +768,7 @@ class ColourWheel(Gtk.DrawingArea, actions.CAGandUIManager):
         spacer = 10
         scaledmax = 110.0
         #
-        bg_colour = (paint.RGB_WHITE / 2).converted_to(rgbh.RGBPN)
+        bg_colour = (paint.RGB.WHITE / 2).converted_to(rgbh.RGBPN)
         cairo_ctxt.set_source_rgb(*bg_colour)
         cairo_ctxt.paint()
         #
@@ -784,7 +784,7 @@ class ColourWheel(Gtk.DrawingArea, actions.CAGandUIManager):
         self.scaled_size = self.size * self.scale
         #
         # Draw the graticule
-        ring_colour = (paint.RGB_WHITE * 3 / 4).converted_to(rgbh.RGBPN)
+        ring_colour = (paint.RGB.WHITE * 3 / 4).converted_to(rgbh.RGBPN)
         cairo_ctxt.set_source_rgb(*ring_colour)
         for radius in [100 * (i + 1) * self.scale / self.nrings for i in range(self.nrings)]:
             draw_circle(cairo_ctxt, self.centre.x, self.centre.y, int(round(radius * self.zoom)))

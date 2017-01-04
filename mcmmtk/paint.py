@@ -61,19 +61,8 @@ class RGB(rgbh.RGB16):
 class Hue(rgbh.Hue16):
     pass
 
-# Primary Colours
-RGB_RED = RGB(red=RGB.ONE, green=RGB.ZERO, blue=RGB.ZERO)
-RGB_GREEN = RGB(red=RGB.ZERO, green=RGB.ONE, blue=RGB.ZERO)
-RGB_BLUE = RGB(red=RGB.ZERO, green=RGB.ZERO, blue=RGB.ONE)
-# Secondary Colours
-RGB_CYAN = RGB_BLUE + RGB_GREEN
-RGB_MAGENTA = RGB_BLUE + RGB_RED
-RGB_YELLOW = RGB_RED + RGB_GREEN
-# Black and White
-RGB_WHITE = RGB_RED + RGB_GREEN + RGB_BLUE
-RGB_BLACK = RGB(*((0,) * 3))
 # The "ideal" palette is one that contains the full range at full strength
-IDEAL_RGB_COLOURS = [RGB_WHITE, RGB_MAGENTA, RGB_RED, RGB_YELLOW, RGB_GREEN, RGB_CYAN, RGB_BLUE, RGB_BLACK]
+IDEAL_RGB_COLOURS = [RGB.WHITE, RGB.MAGENTA, RGB.RED, RGB.YELLOW, RGB.GREEN, RGB.CYAN, RGB.BLUE, RGB.BLACK]
 IDEAl_COLOUR_NAMES = ['WHITE', 'MAGENTA', 'RED', 'YELLOW', 'GREEN', 'CYAN', 'BLUE', 'BLACK']
 
 class HCV:
@@ -84,7 +73,7 @@ class HCV:
         self.hue = Hue.from_angle(xy.get_angle())
         self.chroma = xy.get_hypot() * self.hue.chroma_correction / RGB.ONE
     def value_rgb(self):
-        return RGB_WHITE * self.value
+        return RGB.WHITE * self.value
     def hue_rgb_for_value(self, value=None):
         if value is None:
             # i.e. same hue and value but without any unnecessary grey
@@ -99,11 +88,11 @@ class HCV:
         mcv = self.hue.max_chroma_value()
         dc = 1.0 - self.chroma
         if dc != 0.0:
-            return RGB_WHITE * ((self.value - mcv * self.chroma) / dc)
+            return RGB.WHITE * ((self.value - mcv * self.chroma) / dc)
         elif mcv < 0.5:
-            return RGB_BLACK
+            return RGB.BLACK
         else:
-            return RGB_WHITE
+            return RGB.WHITE
     def chroma_side(self):
         # Is it darker or lighter than max chroma for the hue?
         if sum(self.rgb) > sum(self.hue.rgb):
@@ -352,7 +341,7 @@ BLOB = collections.namedtuple('BLOB', ['colour', 'parts'])
 
 class MixedColour(Colour):
     def __init__(self, blobs):
-        rgb = RGB_BLACK
+        rgb = RGB.BLACK
         transparency = Transparency(0.0)
         finish = Finish(0.0)
         parts = 0

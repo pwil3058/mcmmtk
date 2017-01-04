@@ -577,7 +577,7 @@ GObject.signal_new('changed', PaintEditor, GObject.SignalFlags.RUN_LAST, None, (
 class ColourSampleMatcher(Gtk.VBox):
     HUE_DISPLAY_SPAN =  math.pi / 10
     VALUE_DISPLAY_INCR = fractions.Fraction(1, 10)
-    DEFAULT_COLOUR = paint.Colour(paint.RGB_WHITE / 2)
+    DEFAULT_COLOUR = paint.Colour(paint.RGB.WHITE / 2)
     DELTA_HUE = [mathx.Angle(math.pi / x) for x in [200, 100, 50]]
     DELTA_VALUE = [0.0025, 0.005, 0.01]
     DELTA_CHROMA = [0.0025, 0.005, 0.01]
