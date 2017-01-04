@@ -24,7 +24,7 @@ import fractions
 
 from .bab import mathx
 
-from . import rgbh
+from .epaint import rgbh
 
 if __name__ == '__main__':
     import doctest
@@ -80,7 +80,7 @@ class HCV:
     def __init__(self, rgb):
         self.rgb = RGB(*rgb)
         self.value = self.rgb.get_value()
-        xy = rgbh.XY.from_rgb(self.rgb)
+        xy = rgbh.Cartesian.from_rgb(self.rgb)
         self.hue = Hue.from_angle(xy.get_angle())
         self.chroma = xy.get_hypot() * self.hue.chroma_correction / RGB.ONE
     def value_rgb(self):

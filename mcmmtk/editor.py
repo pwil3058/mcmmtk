@@ -30,6 +30,8 @@ from gi.repository import GLib
 
 from .bab import mathx
 
+from .epaint import rgbh
+
 from .gtx import actions
 from .gtx import coloured
 from .gtx import dialogue
@@ -44,7 +46,6 @@ from . import paint
 from . import gpaint
 from . import data
 from . import icons
-from . import rgbh
 
 class UnsavedChangesDialogue(dialogue.Dialog):
     # TODO: make a better UnsavedChangesDialogue()
