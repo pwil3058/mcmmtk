@@ -30,6 +30,8 @@ from gi.repository import GLib
 
 from .bab import mathx
 
+from .epaint import paint
+
 from .gtx import actions
 from .gtx import coloured
 from .gtx import dialogue
@@ -42,7 +44,6 @@ from .gtx import screen
 from .gtx import tlview
 
 from . import gpaint
-from . import paint
 from . import icons
 from . import data
 from . import editor

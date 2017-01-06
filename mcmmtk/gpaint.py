@@ -30,6 +30,7 @@ from gi.repository import GObject
 from .bab import mathx
 from .bab import nmd_tuples
 
+from .epaint import paint
 from .epaint import rgbh
 
 from .gtx import actions
@@ -41,7 +42,6 @@ from .gtx import tlview
 from .gtx import recollect
 
 from . import options
-from . import paint
 
 if __name__ == '__main__':
     _ = lambda x: x
