@@ -592,8 +592,8 @@ GObject.signal_new('contributions-changed', PartsColourListStore, GObject.Signal
 def notes_cell_data_func(column, cell, model, model_iter, *args):
     colour = model.get_value_named(model_iter, 'colour')
     cell.set_property('text', colour.notes)
-    cell.set_property('background-gdk', Gdk.Color(*colour.rgb))
-    cell.set_property('foreground-gdk', gpaint.best_foreground(colour.rgb))
+    cell.set_property('background-gdk', colour.to_gdk_color())
+    cell.set_property('foreground-gdk', colour.best_foreground_gdk_color())
 
 def generate_colour_parts_list_spec(view, model):
     """
@@ -702,7 +702,7 @@ class MatchedColourListStore(gpaint.ColourListStore):
 
 def match_cell_data_func(column, cell, model, model_iter, attribute):
     colour = model.get_value_named(model_iter, 'target_colour')
-    cell.set_property('background-gdk', Gdk.Color(*colour.rgb))
+    cell.set_property('background-gdk', colour.to_gdk_color())
 
 def generate_matched_colour_list_spec(view, model):
     """

@@ -47,17 +47,6 @@ if __name__ == '__main__':
     _ = lambda x: x
     import doctest
 
-# TODO: find a better home for best_foreground
-GDK_BITS_PER_CHANNEL = 16
-GDK_ONE = (1 << GDK_BITS_PER_CHANNEL) - 1
-
-def best_foreground(rgb, threshold=0.5):
-    wval = (rgb[0] * 0.299 + rgb[1] * 0.587 + rgb[2] * 0.114)
-    if wval > GDK_ONE * threshold:
-        return Gdk.Color(0, 0, 0)
-    else:
-        return Gdk.Color(GDK_ONE, GDK_ONE, GDK_ONE)
-
 def gdk_color_to_rgb(gcol):
     gcol_str = gcol.to_string()[1:]
     if len(gcol_str) == 3:
@@ -65,9 +54,6 @@ def gdk_color_to_rgb(gcol):
     elif len(gcol_str) == 6:
         return paint.RGB(*[int(gcol_str[i*2:(i+1) * 2] * 2, 16) for i in range(3)])
     return paint.RGB(*[int(gcol_str[i*4:(i+1) * 4], 16) for i in range(3)])
-
-def best_foreground_rgb(rgb, threshold=0.5):
-    return gdk_color_to_rgb(best_foreground(rgb=rgb, threshold=threshold))
 
 class MappedFloatChoice(Gtk.ComboBoxText):
     MFDC = None
@@ -351,7 +337,7 @@ class GenericAttrDisplay(Gtk.DrawingArea):
         Gtk.DrawingArea.__init__(self)
         self.set_size_request(size[0], size[1])
         self.colour = colour
-        self.target_fg_colour = self.fg_colour = best_foreground_rgb(colour)
+        self.target_fg_colour = self.fg_colour = colour.best_foreground()
         self.indicator_val = 0.5
         # Set these to none so _set_colour() won't crash
         self.target_colour = None
@@ -465,7 +451,7 @@ class HueDisplay(GenericAttrDisplay):
         elif colour.hue.is_grey():
             self.indicator_val = None
         else:
-            self.fg_colour = best_foreground_rgb(colour.hue_rgb)
+            self.fg_colour = colour.hue_rgb.best_foreground()
             if self.target_val is None:
                 self.indicator_val = 0.5
             elif options.get('colour_wheel', 'red_to_yellow_clockwise'):
@@ -478,7 +464,7 @@ class HueDisplay(GenericAttrDisplay):
         elif colour.hue.is_grey():
             self.target_val = None
         else:
-            self.target_fg_colour = best_foreground_rgb(colour.hue_rgb)
+            self.target_fg_colour = colour.hue_rgb.best_foreground()
             self.target_val = 0.5
             if self.indicator_val is not None:
                 offset = 0.5 * (self.colour.hue - colour.hue) / math.pi
@@ -518,7 +504,7 @@ class ValueDisplay(GenericAttrDisplay):
         if colour is None:
             self.indicator_val = None
         else:
-            self.fg_colour = best_foreground_rgb(colour)
+            self.fg_colour = colour.best_foreground()
             self.indicator_val = colour.value
     def _set_target_colour(self, colour):
         """
@@ -527,7 +513,7 @@ class ValueDisplay(GenericAttrDisplay):
         if colour is None:
             self.target_val = None
         else:
-            self.target_fg_colour = best_foreground_rgb(colour)
+            self.target_fg_colour = colour.best_foreground()
             self.target_val = colour.value
 
 class ChromaDisplay(ValueDisplay):
@@ -546,7 +532,7 @@ class ChromaDisplay(ValueDisplay):
             if self.target_colour is None:
                 self.start_colour = self.colour.hcv.chroma_side()
                 self.end_colour = colour.hue_rgb
-            self.fg_colour = best_foreground_rgb(self.start_colour)
+            self.fg_colour = self.start_colour.best_foreground()
             self.indicator_val = colour.chroma
     def _set_target_colour(self, colour):
         """
@@ -562,7 +548,7 @@ class ChromaDisplay(ValueDisplay):
         else:
             self.start_colour = colour.hcv.zero_chroma_rgb()
             self.end_colour = colour.hue_rgb
-            self.target_fg_colour = best_foreground_rgb(self.start_colour)
+            self.target_fg_colour = self.start_colour.best_foreground()
             self.target_val = colour.chroma
 
 
@@ -813,7 +799,7 @@ class ColourWheel(Gtk.DrawingArea, actions.CAGandUIManager):
             for cb_id in self.__cb_ids:
                 widget.handler_unblock(cb_id)
             return True
-        return actions.CAGandUIManager._button_press_cb(self, widget, event)
+        return actions.CAGandUIManager._button_press_cb(widget, event)
     def _motion_notify_cb(self, widget, event):
         this_xy = nmd_tuples.XY(int(event.x), int(event.y))
         delta_xy = this_xy - self.__last_xy
@@ -947,14 +933,14 @@ def paint_cell_data_func(column, cell, model, model_iter, attribute):
     colour = model.get_value_named(model_iter, 'colour')
     if attribute == 'name':
         cell.set_property('text', colour.name)
-        cell.set_property('background-gdk', Gdk.Color(*colour.rgb))
-        cell.set_property('foreground-gdk', best_foreground(colour.rgb))
+        cell.set_property('background-gdk', colour.to_gdk_color())
+        cell.set_property('foreground-gdk', colour.best_foreground_gdk_color())
     elif attribute == 'value':
         cell.set_property('text', str(float(round(colour.value, 2))))
-        cell.set_property('background-gdk', Gdk.Color(*colour.value_rgb()))
-        cell.set_property('foreground-gdk', best_foreground(colour.value_rgb()))
+        cell.set_property('background-gdk', colour.value_rgb().to_gdk_color())
+        cell.set_property('foreground-gdk', colour.value_rgb().best_foreground_gdk_color())
     elif attribute == 'hue':
-        cell.set_property('background-gdk', Gdk.Color(*colour.hue_rgb))
+        cell.set_property('background-gdk', colour.hue_rgb.to_gdk_color())
     elif attribute == 'finish':
         cell.set_property('text', str(colour.finish))
     elif attribute == 'transparency':

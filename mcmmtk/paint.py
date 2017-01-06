@@ -72,6 +72,16 @@ class HCV:
         xy = rgbh.Cartesian.from_rgb(self.rgb)
         self.hue = Hue.from_angle(xy.get_angle())
         self.chroma = xy.get_hypot() * self.hue.chroma_correction / RGB.ONE
+    def to_gdk_color(self):
+        return self.rgb.to_gdk_color()
+    def to_gdk_rgba(self, alpha=1.0):
+        return self.rgb.to_gdk_rgba(alpha=alpha)
+    def best_foreground(self, threshold=0.5):
+        return self.rgb.best_foreground(threshold)
+    def best_foreground_gdk_color(self, threshold=0.5):
+        return self.rgb.best_foreground_gdk_color(threshold)
+    def best_foreground_gdk_rgba(self, threshold=0.5):
+        return self.rgb.best_foreground_gdk_rgba(threshold)
     def value_rgb(self):
         return RGB.WHITE * self.value
     def hue_rgb_for_value(self, value=None):
@@ -219,6 +229,16 @@ class Colour(object):
         """
         for i in range(3):
             yield self.hcv.rgb[i]
+    def to_gdk_color(self):
+        return self.hcv.rgb.to_gdk_color()
+    def to_gdk_rgba(self, alpha=1.0):
+        return self.hcv.rgb.to_gdk_rgba(alpha=alpha)
+    def best_foreground(self, threshold=0.5):
+        return self.hcv.rgb.best_foreground(threshold)
+    def best_foreground_gdk_color(self, threshold=0.5):
+        return self.hcv.rgb.best_foreground_gdk_color(threshold)
+    def best_foreground_gdk_rgba(self, threshold=0.5):
+        return self.hcv.rgb.best_foreground_gdk_rgba(threshold)
     @property
     def rgb(self):
         return self.hcv.rgb
