@@ -30,6 +30,7 @@ from gi.repository import GLib
 
 from .bab import mathx
 
+from .epaint import gpaint
 from .epaint import paint
 
 from .gtx import actions
@@ -43,7 +44,6 @@ from .gtx import recollect
 from .gtx import screen
 from .gtx import tlview
 
-from . import gpaint
 from . import icons
 from . import data
 from . import editor
