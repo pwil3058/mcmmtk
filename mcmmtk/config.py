@@ -15,10 +15,11 @@
 
 import os
 
-from . import options
+from . import sys_config
 
-CONFIG_DIR_PATH = options.get_user_config_dir()
-SYS_DATA_DIR_PATH = options.get_sys_data_dir()
+from . import CONFIG_DIR_PATH
+
+SYS_DATA_DIR_PATH = sys_config.get_sys_data_dir()
 
 IDEAL_PAINTS_FILE_PATH = os.sep.join([SYS_DATA_DIR_PATH, "ideal.psd"])
 SERIES_FILES_FILE_PATH = os.sep.join([CONFIG_DIR_PATH, "paint_series_files"])

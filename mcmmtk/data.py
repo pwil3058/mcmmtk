@@ -20,8 +20,6 @@ import sys
 
 from gi.repository import Gtk
 
-from . import options
-
 class LexiconListStore(Gtk.ListStore):
     def __init__(self, lexicon):
         Gtk.ListStore.__init__(self, str)
@@ -57,7 +55,7 @@ _COLOUR_NAME_LEXICON = [
     _("Gold"), _("Bronze")
 ]
 
-CONFIG_DIR_PATH = options.get_user_config_dir()
+from . import CONFIG_DIR_PATH
 
 PAINT_WORDS_FILE_PATH = os.sep.join([CONFIG_DIR_PATH, "paint_words"])
 

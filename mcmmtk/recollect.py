@@ -25,11 +25,11 @@ import sys
 
 from .gtx import recollect
 
-from .import options
+from .import sys_config
 
 # TODO: move recollect definitions to where they're used
 
-recollect.define('sample_viewer', 'last_file', recollect.Defn(str, os.path.join(options.get_sys_samples_dir(), 'example.jpg')))
+recollect.define('sample_viewer', 'last_file', recollect.Defn(str, os.path.join(sys_config.get_sys_samples_dir(), 'example.jpg')))
 recollect.define('sample_viewer', 'last_size', recollect.Defn(str, ""))
 
 recollect.define("paint_colour_information", "last_size", recollect.Defn(str, ""))
@@ -38,7 +38,7 @@ recollect.define("mixed_colour_information", "last_size", recollect.Defn(eval, "
 recollect.define("paint_colour_selector", "hpaned_position", recollect.Defn(int, -1))
 recollect.define("paint_colour_selector", "last_size", recollect.Defn(str, ""))
 
-recollect.define("paint_series_selector", "last_file", recollect.Defn(str, os.path.join(options.get_sys_data_dir(), 'ideal.psd')))
+recollect.define("paint_series_selector", "last_file", recollect.Defn(str, os.path.join(sys_config.get_sys_data_dir(), 'ideal.psd')))
 
 recollect.define("editor", "last_file", recollect.Defn(str, ""))
 recollect.define("editor", "last_geometry", recollect.Defn(str, ""))

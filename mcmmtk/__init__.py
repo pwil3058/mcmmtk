@@ -13,6 +13,7 @@
 ### along with this program; if not, write to the Free Software
 ### Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
+import os
 import sys
 
 import gi
@@ -23,8 +24,7 @@ from gi.repository import Gtk
 
 # Importing i18n here means that _() is defined for all package modules
 from . import i18n
-from .options import _USER_CONFIG_DIR_PATH as CONFIG_DIR_PATH
-from . import recollect # Temporary until definitions get moved
+#from .options import _USER_CONFIG_DIR_PATH as CONFIG_DIR_PATH
 
 __all__ = []
 __author__ = "Peter Williams <pwil3058@gmail.com>"
@@ -32,7 +32,10 @@ __version__ = "0.0"
 
 APP_NAME = "mcmmtk"
 
+# TODO: improve configuration directory path
+CONFIG_DIR_PATH = os.path.expanduser("~/.ModellersColourMatcherMixer")
 PGND_CONFIG_DIR_PATH = None
+from . import recollect # Temporary until definitions get moved
 
 ISSUES_URL = "<https://github.com/pwil3058/mcmmtk/issues>"
 ISSUES_EMAIL = __author__

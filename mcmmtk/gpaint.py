@@ -29,6 +29,7 @@ from gi.repository import GObject
 
 from .bab import mathx
 from .bab import nmd_tuples
+from .bab import options
 
 from .epaint import paint
 from .epaint import rgbh
@@ -41,7 +42,7 @@ from .gtx import gutils
 from .gtx import tlview
 from .gtx import recollect
 
-from . import options
+options.define('colour_wheel', 'red_to_yellow_clockwise', options.Defn(bool, False, _('Direction around colour wheel from red to yellow.')))
 
 if __name__ == '__main__':
     _ = lambda x: x

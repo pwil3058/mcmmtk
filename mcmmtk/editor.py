@@ -29,6 +29,7 @@ from gi.repository import GObject
 from gi.repository import GLib
 
 from .bab import mathx
+from .bab import options
 
 from .epaint import paint
 from .epaint import rgbh
@@ -42,7 +43,6 @@ from .gtx import iview
 from .gtx import recollect
 from .gtx import screen
 
-from . import options
 from . import gpaint
 from . import data
 from . import icons
