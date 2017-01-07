@@ -48,7 +48,7 @@ if __name__ == '__main__':
     _ = lambda x: x
     import doctest
 
-def gdk_color_to_rgb(gcol):
+def _gdk_color_to_rgb(gcol):
     gcol_str = gcol.to_string()[1:]
     if len(gcol_str) == 3:
         return paint.RGB(*[int(gcol_str[i:(i+1)] * 4, 16) for i in range(3)])
@@ -253,61 +253,15 @@ class ColourMatchArea(Gtk.DrawingArea):
         self.target_colour = None
         self.queue_draw()
 
-
-def generate_spectral_rgb_buf(hue, spread, width, height, backwards=False):
-    """
-    Generate a rectangular RGB buffer filled with the specified spectrum
-
-    hue: the central hue
-    spread: the total spread in radians (max. 2 * pi)
-    width: the required width of the rectangle in pixels
-    height: the required height of the rectangle in pixels
-    backwards: whether to go clockwise from red to yellow instead of antilcockwise
-    """
-    row = bytearray()
-    if backwards:
-        start_hue_angle = hue.angle - spread / 2
-        delta_hue_angle = spread / width
-    else:
-        start_hue_angle = hue.angle + spread / 2
-        delta_hue_angle = -spread / width
-    for i in range(width):
-        hue = paint.Hue.from_angle(start_hue_angle + delta_hue_angle * i)
-        for j in range(3):
-            row.append(hue.rgb[j] >> 8)
-    buf = row * height
-    return buffer(buf)
-
 def get_rgb(colour):
     if isinstance(colour, Gdk.Color):
-        return gdk_color_to_rgb(colour)
+        return _gdk_color_to_rgb(colour)
     elif isinstance(colour, paint.Colour) or isinstance(colour, paint.HCV):
         return colour.rgb
     elif isinstance(colour, paint.RGB):
         return colour
     else:
         return paint.RGB(*colour)
-
-def generate_graded_rgb_buf(start_colour, end_colour, width, height):
-    # TODO: deprecate this function in favour of the one in pixbuf
-    """
-    Generate a rectangular RGB buffer whose RGB values change linearly
-
-    start_colour: the start colour
-    end_colour: the end colour
-    width: the required width of the rectangle in pixels
-    height: the required height of the rectangle in pixels
-    """
-    start_rgb = get_rgb(start_colour)
-    end_rgb = get_rgb(end_colour)
-    # Use Fraction() to eliminate rounding errors causing chr() range problems
-    delta_rgb = [fractions.Fraction(end_rgb[i] - start_rgb[i], width) for i in range(3)]
-    row = bytearray()
-    for i in range(width):
-        for j in range(3):
-            row.append(chr((start_rgb[j] + int(delta_rgb[j] * i)) >> 8))
-    buf = row * height
-    return buffer(buf)
 
 def draw_line(cairo_ctxt, x0, y0, x1, y1):
     cairo_ctxt.move_to(x0, y0)
