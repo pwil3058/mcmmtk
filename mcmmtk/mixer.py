@@ -90,10 +90,10 @@ class Mixer(Gtk.VBox, actions.CAGandUIManager, dialogue.AskerMixin):
         self.hcvw_display = gpaint.HCVDisplay()
         self.paint_colours = ColourPartsSpinButtonBox()
         self.paint_colours.connect('remove-colour', self._remove_paint_colour_cb)
-        self.paint_colours.connect('contributions-changed', self._contributions_changed_cb)
-        self.mixed_colours = MatchedColourListStore()
-        self.mixed_colours_view = MatchedColourListView(self.mixed_colours)
-        self.mixed_colours_view.action_groups.connect_activate('remove_selected_colours', self._remove_mixed_colours_cb)
+        self.paint_colours.connect("contributions-changed", self._contributions_changed_cb)
+        self.mixed_colours = MatchedModelPaintListStore()
+        self.mixed_colours_view = MatchedModelPaintListView(self.mixed_colours)
+        self.mixed_colours_view.action_groups.connect_activate('remove_selected_paints', self._remove_mixed_colours_cb)
         self.mixed_count = 0
         self.wheels = gpaint.HueWheelNotebook()
         self.wheels.set_size_request(360, 360)
@@ -188,7 +188,7 @@ class Mixer(Gtk.VBox, actions.CAGandUIManager, dialogue.AskerMixin):
         ])
     def _show_wheel_colour_details_cb(self, _action, wheel):
         colour = wheel.popup_colour
-        if isinstance(colour, paint.NamedMixedColour):
+        if hasattr(colour, "blobs"): # isinstance(colour, paint.NamedMixedColour):
             MixedColourInformationDialogue(colour, self.mixed_colours.get_target_colour(colour)).show()
         else:
             gpaint.PaintColourInformationDialogue(colour).show()
@@ -208,7 +208,7 @@ class Mixer(Gtk.VBox, actions.CAGandUIManager, dialogue.AskerMixin):
         for mc in self.mixed_colours.get_colours():
             string += '{0}: {1}\n'.format(mc.name, round(mc.value, 2))
             for cc, parts in mc.blobs:
-                if isinstance(cc, paint.PaintColour):
+                if hasattr(cc, "series"):
                     string += '\t {0}:\t{1}: {2}: {3}\n'.format(parts, cc.name, cc.series.series_id.maker, cc.series.series_id.name)
                 else:
                     string += '\t {0}:\t{1}\n'.format(parts, cc.name)
@@ -236,11 +236,11 @@ class Mixer(Gtk.VBox, actions.CAGandUIManager, dialogue.AskerMixin):
             mc = tmc.colour
             tc = tmc.target_colour
             string += '<span background="{0}">\t</span>'.format(pango_rgb_str(mc))
-            string += '<span background="{0}">\t</span>'.format(pango_rgb_str(mc.value_rgb()))
+            string += '<span background="{0}">\t</span>'.format(pango_rgb_str(mc.value_rgb))
             string += '<span background="{0}">\t</span>'.format(pango_rgb_str(mc.hue_rgb))
             string += ' {0}: {1}\n'.format(cgi.escape(mc.name), cgi.escape(mc.notes))
             string += '<span background="{0}">\t</span>'.format(pango_rgb_str(tc.rgb))
-            string += '<span background="{0}">\t</span>'.format(pango_rgb_str(tc.value_rgb()))
+            string += '<span background="{0}">\t</span>'.format(pango_rgb_str(tc.value_rgb))
             string += '<span background="{0}">\t</span> Target Colour\n'.format(pango_rgb_str(tc.hue.rgb))
             for blob in mc.blobs:
                 string += '{0: 7d}:'.format(blob.parts)
@@ -252,10 +252,10 @@ class Mixer(Gtk.VBox, actions.CAGandUIManager, dialogue.AskerMixin):
     def _contributions_changed_cb(self, _widget, contributions):
         self.recalculate_colour(contributions)
     def recalculate_colour(self, contributions):
-        new_colour = paint.MixedColour(contributions)
-        self.mixpanel.set_bg_colour(new_colour.rgb)
-        self.hcvw_display.set_colour(new_colour)
         if len(contributions) > 0:
+            new_colour = paint.ModelMixture(contributions)
+            self.mixpanel.set_bg_colour(new_colour.rgb)
+            self.hcvw_display.set_colour(new_colour)
             self.action_groups.update_condns(actions.MaskedCondns(self.AC_HAVE_MIXTURE, self.AC_MASK))
         else:
             self.action_groups.update_condns(actions.MaskedCondns(0, self.AC_MASK))
@@ -267,7 +267,7 @@ class Mixer(Gtk.VBox, actions.CAGandUIManager, dialogue.AskerMixin):
         self.mixed_count += 1
         name = _('Mix #{:03d}').format(self.mixed_count)
         notes = self.current_colour_description.get_text()
-        new_colour = paint.NamedMixedColour(blobs=paint_contribs, name=name, notes=notes)
+        new_colour = paint.MixedModelPaint(blobs=paint_contribs, name=name, notes=notes)
         self.mixed_colours.append_colour(new_colour, self.current_target_colour)
         self.wheels.add_colour(new_colour)
         self.reset_parts()
@@ -394,7 +394,7 @@ class ColourPartsSpinButton(Gtk.EventBox, actions.CAGandUIManager):
         frame = Gtk.Frame()
         frame.set_shadow_type(Gtk.ShadowType.ETCHED_IN)
         hbox = Gtk.HBox()
-        hbox.pack_start(coloured.ColouredLabel(self.colour.name, self.colour), expand=True, fill=True, padding=0)
+        hbox.pack_start(coloured.ColouredLabel(self.colour.name, self.colour.rgb), expand=True, fill=True, padding=0)
         vbox = Gtk.VBox()
         vbox.pack_start(gpaint.ColouredRectangle(self.colour), expand=True, fill=True, padding=0)
         vbox.pack_start(self.entry, expand=False, fill=True, padding=0)
@@ -485,7 +485,7 @@ class ColourPartsSpinButtonBox(Gtk.VBox):
         Signal those interested that our contributions have changed
         """
         if not self.__suppress_change_notification:
-            self.emit('contributions-changed', self.get_contributions())
+            self.emit("contributions-changed", self.get_contributions())
     def del_colour(self, colour):
         # do this the easy way by taking them all out and putting back
         # all but the one to be deleted
@@ -520,7 +520,7 @@ class ColourPartsSpinButtonBox(Gtk.VBox):
             for spinbutton in self.__spinbuttons:
                 spinbutton.divide_parts(gcd)
             self.__suppress_change_notification = False
-            self.emit('contributions-changed', self.get_contributions())
+            self.emit("contributions-changed", self.get_contributions())
     def reset_parts(self):
         """
         Reset all spinbutton values to zero
@@ -529,81 +529,81 @@ class ColourPartsSpinButtonBox(Gtk.VBox):
         for spinbutton in self.__spinbuttons:
             spinbutton.set_parts(0)
         self.__suppress_change_notification = False
-        self.emit('contributions-changed', self.get_contributions())
+        self.emit("contributions-changed", self.get_contributions())
 GObject.signal_new('remove-colour', ColourPartsSpinButtonBox, GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,))
-GObject.signal_new('contributions-changed', ColourPartsSpinButtonBox, GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,))
+GObject.signal_new("contributions-changed", ColourPartsSpinButtonBox, GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT,))
 
-class PartsColourListStore(gpaint.ColourListStore):
-    ROW = paint.BLOB
-    TYPES = ROW(colour=object, parts=int)
-
-    def append_colour(self, colour):
-        self.append(self.ROW(parts=0, colour=colour))
-    def get_parts(self, colour):
+class ModelPaintPartsListStore(gpaint.PaintListStore):
+    COLUMN_DEFS = gpaint.ModelPaintListStore.COLUMN_DEFS[1:]
+    def __init__(self):
+        gpaint.PaintListStore.__init__(self, GObject.TYPE_PYOBJECT, int)
+    def append_paint(self, paint, parts=0):
+        self.append([paint, parts])
+    def get_parts(self, paint):
         """
-        Return the number of parts selected for the given colour
+        Return the number of parts selected for the given paint
         """
-        model_iter = self.find_named(lambda x: x.colour == colour)
+        model_iter = self.get_paint_iter(paint)
         if model_iter is None:
             raise LookupError()
-        return self.get_value_named(model_iter, 'parts')
+        return self[model_iter][1]
     def reset_parts(self):
         """
         Reset the number of parts for all colours to zero
         """
         model_iter = self.get_iter_first()
         while model_iter is not None:
-            self.set_value_named(model_iter, 'parts', 0)
+            self[model_iter][1] = 0
             model_iter = self.iter_next(model_iter)
-        self.emit('contributions-changed', [])
+        self.emit("contributions-changed", [])
     def get_contributions(self):
         """
         Return a list of MODEL.ROW() tuples where parts is greater than zero
         """
-        return [row for row in self.named() if row.parts > 0]
-    def get_colour_users(self, colour):
-        return [row.colour for row in self.named() if row.colour.contains_colour(colour)]
-    def process_parts_change(self, blob):
+        return [paint.BLOB(row[0], row[1]) for row in self if row[1] > 0]
+    def get_paint_users(self, paint):
+        return [row[0] for row in self if row[0].contains_paint(paint)]
+    def process_parts_change(self, contribution):
         """
-        Work out contributions with modifications in blob.
+        Work out contributions with modifications in contribution.
         This is necessary because the parts field in the model hasn't
         been updated yet as it causes a "jerky" appearance in the
         CellRendererSpin due to SpinButton being revreated every time
         an edit starts and updating the model causes restart of edit.
         """
         contributions = []
-        for row in self.named():
-            if row.colour == blob.colour:
-                if blob.parts > 0:
-                    contributions.append(blob)
-            elif row.parts > 0:
-                contributions.append(row)
-        self.emit('contributions-changed', contributions)
+        for row in self:
+            if row[0] == contribution.paint:
+                if contribution.parts > 0:
+                    contributions.append(contribution)
+            elif row[1] > 0:
+                contributions.append(paint.BLOB(row[0], row[1]))
+        self.emit("contributions-changed", contributions)
     def _parts_value_changed_cb(self, cell, path, spinbutton):
         """
         Change the model for a change to a spinbutton value
         """
         new_parts = spinbutton.get_value_as_int()
         row = self.get_row(self.get_iter(path))
-        self.process_parts_change(paint.BLOB(colour=row.colour, parts=new_parts))
+        self.process_parts_change(paint.BLOB(colour=row[0], parts=new_parts))
     def _notes_edited_cb(self, cell, path, new_text):
         self[path][0].notes = new_text
-GObject.signal_new('contributions-changed', PartsColourListStore, GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT, ))
+GObject.signal_new("contributions-changed", ModelPaintPartsListStore, GObject.SignalFlags.RUN_LAST, None, (GObject.TYPE_PYOBJECT, ))
 
 def notes_cell_data_func(column, cell, model, model_iter, *args):
-    colour = model.get_value_named(model_iter, 'colour')
+    colour = model[model_iter][0]
     cell.set_property('text', colour.notes)
     cell.set_property('background-gdk', colour.to_gdk_color())
     cell.set_property('foreground-gdk', colour.best_foreground_gdk_color())
 
-def generate_colour_parts_list_spec(view, model):
+def generate_model_paint_parts_list_spec(view, model):
     """
-    Generate the specification for a paint colour parts list
+    Generate the SPECIFICATION for a paint colour parts list
     """
     parts_col_spec = tlview.ColumnSpec(
         title =_('Parts'),
         properties={},
-        sort_key_function=lambda row: row.parts,
+        sort_key_function=lambda row: row[1],
         cells=[
             tlview.CellSpec(
                 cell_renderer_spec=tlview.CellRendererSpec(
@@ -614,14 +614,14 @@ def generate_colour_parts_list_spec(view, model):
                     start=False
                 ),
                 cell_data_function_spec=None,
-                attributes={'text' : model.col_index('parts')}
+                attributes={'text' : 1}
             ),
         ]
     )
     notes_col_spec = tlview.ColumnSpec(
         title =_('Notes'),
         properties={'resizable' : True, 'expand' : True},
-        sort_key_function=lambda row: row.colour.notes,
+        sort_key_function=lambda row: row[0].notes,
         cells=[
             tlview.CellSpec(
                 cell_renderer_spec=tlview.CellRendererSpec(
@@ -638,15 +638,15 @@ def generate_colour_parts_list_spec(view, model):
             ),
         ]
     )
-    name_col_spec = gpaint.colour_attribute_column_spec(gpaint.TNS(_('Name'), 'name', {}, lambda row: row.colour.name))
-    attr_cols_specs = [gpaint.colour_attribute_column_spec(tns) for tns in gpaint.COLOUR_ATTRS[1:]]
+    name_col_spec = gpaint.model_paint_column_spec(gpaint.TNS(_('Name'), 'name', {}, lambda row: row[0].name))
+    attr_cols_specs = gpaint.model_paint_column_specs(model)
     return tlview.ViewSpec(
         properties={},
         selection_mode=Gtk.SelectionMode.MULTIPLE,
         columns=[parts_col_spec, name_col_spec, notes_col_spec] + attr_cols_specs
     )
 
-class PartsColourListView(gpaint.ColourListView):
+class ModelPaintPartsListView(gpaint.ModelPaintListView):
     UI_DESCR = '''
     <ui>
         <popup name='colour_list_popup'>
@@ -655,10 +655,10 @@ class PartsColourListView(gpaint.ColourListView):
         </popup>
     </ui>
     '''
-    MODEL = PartsColourListStore
-    SPECIFICATION = generate_colour_parts_list_spec
+    MODEL = ModelPaintPartsListStore
+    SPECIFICATION = generate_model_paint_parts_list_spec
     def __init__(self, *args, **kwargs):
-        gpaint.ColourListView.__init__(self, *args, **kwargs)
+        gpaint.ModelPaintListView.__init__(self, *args, **kwargs)
     def populate_action_groups(self):
         """
         Populate action groups ready for UI initialization.
@@ -670,49 +670,43 @@ class PartsColourListView(gpaint.ColourListView):
                 self._show_colour_details_cb),
             ],
         )
-        #self.action_groups[actions.AC_SELN_MADE].add_actions(
-            #[
-                #('remove_selected_colours', Gtk.STOCK_REMOVE, None, None,
-                 #_('Remove the selected colours from the list.'), ),
-            #]
-        #)
-    def _show_colour_details_cb(self, _action):
+   def _show_colour_details_cb(self, _action):
         colour = self.get_selected_colours()[0]
         gpaint.PaintColourInformationDialogue(colour).show()
 
 MATCH = collections.namedtuple('MATCH', ['colour', 'target_colour'])
 
-class MatchedColourListStore(gpaint.ColourListStore):
-    ROW = MATCH
-    TYPES = ROW(colour=object, target_colour=object)
-
+class MatchedModelPaintListStore(gpaint.PaintListStore):
+    COLUMN_DEFS = gpaint.ModelPaintListStore.COLUMN_DEFS[1:]
+    def __init__(self):
+        gpaint.PaintListStore.__init__(self, GObject.TYPE_PYOBJECT)
     def append_colour(self, colour, target_colour):
-        self.append(self.ROW(target_colour=target_colour, colour=colour))
+        self.append([colour, target_colour])
     def get_colour_users(self, colour):
-        return [row.colour for row in self.named() if row.colour.contains_colour(colour)]
+        return [row[0] for row in self if row[0].contains_colour(colour)]
     def get_target_colour(self, colour):
         """
         Return the target colour for the given colour
         """
-        model_iter = self.find_named(lambda x: x.colour == colour)
+        model_iter = self.get_paint_iter(colour)
         if model_iter is None:
             raise LookupError()
-        return self.get_value_named(model_iter, 'target_colour')
+        return self[model_iter][1]
     def _notes_edited_cb(self, cell, path, new_text):
         self[path][0].notes = new_text
 
 def match_cell_data_func(column, cell, model, model_iter, attribute):
-    colour = model.get_value_named(model_iter, 'target_colour')
+    colour = model[model_iter][1]
     cell.set_property('background-gdk', colour.to_gdk_color())
 
-def generate_matched_colour_list_spec(view, model):
+def generate_matched_model_paint_list_spec(view, model):
     """
     Generate the specification for a paint colour parts list
     """
     matched_col_spec = tlview.ColumnSpec(
         title =_('Matched'),
         properties={},
-        sort_key_function=lambda row: row.target_colour.hue,
+        sort_key_function=lambda row: row[1].hue,
         cells=[
             tlview.CellSpec(
                 cell_renderer_spec=tlview.CellRendererSpec(
@@ -731,7 +725,7 @@ def generate_matched_colour_list_spec(view, model):
     notes_col_spec = tlview.ColumnSpec(
         title =_('Notes'),
         properties={'resizable' : True, 'expand' : True},
-        sort_key_function=lambda row: row.colour.notes,
+        sort_key_function=lambda row: row[0].notes,
         cells=[
             tlview.CellSpec(
                 cell_renderer_spec=tlview.CellRendererSpec(
@@ -748,56 +742,50 @@ def generate_matched_colour_list_spec(view, model):
             ),
         ]
     )
-    name_col_spec = gpaint.colour_attribute_column_spec(gpaint.TNS(_('Name'), 'name', {}, lambda row: row.colour.name))
-    attr_cols_specs = [gpaint.colour_attribute_column_spec(tns) for tns in gpaint.COLOUR_ATTRS[1:]]
+    name_col_spec = gpaint.model_paint_column_spec(gpaint.TNS(_('Name'), 'name', {}, lambda row: row[0].name))
+    attr_cols_specs = gpaint.model_paint_column_specs(model)
     return tlview.ViewSpec(
         properties={},
         selection_mode=Gtk.SelectionMode.MULTIPLE,
         columns=[name_col_spec, matched_col_spec, notes_col_spec] + attr_cols_specs
     )
 
-class MatchedColourListView(gpaint.ColourListView):
+class MatchedModelPaintListView(gpaint.ModelPaintListView):
     UI_DESCR = '''
     <ui>
-        <popup name='colour_list_popup'>
-            <menuitem action='show_colour_details'/>
-            <menuitem action='remove_selected_colours'/>
+        <popup name='paint_list_popup'>
+            <menuitem action='show_paint_details'/>
+            <menuitem action='remove_selected_paints'/>
         </popup>
     </ui>
     '''
-    MODEL = MatchedColourListStore
-    SPECIFICATION = generate_matched_colour_list_spec
+    MODEL = MatchedModelPaintListStore
+    SPECIFICATION = generate_matched_model_paint_list_spec
     def __init__(self, *args, **kwargs):
-        gpaint.ColourListView.__init__(self, *args, **kwargs)
+        gpaint.ModelPaintListView.__init__(self, *args, **kwargs)
     def populate_action_groups(self):
         """
         Populate action groups ready for UI initialization.
         """
         self.action_groups[actions.AC_SELN_UNIQUE].add_actions(
             [
-                ('show_colour_details', Gtk.STOCK_INFO, None, None,
-                 _('Show a detailed description of the selected colour.'),
+                ('show_paint_details', Gtk.STOCK_INFO, None, None,
+                 _('Show a detailed description of the selected paint.'),
                 self._show_colour_details_cb),
             ],
         )
-        #self.action_groups[actions.AC_SELN_MADE].add_actions(
-            #[
-                #('remove_selected_colours', Gtk.STOCK_REMOVE, None, None,
-                 #_('Remove the selected colours from the list.'), ),
-            #]
-        #)
     def _show_colour_details_cb(self, _action):
         selected_rows = self.MODEL.get_selected_rows(self.get_selection())
         colour = selected_rows[0].colour
-        if isinstance(colour, paint.NamedMixedColour):
+        if hasattr(colour, "blobs"): # isinstance(colour, paint.NamedMixedColour):
             MixedColourInformationDialogue(colour, selected_rows[0].target_colour).show()
         else:
             gpaint.PaintColourInformationDialogue(colour).show()
 
-class SelectColourListView(gpaint.ColourListView):
+class SelectColourListView(gpaint.ModelPaintListView):
     UI_DESCR = '''
     <ui>
-        <popup name='colour_list_popup'>
+        <popup name='paint_list_popup'>
             <menuitem action='show_colour_details'/>
             <menuitem action='add_colours_to_mixer'/>
         </popup>
@@ -833,7 +821,7 @@ class PaintColourSelector(Gtk.VBox):
         self.paint_colours_view.set_size_request(240, 360)
         model = self.paint_colours_view.get_model()
         for colour in paint_series.paint_colours.values():
-            model.append_colour(colour)
+            model.append_paint(colour)
             self.wheels.add_colour(colour)
         maker = Gtk.Label(label=_('Manufacturer: {0}'.format(paint_series.series_id.maker)))
         sname = Gtk.Label(label=_('Series Name: {0}'.format(paint_series.series_id.name)))
@@ -867,7 +855,7 @@ class PaintColourSelector(Gtk.VBox):
         """
         Add the currently selected colours to the mixer.
         """
-        self.emit('add-paint-colours', self.paint_colours_view.get_selected_colours())
+        self.emit('add-paint-colours', self.paint_colours_view.get_selected_paints())
     def _add_wheel_colour_to_mixer_cb(self, _action, wheel):
         """
         Add the currently selected colours to the mixer.
@@ -925,7 +913,7 @@ class PaintSeriesManager(GObject.GObject, dialogue.ReporterMixin):
         fobj = open(filepath, 'r')
         text = fobj.read()
         fobj.close()
-        series = paint.Series.fm_definition(text)
+        series = paint.PaintSeries.fm_definition(text)
         # All OK so we can add this series to our dictionary
         selector = PaintColourSelector(series)
         selector.set_target_colour(self.__target_colour)
@@ -942,7 +930,7 @@ class PaintSeriesManager(GObject.GObject, dialogue.ReporterMixin):
             except IOError as edata:
                 io_errors.append(edata)
                 continue
-            except paint.Series.ParseError as edata:
+            except paint.PaintSeries.ParseError as edata:
                 format_errors.append((edata, filepath))
                 continue
         if io_errors or format_errors:
@@ -967,9 +955,9 @@ class PaintSeriesManager(GObject.GObject, dialogue.ReporterMixin):
         return (open_menu, remove_menu)
     def _rebuild_submenus(self):
         open_menu, remove_menu = self._build_submenus()
-        self.__open_item.remove_submenu()
+        #self.__open_item.remove_submenu()
         self.__open_item.set_submenu(open_menu)
-        self.__remove_item.remove_submenu()
+        #self.__remove_item.remove_submenu()
         self.__remove_item.set_submenu(remove_menu)
     def _add_paint_series_cb(self, widget):
         dlg = Gtk.FileChooserDialog(
@@ -991,7 +979,7 @@ class PaintSeriesManager(GObject.GObject, dialogue.ReporterMixin):
             series = self._add_series_from_file(filepath)
         except IOError as edata:
             return self.report_io_error(edata)
-        except paint.Series.ParseError as edata:
+        except paint.PaintSeries.ParseError as edata:
             return self.alert_user(_("Format Error:  {}: {}").format(edata, filepath))
         if series is None:
             return
@@ -1181,12 +1169,12 @@ class NewMixedColourDialogue(dialogue.Dialog):
 
 def generate_components_list_spec(view, model):
     """
-    Generate the specification for a mixed colour components list
+    Generate the SPECIFICATION for a mixed colour components list
     """
     parts_col_spec = tlview.ColumnSpec(
         title =_('Parts'),
         properties={},
-        sort_key_function=lambda row: row.parts,
+        sort_key_function=lambda row: row[1],
         cells=[
             tlview.CellSpec(
                 cell_renderer_spec=tlview.CellRendererSpec(
@@ -1196,19 +1184,19 @@ def generate_components_list_spec(view, model):
                     start=False
                 ),
                 cell_data_function_spec=None,
-                attributes={'text' : model.col_index('parts')}
+                attributes={'text' : 1}
             ),
         ]
     )
-    name_col_spec = gpaint.colour_attribute_column_spec(gpaint.TNS(_('Name'), 'name', {'expand' : True}, lambda row: row.colour.name))
-    attr_cols_specs = [gpaint.colour_attribute_column_spec(tns) for tns in gpaint.COLOUR_ATTRS[1:]]
+    name_col_spec = gpaint.model_paint_column_spec(gpaint.TNS(_('Name'), 'name', {'expand' : True}, lambda row: row[0].name))
+    attr_cols_specs = gpaint.model_paint_column_specs(model)
     return tlview.ViewSpec(
         properties={},
         selection_mode=Gtk.SelectionMode.SINGLE,
         columns=[parts_col_spec, name_col_spec] + attr_cols_specs
     )
 
-class ComponentsListView(PartsColourListView):
+class ComponentsListView(ModelPaintPartsListView):
     UI_DESCR = '''
     <ui>
         <popup name='colour_list_popup'>
@@ -1216,7 +1204,7 @@ class ComponentsListView(PartsColourListView):
         </popup>
     </ui>
     '''
-    MODEL = PartsColourListStore
+    MODEL = ModelPaintPartsListStore
     SPECIFICATION = generate_components_list_spec
 
     def _set_cell_connections(self):
