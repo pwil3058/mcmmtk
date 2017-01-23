@@ -31,7 +31,9 @@ from gi.repository import GLib
 from .bab import mathx
 
 from .epaint import gpaint
+from .epaint import lexicon
 from .epaint import paint
+from .epaint import pedit
 
 from .gtx import actions
 from .gtx import coloured
@@ -45,7 +47,6 @@ from .gtx import screen
 from .gtx import tlview
 
 from . import icons
-from . import data
 from . import editor
 from . import config
 
@@ -79,12 +80,12 @@ class Mixer(Gtk.VBox, actions.CAGandUIManager, dialogue.AskerMixin):
         actions.CAGandUIManager.__init__(self)
         self.action_groups.update_condns(actions.MaskedCondns(self.AC_DONT_HAVE_TARGET, self.AC_TARGET_MASK))
         # Components
-        self.notes = entries.TextEntryAutoComplete(data.GENERAL_WORDS_LEXICON)
-        self.notes.connect("new-words", data.new_general_words_cb)
+        self.notes = entries.TextEntryAutoComplete(lexicon.GENERAL_WORDS_LEXICON)
+        self.notes.connect("new-words", lexicon.new_general_words_cb)
         self.next_name_label = Gtk.Label(label=_("#???:"))
         self.current_target_colour = None
-        self.current_colour_description = entries.TextEntryAutoComplete(data.COLOUR_NAME_LEXICON)
-        self.current_colour_description.connect("new-words", data.new_paint_words_cb)
+        self.current_colour_description = entries.TextEntryAutoComplete(lexicon.COLOUR_NAME_LEXICON)
+        self.current_colour_description.connect("new-words", lexicon.new_paint_words_cb)
         self.mixpanel = gpaint.ColourMatchArea()
         self.mixpanel.set_size_request(240, 240)
         self.hcvw_display = gpaint.HCVDisplay()
@@ -269,7 +270,7 @@ class Mixer(Gtk.VBox, actions.CAGandUIManager, dialogue.AskerMixin):
         notes = self.current_colour_description.get_text()
         new_colour = paint.MixedModelPaint(blobs=paint_contribs, name=name, notes=notes)
         self.mixed_colours.append_colour(new_colour, self.current_target_colour)
-        self.wheels.add_colour(new_colour)
+        self.wheels.add_paint(new_colour)
         self.reset_parts()
         self.paint_colours.set_sensitive(False)
         self.mixpanel.clear()
@@ -306,14 +307,14 @@ class Mixer(Gtk.VBox, actions.CAGandUIManager, dialogue.AskerMixin):
     def _simplify_contributions_cb(self, _action):
         self.simplify_parts()
     def add_paint(self, paint_colour):
-        self.paint_colours.add_colour(paint_colour)
-        self.wheels.add_colour(paint_colour)
+        self.paint_colours.add_paint(paint_colour)
+        self.wheels.add_paint(paint_colour)
     def del_paint(self, paint_colour):
-        self.paint_colours.del_colour(paint_colour)
-        self.wheels.del_colour(paint_colour)
+        self.paint_colours.del_paint(paint_colour)
+        self.wheels.del_paint(paint_colour)
     def del_mixed(self, mixed):
         self.mixed_colours.remove_colour(mixed)
-        self.wheels.del_colour(mixed)
+        self.wheels.del_paint(mixed)
         self.wheels.del_target_colour(mixed.name)
     def _add_colours_to_mixer_cb(self, selector, colours):
         for pcol in colours:
@@ -449,9 +450,9 @@ class ColourPartsSpinButtonBox(Gtk.VBox):
         self.__sensitive = sensitive
         for sb in self.__spinbuttons:
             sb.set_sensitive(sensitive)
-    def add_colour(self, colour):
+    def add_paint(self, colour):
         """
-        Add a spinner for the given colour to the box
+        Add a spinner for the given paint to the box
         """
         spinbutton = ColourPartsSpinButton(colour, self.__sensitive)
         spinbutton.action_groups.connect_activate('remove_me', self._remove_me_cb, spinbutton)
@@ -486,7 +487,7 @@ class ColourPartsSpinButtonBox(Gtk.VBox):
         """
         if not self.__suppress_change_notification:
             self.emit("contributions-changed", self.get_contributions())
-    def del_colour(self, colour):
+    def del_paint(self, colour):
         # do this the easy way by taking them all out and putting back
         # all but the one to be deleted
         self._unpack_all()
@@ -638,8 +639,8 @@ def generate_model_paint_parts_list_spec(view, model):
             ),
         ]
     )
-    name_col_spec = gpaint.model_paint_column_spec(gpaint.TNS(_('Name'), 'name', {}, lambda row: row[0].name))
-    attr_cols_specs = gpaint.model_paint_column_specs(model)
+    name_col_spec = gpaint.tns_paint_list_column_spec(gpaint.TNS(_('Name'), 'name', {}, lambda row: row[0].name))
+    attr_cols_specs = gpaint.paint_list_column_specs(model)
     return tlview.ViewSpec(
         properties={},
         selection_mode=Gtk.SelectionMode.MULTIPLE,
@@ -670,7 +671,7 @@ class ModelPaintPartsListView(gpaint.ModelPaintListView):
                 self._show_colour_details_cb),
             ],
         )
-   def _show_colour_details_cb(self, _action):
+    def _show_colour_details_cb(self, _action):
         colour = self.get_selected_colours()[0]
         gpaint.PaintColourInformationDialogue(colour).show()
 
@@ -742,8 +743,8 @@ def generate_matched_model_paint_list_spec(view, model):
             ),
         ]
     )
-    name_col_spec = gpaint.model_paint_column_spec(gpaint.TNS(_('Name'), 'name', {}, lambda row: row[0].name))
-    attr_cols_specs = gpaint.model_paint_column_specs(model)
+    name_col_spec = gpaint.tns_paint_list_column_spec(gpaint.TNS(_('Name'), 'name', {}, lambda row: row[0].name))
+    attr_cols_specs = gpaint.paint_list_column_specs(model)
     return tlview.ViewSpec(
         properties={},
         selection_mode=Gtk.SelectionMode.MULTIPLE,
@@ -816,13 +817,13 @@ class PaintColourSelector(Gtk.VBox):
         Gtk.VBox.__init__(self)
         # components
         self.wheels = gpaint.HueWheelNotebook(popup='/colour_wheel_AI_popup')
-        self.wheels.set_wheels_add_colour_acb(self._add_wheel_colour_to_mixer_cb)
+        self.wheels.set_wheels_add_paint_acb(self._add_wheel_colour_to_mixer_cb)
         self.paint_colours_view = SelectColourListView()
         self.paint_colours_view.set_size_request(240, 360)
         model = self.paint_colours_view.get_model()
         for colour in paint_series.paint_colours.values():
             model.append_paint(colour)
-            self.wheels.add_colour(colour)
+            self.wheels.add_paint(colour)
         maker = Gtk.Label(label=_('Manufacturer: {0}'.format(paint_series.series_id.maker)))
         sname = Gtk.Label(label=_('Series Name: {0}'.format(paint_series.series_id.name)))
         # make connections
@@ -1150,15 +1151,15 @@ class NewMixedColourDialogue(dialogue.Dialog):
                                      Gtk.STOCK_OK, Gtk.ResponseType.ACCEPT)
                             )
         vbox = self.get_content_area()
-        self.colour_description = entries.TextEntryAutoComplete(data.COLOUR_NAME_LEXICON)
-        self.colour_description.connect("new-words", data.new_paint_words_cb)
+        self.colour_description = entries.TextEntryAutoComplete(lexicon.COLOUR_NAME_LEXICON)
+        self.colour_description.connect("new-words", lexicon.new_paint_words_cb)
         self.colour_description.connect('changed', self._description_changed_cb)
         self.set_response_sensitive(Gtk.ResponseType.ACCEPT, len(self.colour_description.get_text()) > 0)
         hbox = Gtk.HBox()
         hbox.pack_start(Gtk.Label(_("Description:")), expand=False, fill=True, padding=0)
         hbox.pack_start(self.colour_description, expand=True, fill=True, padding=0)
         vbox.pack_start(hbox, expand=False, fill=True, padding=0)
-        self.colour_specifier = editor.ColourSampleMatcher(auto_match_on_paste=True)
+        self.colour_specifier = pedit.ColourSampleMatcher(auto_match_on_paste=True)
         vbox.pack_start(self.colour_specifier, expand=True, fill=True, padding=0)
         button = Gtk.Button(_("Take Screen Sample"))
         button.connect("clicked", lambda _button: screen.take_screen_sample())
@@ -1188,8 +1189,8 @@ def generate_components_list_spec(view, model):
             ),
         ]
     )
-    name_col_spec = gpaint.model_paint_column_spec(gpaint.TNS(_('Name'), 'name', {'expand' : True}, lambda row: row[0].name))
-    attr_cols_specs = gpaint.model_paint_column_specs(model)
+    name_col_spec = gpaint.tns_paint_list_column_spec(gpaint.TNS(_('Name'), 'name', {'expand' : True}, lambda row: row[0].name))
+    attr_cols_specs = gpaint.paint_list_column_specs(model)
     return tlview.ViewSpec(
         properties={},
         selection_mode=Gtk.SelectionMode.SINGLE,
