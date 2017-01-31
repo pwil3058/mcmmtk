@@ -24,7 +24,6 @@ from gi.repository import Gtk
 
 # Importing i18n here means that _() is defined for all package modules
 from . import i18n
-#from .options import _USER_CONFIG_DIR_PATH as CONFIG_DIR_PATH
 
 __all__ = []
 __author__ = "Peter Williams <pwil3058@gmail.com>"
@@ -35,6 +34,9 @@ APP_NAME = "mcmmtk"
 # TODO: improve configuration directory path
 CONFIG_DIR_PATH = os.path.expanduser("~/.ModellersColourMatcherMixer")
 PGND_CONFIG_DIR_PATH = None
+from . import sys_config
+SYS_DATA_DIR_PATH = sys_config.get_sys_data_dir()
+SYS_SAMPLES_DIR_PATH = sys_config.get_sys_samples_dir()
 from . import recollect # Temporary until definitions get moved
 
 ISSUES_URL = "<https://github.com/pwil3058/mcmmtk/issues>"
