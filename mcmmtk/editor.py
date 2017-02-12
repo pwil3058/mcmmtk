@@ -43,9 +43,10 @@ from .gtx import coloured
 from .gtx import dialogue
 from .gtx import entries
 from .gtx import gutils
-from .gtx import iview
 from .gtx import recollect
 from .gtx import screen
+
+from .pixbufx import iview
 
 from . import icons
 
@@ -98,22 +99,3 @@ class TopLevelWindow(dialogue.MainWindow):
         self.set_title(_('mcmmtk: Paint Series Editor: {0}').format(file_path))
     def _configure_event_cb(self, widget, event):
         recollect.set("editor", "last_geometry", "{0.width}x{0.height}+{0.x}+{0.y}".format(event))
-
-def get_avg_rgb_for_samples(samples):
-    total = [0, 0, 0]
-    npixels = 0
-    for sample in samples:
-        assert sample.get_bits_per_sample() == 8
-        nc = sample.get_n_channels()
-        rs = sample.get_rowstride()
-        width = sample.get_width()
-        n_rows = sample.get_height()
-        data = [ord(b) for b in sample.get_pixels()]
-        for row_num in range(n_rows):
-            row_start = row_num * rs
-            for j in range(width):
-                offset = row_start + j * nc
-                for i in range(3):
-                    total[i] += data[offset + i]
-        npixels += width * n_rows
-    return rgbh.RGB8(*(rgbh.RGB8.ROUND(total[i] / npixels) for i in range(3)))

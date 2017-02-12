@@ -41,14 +41,14 @@ from .gtx import coloured
 from .gtx import dialogue
 from .gtx import entries
 from .gtx import gutils
-from .gtx import iview
 from .gtx import printer
 from .gtx import recollect
 from .gtx import screen
 from .gtx import tlview
 
+from .pixbufx import iview
+
 from . import icons
-from . import editor
 from . import config
 
 class ModelPaintMixer(pmix.PaintMixer):

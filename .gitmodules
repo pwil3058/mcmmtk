@@ -7,3 +7,6 @@
 [submodule "mcmmtk/epaint"]
 	path = mcmmtk/epaint
 	url = git@github.com:pwil3058/pysm_epaint.git
+[submodule "mcmmtk/pixbufx"]
+	path = mcmmtk/pixbufx
+	url = git@github.com:pwil3058/pysm_pixbufx.git
