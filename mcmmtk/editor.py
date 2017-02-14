@@ -71,8 +71,12 @@ class ModelPaintListNotebook(gpaint.PaintListNotebook):
                 ]
             )
 
+class ModelPaintEditor(pedit.PaintEditor):
+    PAINT = vpaint.ModelPaint
+    RESET_CHARACTERISTICS = False
+
 class ModelPaintSeriesEditor(pedit.PaintSeriesEditor):
-    PAINT_EDITOR = pedit.ModelPaintEditor
+    PAINT_EDITOR = ModelPaintEditor
     PAINT_LIST_NOTEBOOK = ModelPaintListNotebook
 
 class TopLevelWindow(dialogue.MainWindow):
