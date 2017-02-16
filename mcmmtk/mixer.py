@@ -69,7 +69,7 @@ class TopLevelWindow(dialogue.MainWindow):
         self.set_icon_from_file(icons.APP_ICON_FILE)
         self.set_title('mcmmtk: Mixer')
         self.mixer = ModelPaintMixer()
-        self.connect("destroy", self.mixer._quit_mixer)
+        self.connect("destroy", lambda _widget: self.mixer._quit_mixer())
         self.connect("configure-event", self._configure_event_cb)
         self.add(self.mixer)
         self.show_all()
