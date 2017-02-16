@@ -49,7 +49,6 @@ from .gtx import tlview
 from .pixbufx import iview
 
 from . import icons
-from . import config
 
 class ModelPaintMixer(pmix.PaintMixer):
     PAINT = vpaint.ModelPaint
