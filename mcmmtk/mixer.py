@@ -58,6 +58,8 @@ class ModelPaintMixer(pmix.PaintMixer):
     MIXTURE = pmix.ModelMixture
     MIXED_PAINT = pmix.MixedModelPaint
 
+recollect.define("mixer", "last_geometry", recollect.Defn(str, ""))
+
 class TopLevelWindow(dialogue.MainWindow):
     """
     A top level window wrapper around a mixer

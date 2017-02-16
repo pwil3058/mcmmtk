@@ -34,10 +34,23 @@ APP_NAME = "mcmmtk"
 # TODO: improve configuration directory path
 CONFIG_DIR_PATH = os.path.expanduser("~/.ModellersColourMatcherMixer")
 PGND_CONFIG_DIR_PATH = None
-from . import sys_config
-SYS_DATA_DIR_PATH = sys_config.get_sys_data_dir()
-SYS_SAMPLES_DIR_PATH = sys_config.get_sys_samples_dir()
-from . import recollect # Temporary until definitions get moved
+
+def _find_sys_base_dir():
+    sys_data_dir = os.path.join(sys.path[0], "data")
+    if os.path.exists(sys_data_dir) and os.path.isdir(sys_data_dir):
+        return os.path.dirname(sys_data_dir)
+    else:
+        _TAILEND = os.path.join("share", APP_NAME, "data")
+        _prefix = sys.path[0]
+        while _prefix:
+            sys_data_dir = os.path.join(_prefix, _TAILEND)
+            if os.path.exists(sys_data_dir) and os.path.isdir(sys_data_dir):
+                return os.path.dirname(sys_data_dir)
+            _prefix = os.path.dirname(_prefix)
+
+SYS_BASE_DIR_PATH = _find_sys_base_dir()
+SYS_DATA_DIR_PATH = os.path.join(SYS_BASE_DIR_PATH, "data")
+SYS_SAMPLES_DIR_PATH = os.path.join(SYS_BASE_DIR_PATH, "samples")
 
 ISSUES_URL = "<https://github.com/pwil3058/mcmmtk/issues>"
 ISSUES_EMAIL = __author__

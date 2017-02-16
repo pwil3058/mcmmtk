@@ -79,6 +79,8 @@ class ModelPaintSeriesEditor(pedit.PaintSeriesEditor):
     PAINT_EDITOR = ModelPaintEditor
     PAINT_LIST_NOTEBOOK = ModelPaintListNotebook
 
+recollect.define("editor", "last_geometry", recollect.Defn(str, ""))
+
 class TopLevelWindow(dialogue.MainWindow):
     """
     A top level window wrapper around a palette
