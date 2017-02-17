@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Name=mcmmtk: Paint Standards Editor
+Name[en_AU]=mcmmtk: Paint Standards Editor
+Exec=mcmmtk_stds_editor.py
+Comment=Modeller's Colour Matching/Matching Tool Kit Paint Standards Editor
+Comment[en_AU]=Modeller's Colour Matching/Matching Tool Kit Paint Standards Editor
+Icon=mcmmtk
+Categories=GNOME;GTK;Graphics;X-Modelling;
