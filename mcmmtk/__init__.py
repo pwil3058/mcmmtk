@@ -31,9 +31,15 @@ __version__ = "0.0"
 
 APP_NAME = "mcmmtk"
 
-# TODO: improve configuration directory path
-CONFIG_DIR_PATH = os.path.expanduser("~/.ModellersColourMatcherMixer")
+CONFIG_DIR_PATH = os.path.expanduser(os.path.join("~", ".config", APP_NAME))
 PGND_CONFIG_DIR_PATH = None
+
+if not os.path.exists(CONFIG_DIR_PATH):
+    old_config_dir_path = os.path.expanduser(os.path.join("~", ".ModellersColourMatcherMixer"))
+    if os.path.exists(old_config_dir_path):
+        os.rename(old_config_dir_path, CONFIG_DIR_PATH)
+    else:
+        os.mkdir(CONFIG_DIR_PATH)
 
 def _find_sys_base_dir():
     sys_data_dir = os.path.join(sys.path[0], "data")
