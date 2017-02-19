@@ -20,58 +20,63 @@ import sys
 
 from distutils.core import setup
 
-for_windows = sys.platform in ['win32', 'cygwin'] or 'bdist_wininst' in sys.argv or 'bdist_msi' in sys.argv
+for_windows = sys.platform in ["win32", "cygwin"] or "bdist_wininst" in sys.argv or "bdist_msi" in sys.argv
 
-NAME = 'ModellersColourMatcherMixer'
+NAME = "ModellersColourMatcherMixer"
 
-VERSION = '0.05'
+SHORT_NAME = "mcmmtk"
 
-DESCRIPTION = 'A set of tools for modellers to experiment with mixing colours.'
+VERSION = "0.10"
+
+DESCRIPTION = "A set of tools for modellers to experiment with mixing colours."
 
 LONG_DESCRIPTION =\
-'''
+"""
 This software is a set of tools for modellers who wish to experiment with
 mixing paints to match a specified colour.
-'''
+"""
 
-LICENSE = 'GNU General Public License (GPL) Version 2.0'
+LICENSE = "GNU General Public License (GPL) Version 2.0"
 
 CLASSIFIERS = [
-    'Development Status :: Pre-Alpha',
-    'Intended Audience :: End Users/Desktop',
-    'License :: OSI Approved :: %s' % LICENSE,
-    'Programming Language :: Python',
-    'Topic :: Artistic Software',
-    'Operating System :: MacOS :: MacOS X',
-    'Operating System :: Microsoft :: Windows',
-    'Operating System :: POSIX',
+    "Development Status :: Pre-Alpha",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: %s" % LICENSE,
+    "Programming Language :: Python",
+    "Topic :: Artistic Software",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
 ]
 
-AUTHOR = 'Peter Williams'
+AUTHOR = "Peter Williams"
 
-AUTHOR_EMAIL = 'pwil3058@bigpond.net.au'
+AUTHOR_EMAIL = "pwil3058@bigpond.net.au"
 
-URL = 'http://sourceforge.net/projects/mcmmtk/'
+URL = "http://sourceforge.net/projects/mcmmtk/"
 
-SCRIPTS = ['mcmmtk_mixer.py', 'mcmmtk_editor.py']
+SCRIPTS = ["mcmmtk_mixer.py", "mcmmtk_editor.py", "mcmmtk_stds_editor.py"]
 
-PACKAGES = ['mcmmtk']
+PACKAGES = ["mcmmtk", "mcmmtk/bab", "mcmmtk/gtx", "mcmmtk/epaint", "mcmmtk/pixbufx"]
 
-paints = glob.glob('data/*.psd')
-print "paints:", paints
-PAINTS = [(os.path.join('share', NAME, 'data'), paints)]
-print "PAINTS:", PAINTS
-samples = glob.glob('samples/*.jpg') + glob.glob('samples/*.png')
-print "samples:", samples
-SAMPLES = [(os.path.join('share', NAME, 'samples'), samples)]
+paints = glob.glob("data/*.psd")
+print("paints:", paints)
+PAINTS = [(os.path.join("share", SHORT_NAME, "data"), paints)]
+print("PAINTS:", PAINTS)
+samples = glob.glob("samples/*.jpg") + glob.glob("samples/*.png")
+print("samples:", samples)
+SAMPLES = [(os.path.join("share", SHORT_NAME, "samples"), samples)]
+standards = glob.glob("standards/*.pstddb")
+print("standards:", standards)
+STANDARDS = [(os.path.join("share", SHORT_NAME, "standards"), standards)]
 
 if for_windows:
-    SCRIPTS.append('mcmmtk_win_post_install.py')
+    SCRIPTS.append("mcmmtk_win_post_install.py")
     DESKTOP = []
-    PIXMAPS = [('share/pixmaps', ['pixmaps/mcmmtk.png', 'pixmaps/mcmmtk.ico'])]
+    PIXMAPS = [("share/pixmaps", ["pixmaps/mcmmtk.png", "pixmaps/mcmmtk.ico"]), ("share/pixmaps/" + SHORT_NAME, ["pixmaps/mcmmtk.png", "pixmaps/mcmmtk.ico"])]
 else:
-    DESKTOP = [('share/applications', ['mcmmtk_editor.desktop', 'mcmmtk_mixer.desktop'])]
-    PIXMAPS = [('share/pixmaps', ['pixmaps/mcmmtk.png'])]
+    DESKTOP = [("share/applications", ["mcmmtk_editor.desktop", "mcmmtk_stds_editor.desktop", "mcmmtk_mixer.desktop"])]
+    PIXMAPS = [("share/pixmaps", ["pixmaps/mcmmtk.png"]), ("share/pixmaps/" + SHORT_NAME, ["pixmaps/mcmmtk.png", "pixmaps/mcmmtk.ico"])]
 
 setup(
     name = NAME,
@@ -85,5 +90,5 @@ setup(
     url = URL,
     scripts = SCRIPTS,
     packages = PACKAGES,
-    data_files = DESKTOP + PIXMAPS + PAINTS + SAMPLES
+    data_files = DESKTOP + PIXMAPS + PAINTS + SAMPLES + STANDARDS
 )

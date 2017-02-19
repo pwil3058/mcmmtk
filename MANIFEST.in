@@ -4,4 +4,6 @@ include MANIFEST.in
 include pixmaps/*.ico
 include data/ideal.psd
 include samples/example.png
+include standards/*.pstddb
+include mcmmtk.png
 include rpm_post_install.script mcmmtk_win_post_install.py
