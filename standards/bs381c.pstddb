@@ -1,5 +1,5 @@
 Sponsor: UK Government
-Standard: British Standard 381C
+Standard: British Standard 381C (may be dodgy)
 ModelPaint(name="BS381 101", rgb=RGB16(red=0x8300, green=0xA800, blue=0x9B00), transparency="O", finish="F", metallic="NM", fluorescence="NF", notes="Sky Blue")
 ModelPaint(name="BS381 103", rgb=RGB16(red=0x3A00, green=0x6A00, blue=0x7200), transparency="O", finish="F", metallic="NM", fluorescence="NF", notes="Peacock Blue")
 ModelPaint(name="BS381 104", rgb=RGB16(red=0x3B00, green=0x5600, blue=0x7900), transparency="O", finish="F", metallic="NM", fluorescence="NF", notes="Azure Blue")
