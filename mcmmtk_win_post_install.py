@@ -21,6 +21,6 @@ if sys.argv[1] == "-install":
             link = os.path.join(link_dir, descr + ".lnk")
             create_shortcut(target, script, link, "",data_dir , icon_file)
             file_created(link)
-            print "Created shortcut from {0} to {1}.".format(link, target)
+            print("Created shortcut from {0} to {1}.".format(link, target))
 elif sys.argv[1] == "-remove":
     pass
