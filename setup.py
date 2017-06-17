@@ -26,7 +26,7 @@ NAME = "ModellersColourMatcherMixer"
 
 SHORT_NAME = "mcmmtk"
 
-VERSION = "1.00"
+VERSION = "1.01"
 
 DESCRIPTION = "A set of tools for modellers to experiment with mixing colours."
 
