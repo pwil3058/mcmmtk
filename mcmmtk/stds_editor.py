@@ -94,7 +94,7 @@ class TopLevelWindow(dialogue.MainWindow):
         self.editor.action_groups.get_action('close_colour_editor').set_visible(False)
         self.editor.connect("file_changed", self._file_changed_cb)
         self.editor.set_file_path(None)
-        self._menubar = self.editor.ui_manager.get_widget('/paint_series_editor_menubar')
+        self._menubar = self.editor.ui_manager.get_widget('/paint_collection_editor_menubar')
         self.connect("destroy", self.editor._exit_colour_editor_cb)
         self.connect("configure-event", self._configure_event_cb)
         vbox = Gtk.VBox()
