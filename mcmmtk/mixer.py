@@ -36,6 +36,7 @@ from .epaint import vpaint
 from .epaint import pedit
 from .epaint import pmix
 from .epaint import pseries
+from .epaint import standards
 
 from .gtx import actions
 from .gtx import coloured
@@ -55,6 +56,7 @@ class ModelPaintMixer(pmix.PaintMixer):
     PAINT = vpaint.ModelPaint
     MATCHED_PAINT_LIST_VIEW = pmix.MatchedModelPaintListView
     PAINT_SERIES_MANAGER = pseries.ModelPaintSeriesManager
+    PAINT_STANDARDS_MANAGER = standards.PaintStandardsManager
     MIXED_PAINT_INFORMATION_DIALOGUE = pmix.MixedModelPaintInformationDialogue
     MIXTURE = pmix.ModelMixture
     MIXED_PAINT = pmix.MixedModelPaint
