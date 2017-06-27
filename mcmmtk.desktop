@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Name=Modeller's Colour Matching/Mixing Tool Kit
+Name[en_AU]=Modeller's Colour Matching/Mixing Tool Kit
+Exec=mcmmtk.py
+Comment=Modeller's Colour Matching/Mixing Tool Kit
+Comment[en_AU]=Modeller's Colour Matching/Mixing Tool Kit
+Icon=mcmmtk
+Categories=GNOME;GTK;Graphics;X-Modelling;
