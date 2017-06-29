@@ -119,6 +119,8 @@ class ModelPaintSeriesEditor(Gtk.VBox):
         hbox.pack_start(self.editor.current_file_box, expand=True, fill=True, padding=0)
         self.pack_start(hbox, expand=False, fill=True, padding=0)
         self.pack_start(self.editor, expand=True, fill=True, padding=0)
+    def __getattr__(self, attr_name):
+        return getattr(self.editor, attr_name)
 
 class ModelPaintStandardEditor(Gtk.VBox):
     class Editor(standards.PaintStandardEditor):
@@ -153,6 +155,8 @@ class ModelPaintStandardEditor(Gtk.VBox):
         hbox.pack_start(self.editor.current_file_box, expand=True, fill=True, padding=0)
         self.pack_start(hbox, expand=False, fill=True, padding=0)
         self.pack_start(self.editor, expand=True, fill=True, padding=0)
+    def __getattr__(self, attr_name):
+        return getattr(self.editor, attr_name)
 
 @singleton
 class MainWindow(dialogue.MainWindow, actions.CAGandUIManager):
@@ -166,6 +170,7 @@ class MainWindow(dialogue.MainWindow, actions.CAGandUIManager):
         </menubar>
     </ui>
     """
+    MIXER_LABEL = _("Paint Mixer")
     recollect.define("mcmmtk_main_window", "last_geometry", recollect.Defn(str, ""))
     def __init__(self):
         dialogue.MainWindow.__init__(self)
@@ -173,18 +178,18 @@ class MainWindow(dialogue.MainWindow, actions.CAGandUIManager):
         actions.CAGandUIManager.__init__(self)
         self.set_default_icon(APP_ICON_PIXBUF)
         self.set_icon(APP_ICON_PIXBUF)
-        self.connect("delete_event", Gtk.main_quit)
+        self.connect("delete_event", lambda _w, _e: self.quit())
         vbox = Gtk.VBox()
         lmenu_bar = self.ui_manager.get_widget('/mcmmtk_left_menubar')
         vbox.pack_start(lmenu_bar, expand=False, fill=True, padding=0)
-        stack = Gtk.Stack()
-        stack.add_titled(ModelPaintMixer(), "paint_mixer", _("Paint Mixer"))
-        stack.add_titled(ModelPaintSeriesEditor(), "paint_series_editor", _("Paint Series Editor"))
-        stack.add_titled(ModelPaintStandardEditor(), "paint_standards_editor", _("Paint Standards Editor"))
+        self._stack = Gtk.Stack()
+        self._stack.add_titled(ModelPaintMixer(), "paint_mixer", self.MIXER_LABEL)
+        self._stack.add_titled(ModelPaintSeriesEditor(), "paint_series_editor", ModelPaintSeriesEditor.Editor.LABEL)
+        self._stack.add_titled(ModelPaintStandardEditor(), "paint_standards_editor", ModelPaintStandardEditor.Editor.LABEL)
         stack_switcher = Gtk.StackSwitcher()
-        stack_switcher.set_stack(stack)
+        stack_switcher.set_stack(self._stack)
         vbox.pack_start(stack_switcher, expand=False, fill=True, padding=0)
-        vbox.pack_start(stack, expand=True, fill=True, padding=0)
+        vbox.pack_start(self._stack, expand=True, fill=True, padding=0)
         self.add(vbox)
         self.show_all()
         self.connect("configure-event", self._configure_event_cb)
@@ -194,8 +199,16 @@ class MainWindow(dialogue.MainWindow, actions.CAGandUIManager):
                 ("mcmmtk_main_window_file_menu", None, _("File"), ),
                 ("mcmmtk_main_window_quit", Gtk.STOCK_QUIT, _("Quit"), None,
                  _("Close the application."),
-                 lambda _action: Gtk.main_quit()
+                 lambda _action: self.quit()
                 ),
             ])
     def _configure_event_cb(self, widget, event):
         recollect.set("mcmmtk_main_window", "last_geometry", "{0.width}x{0.height}+{0.x}+{0.y}".format(event))
+    def quit(self):
+        for name in ["paint_series_editor", "paint_standards_editor"]:
+            child = self._stack.get_child_by_name(name)
+            if child.has_unsaved_changes:
+                self._stack.set_visible_child(child)
+                if not child.unsaved_changes_ok():
+                    return True
+        Gtk.main_quit()
