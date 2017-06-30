@@ -48,12 +48,6 @@ class ModelPaintMixer(pmix.PaintMixer):
             <menu action="mixer_file_menu">
                 <menuitem action="print_mixer"/>
             </menu>
-            <menu action="mixer_series_manager_menu">
-                <menuitem action="mixer_load_paint_series"/>
-            </menu>
-            <menu action="mixer_standards_manager_menu">
-                <menuitem action="mixer_load_paint_standard"/>
-            </menu>
         </menubar>
     </ui>
     """
@@ -156,6 +150,12 @@ class MainWindow(dialogue.MainWindow, actions.CAGandUIManager):
             <menu action="mcmmtk_main_window_file_menu">
               <menuitem action="mcmmtk_main_window_quit"/>
             </menu>
+            <menu action="mcmmtk_series_manager_menu">
+                <menuitem action="mixer_load_paint_series"/>
+            </menu>
+            <menu action="mcmmtk_standards_manager_menu">
+                <menuitem action="mixer_load_paint_standard"/>
+            </menu>
             <menu action="mcmmtk_samples_menu">
               <menuitem action="take_screen_sample"/>
               <menuitem action="open_sample_viewer"/>
@@ -175,11 +175,24 @@ class MainWindow(dialogue.MainWindow, actions.CAGandUIManager):
         self.set_default_icon(APP_ICON_PIXBUF)
         self.set_icon(APP_ICON_PIXBUF)
         self.connect("delete_event", lambda _w, _e: self.quit())
+        self.paint_series_manager = pseries.ModelPaintSeriesManager()
+        self.paint_standards_manager = standards.PaintStandardsManager()
         vbox = Gtk.VBox()
+        msm = self.ui_manager.get_widget("/mcmmtk_left_menubar/mcmmtk_series_manager_menu")
+        if msm:
+            msmm = msm.get_submenu()
+            msmm.prepend(self.paint_series_manager.open_menu_item)
+            msmm.append(self.paint_series_manager.remove_menu_item)
+        if self.paint_standards_manager:
+            msm = self.ui_manager.get_widget("/mcmmtk_left_menubar/mcmmtk_standards_manager_menu")
+            if msm:
+                msmm = msm.get_submenu()
+                msmm.prepend(self.paint_standards_manager.open_menu_item)
+                msmm.append(self.paint_standards_manager.remove_menu_item)
         lmenu_bar = self.ui_manager.get_widget('/mcmmtk_left_menubar')
         vbox.pack_start(lmenu_bar, expand=False, fill=True, padding=0)
         self._stack = Gtk.Stack()
-        self._stack.add_titled(ModelPaintMixer(), "paint_mixer", self.MIXER_LABEL)
+        self._stack.add_titled(ModelPaintMixer(paint_series_manager=self.paint_series_manager, paint_standards_manager=self.paint_standards_manager), "paint_mixer", self.MIXER_LABEL)
         self._stack.add_titled(ModelPaintSeriesEditor(), "paint_series_editor", ModelPaintSeriesEditor.Editor.LABEL)
         self._stack.add_titled(ModelPaintStandardEditor(), "paint_standards_editor", ModelPaintStandardEditor.Editor.LABEL)
         stack_switcher = Gtk.StackSwitcher()
@@ -193,6 +206,16 @@ class MainWindow(dialogue.MainWindow, actions.CAGandUIManager):
         self.action_groups[actions.AC_DONT_CARE].add_actions(
             [
                 ("mcmmtk_main_window_file_menu", None, _("File"), ),
+                ("mcmmtk_series_manager_menu", None, _("Paint Series"), ),
+                ("mcmmtk_standards_manager_menu", None, _("Paint Standards"), ),
+                ("mixer_load_paint_series", None, _("Load"), None,
+                 _("Load a paint series from a file."),
+                 lambda _action: self.paint_series_manager.add_paint_series()
+                ),
+                ("mixer_load_paint_standard", None, _("Load"), None,
+                 _("Load a paint standard from a file."),
+                 lambda _action: self.paint_standards_manager.add_paint_standard()
+                ),
                 ("mcmmtk_main_window_quit", Gtk.STOCK_QUIT, _("Quit"), None,
                  _("Close the application."),
                  lambda _action: self.quit()
