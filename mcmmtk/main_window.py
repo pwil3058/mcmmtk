@@ -54,9 +54,6 @@ class ModelPaintMixer(pmix.PaintMixer):
             <menu action="mixer_standards_manager_menu">
                 <menuitem action="mixer_load_paint_standard"/>
             </menu>
-            <menu action="reference_resource_menu">
-                <menuitem action="open_reference_image_viewer"/>
-            </menu>
         </menubar>
     </ui>
     """
@@ -99,10 +96,6 @@ class ModelPaintSeriesEditor(Gtk.VBox):
               <menuitem action="save_paint_collection_to_file"/>
               <menuitem action="save_paint_collection_as_file"/>
             </menu>
-            <menu action="paint_collection_editor_samples_menu">
-              <menuitem action="take_screen_sample"/>
-              <menuitem action="open_sample_viewer"/>
-            </menu>
           </menubar>
         </ui>
         """
@@ -135,10 +128,6 @@ class ModelPaintStandardEditor(Gtk.VBox):
               <menuitem action="save_paint_collection_to_file"/>
               <menuitem action="save_paint_collection_as_file"/>
             </menu>
-            <menu action="paint_collection_editor_samples_menu">
-              <menuitem action="take_screen_sample"/>
-              <menuitem action="open_sample_viewer"/>
-            </menu>
           </menubar>
         </ui>
         """
@@ -166,6 +155,13 @@ class MainWindow(dialogue.MainWindow, actions.CAGandUIManager):
         <menubar name="mcmmtk_left_menubar">
             <menu action="mcmmtk_main_window_file_menu">
               <menuitem action="mcmmtk_main_window_quit"/>
+            </menu>
+            <menu action="mcmmtk_samples_menu">
+              <menuitem action="take_screen_sample"/>
+              <menuitem action="open_sample_viewer"/>
+            </menu>
+            <menu action="mcmmtk_reference_resource_menu">
+              <menuitem action="open_reference_image_viewer"/>
             </menu>
         </menubar>
     </ui>
