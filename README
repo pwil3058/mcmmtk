@@ -23,9 +23,9 @@ directory to be in the user's PATH environment variable.
 
 USAGE:
 
-This software has a number of components:
+The software's GUI (mcmmtk.py) has 3 selectable components:
 
-1. The Mixer (mcmmtk_mixer.py) is a GUI that (once the user
+1. The Paint Mixer is the component that (once the user
 has specified a colour to be matched and selected some paints for use)
 enables the modeller to mix paints by specifying the number of "parts"
 of each paint to be used in mixing a colour to match the specified
@@ -35,8 +35,8 @@ finished mixing the colours that they require they may print out a
 report to be used as a reference while painting the model for which the
 colours were mixed.
 
-2. The Paint Series Editor (mcmmtk_editor.py) is a GUI that enables the
-modeller create sets of paints for use in the mixer.
+2. The Paint Series Editor is the component that enables the
+modeller create/modify sets of paints for use in the mixer.
 The recommended method is to produce a "sampler" of the actual paints
 to be used on a suitable medium (preferably airbrushed), take a digital
 photograph (or scan) and then cut and paste from that photograph into
@@ -52,63 +52,35 @@ the difference between colours.
 NB the provided sample is hand painted and should make it clear why an
 air brushed version is preferred.
 
+3. The Paint Standards Editor is the component that enables the
+modeller create/modify paint standards for use specifiyng target
+colours in the mixer.
+
 PAINT SERIES:
 
 At this time, the only paint series data included in the distribution is
 for an imaginary set of paints known as the "Ideal Paint Colours Series"
 which features six colours equally spaced around the colour circle
-(at maximim chroma) together with black and white. This series should be
+(at maximim chroma) together with black and white.
+This series should be
 automatically included in the mixer's "Paint Colour Series"->Open menu
 when it is run for the first time.  Although of no real use in practice
 this set of paints is useful for assessing the Mixer's potential and,
 more importantly, learning how to mix paints.
+If it existed it would be possible to match any colour with this set of
+paints (but unfortunately it's only imaginery).
+
+PAINT STANDARDS:
+
+At this time, the only paint standards data included in the distribution
+are for US Federal Standard 595C and British Standard 381C. Although
+all care has been taken in the preparation of this data, no guarantee as
+to its accuracy is made (caveat emptor).
 
 INTERNATIONALIZATION:
 
 The code is extensively hooked for i18n but (at the moment) there is no
 localization available for languages other than English.
-
-CHANGES:
-    v-0.02:
-        - adds target colour crosshairs to colour series selector wheels
-    v-0.03:
-        - adds mechanisms for entering target/paint colour as RGB values
-        - adds mechanisms to make accidentally deleting paints harder
-    v-0.04:
-        - removes inappropriate cross coupling between Hue, Value and
-          Chroma in the mixer's new mixd colour specifier and the editor's
-          paint colour editor interfaces.
-        - allows smaller/larger increments to be used when tweaking
-          the colour in these interfaces by depressing the Control/Shift
-          keys respectively while clicking the tweak buttons.
-        - allows paint colours to be added to the mixer from the
-          paint series selector's colour wheels via a right button
-          popup menu.
-        - allows colour details to be displayed from all colour wheels
-          via a right button popup menu.
-        - adds the ability to move wheels' graticules using mouse
-          motion with the left button pressed. This is useful when
-          zooming the wheel (via the existing mouse wheel mechanism)
-          places the colours of interest out of view.
-        - gives the user more mechanisms for changing the size and
-          layout of windows.
-        - saves size/layout changes and uses them next time either tool
-          is reused.
-        - replaces the mixer's primitive "load paint series data from a file"
-          mechanism with a more sophisticated one where "known" paint
-          series are offered for selection in its "Paint Colour Series"->Open
-          menu.  New paint series can be made "known" by loading them from
-          a file via the "Paint Colour Series"->Load menu item. Similarly,
-          unwanted paint series may be removed via the
-          "Paint Colour Series"->Remove menu item.  Once "known" paint
-          series remain "known" between sessions provided the file
-          containing their specification continues to exist.
-        - increases the size of the mixer's paint spinners and adds
-          the paints name to the label.
-    v-0.05:
-        - adds more words to the paint description lexicon
-        - adds a "general" words lexicon for use with comments etc.
-        - adds a mechanism to remember new words between sessions.
 
 BUGS:
 

@@ -1,3 +1,1 @@
-desktop-file-install --dir %{_prefix}/share/applications %{_prefix}/share/applications/mcmmtk_editor.desktop
-desktop-file-install --dir %{_prefix}T/share/applications %{_prefix}/share/applications/mcmmtk_mixer.desktop
-desktop-file-install --dir %{_prefix}T/share/applications %{_prefix}/share/applications/mcmmtk_stds_editor.desktop
+desktop-file-install --dir %{_prefix}/share/applications %{_prefix}/share/applications/mcmmtk.desktop

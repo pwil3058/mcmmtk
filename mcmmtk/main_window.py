@@ -32,6 +32,8 @@ from .epaint import pseries
 from .epaint import vpaint
 from .epaint import standards
 
+from . import APP_NAME
+
 APP_ICON_PIXBUF = GdkPixbuf.Pixbuf.new_from_file(icons.APP_ICON_FILE)
 
 class ModelPaintMixer(pmix.PaintMixer):
@@ -176,6 +178,7 @@ class MainWindow(dialogue.MainWindow, actions.CAGandUIManager):
     recollect.define("mcmmtk_main_window", "last_geometry", recollect.Defn(str, ""))
     def __init__(self):
         dialogue.MainWindow.__init__(self)
+        self.set_title(APP_NAME)
         self.parse_geometry(recollect.get("mcmmtk_main_window", "last_geometry"))
         actions.CAGandUIManager.__init__(self)
         self.set_default_icon(APP_ICON_PIXBUF)

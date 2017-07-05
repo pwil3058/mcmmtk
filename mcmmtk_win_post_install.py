@@ -15,7 +15,7 @@ standards_dir = os.path.join(distutils.sysconfig.PREFIX, "share", NAME, "standar
 if sys.argv[1] == "-install":
     os.mkdir(start_menu_dir)
     directory_created(start_menu_dir)
-    for script, descr in [("mcmmtk_mixer.py", "Paint Mixer"), ("mcmmtk_editor.py", "Paint Series Editor"), ("mcmmtk_stds_editor.py", "Paint Standards Editor")]:
+    for script, descr in [("mcmmtk.py", "Modellers' Colour Matching/Mixing Tool Kit")]:
         target = os.path.join(distutils.sysconfig.PREFIX, "Scripts", script)
         for link_dir in [desktop_dir, start_menu_dir]:
             link = os.path.join(link_dir, descr + ".lnk")

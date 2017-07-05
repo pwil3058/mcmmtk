@@ -26,14 +26,14 @@ NAME = "ModellersColourMatcherMixer"
 
 SHORT_NAME = "mcmmtk"
 
-VERSION = "1.01"
+VERSION = "2.00"
 
-DESCRIPTION = "A set of tools for modellers to experiment with mixing colours."
+DESCRIPTION = "A tool for modellers to experiment with mixing colours."
 
 LONG_DESCRIPTION =\
 """
-This software is a set of tools for modellers who wish to experiment with
-mixing paints to match a specified colour.
+This software is a tool for modellers who wish to experiment with
+mixing paints to match a specified colour or standard.
 """
 
 LICENSE = "GNU General Public License (GPL) Version 2.0"
@@ -55,7 +55,7 @@ AUTHOR_EMAIL = "pwil3058@bigpond.net.au"
 
 URL = "http://sourceforge.net/projects/mcmmtk/"
 
-SCRIPTS = ["mcmmtk_mixer.py", "mcmmtk_editor.py", "mcmmtk_stds_editor.py"]
+SCRIPTS = ["mcmmtk.py"]
 
 PACKAGES = ["mcmmtk", "mcmmtk/bab", "mcmmtk/gtx", "mcmmtk/epaint", "mcmmtk/pixbufx"]
 
@@ -75,7 +75,7 @@ if for_windows:
     DESKTOP = []
     PIXMAPS = [("share/pixmaps", ["pixmaps/mcmmtk.png", "pixmaps/mcmmtk.ico"]), ("share/pixmaps/" + SHORT_NAME, ["pixmaps/mcmmtk.png", "pixmaps/mcmmtk.ico"])]
 else:
-    DESKTOP = [("share/applications", ["mcmmtk_editor.desktop", "mcmmtk_stds_editor.desktop", "mcmmtk_mixer.desktop"])]
+    DESKTOP = [("share/applications", ["mcmmtk.desktop"])]
     PIXMAPS = [("share/pixmaps", ["pixmaps/mcmmtk.png"]), ("share/pixmaps/" + SHORT_NAME, ["pixmaps/mcmmtk.png", "pixmaps/mcmmtk.ico"])]
 
 setup(
