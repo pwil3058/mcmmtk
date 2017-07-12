@@ -44,23 +44,14 @@ class ModelPaintMixer(pmix.PaintMixer):
     MIXED_PAINT_INFORMATION_DIALOGUE = pmix.MixedModelPaintInformationDialogue
     MIXTURE = pmix.ModelMixture
     MIXED_PAINT = pmix.MixedModelPaint
-    UI_DESCR = """
-    <ui>
-        <menubar name="mixer_menubar">
-            <menu action="mixer_file_menu">
-                <menuitem action="print_mixer"/>
-            </menu>
-        </menubar>
-    </ui>
-    """
 
 class ModelPaintListNotebook(gpaint.PaintListNotebook):
     class PAINT_LIST_VIEW(gpaint.ModelPaintListView):
         UI_DESCR = '''
             <ui>
-                <popup name='paint_list_popup'>
-                    <menuitem action='edit_clicked_paint'/>
-                    <menuitem action='remove_selected_paints'/>
+                <popup name="paint_list_popup">
+                    <menuitem action="edit_clicked_paint"/>
+                    <menuitem action="remove_selected_paints"/>
                 </popup>
             </ui>
             '''
@@ -70,14 +61,14 @@ class ModelPaintListNotebook(gpaint.PaintListNotebook):
             """
             self.action_groups[actions.AC_SELN_UNIQUE].add_actions(
                 [
-                    ('edit_selected_paint', Gtk.STOCK_EDIT, None, None,
-                     _('Load the selected paint into the paint editor.'), ),
+                    ("edit_selected_paint", Gtk.STOCK_EDIT, None, None,
+                     _("Load the selected paint into the paint editor."), ),
                 ]
             )
             self.action_groups[self.AC_CLICKED_ON_ROW].add_actions(
                 [
-                    ('edit_clicked_paint', Gtk.STOCK_EDIT, None, None,
-                     _('Load the clicked paint into the paint editor.'), ),
+                    ("edit_clicked_paint", Gtk.STOCK_EDIT, None, None,
+                     _("Load the clicked paint into the paint editor."), ),
                 ]
             )
 
@@ -85,69 +76,44 @@ class ModelPaintEditor(pedit.PaintEditor):
     PAINT = vpaint.ModelPaint
     RESET_CHARACTERISTICS = False
 
+COLLN_EDITOR_UI_DESC = """
+    <ui>
+    <toolbar name="colln_editor_toolbar">
+        <toolitem action="new_paint_collection"/>
+        <toolitem action="open_paint_collection_file"/>
+        <toolitem action="save_paint_collection_to_file"/>
+        <toolitem action="save_paint_collection_as_file"/>
+    </toolbar>
+    </ui>
+"""
+
 class ModelPaintSeriesEditor(Gtk.VBox):
     class Editor(pseries.PaintSeriesEditor):
         PAINT_EDITOR = ModelPaintEditor
         PAINT_LIST_NOTEBOOK = ModelPaintListNotebook
-        UI_DESCR = """
-        <ui>
-          <menubar name="paint_series_editor_menubar">
-            <menu action="paint_collection_editor_file_menu">
-              <menuitem action="new_paint_collection"/>
-              <menuitem action="open_paint_collection_file"/>
-              <menuitem action="save_paint_collection_to_file"/>
-              <menuitem action="save_paint_collection_as_file"/>
-            </menu>
-          </menubar>
-        </ui>
-        """
+        UI_DESCR = COLLN_EDITOR_UI_DESC
     def __init__(self):
         Gtk.VBox.__init__(self)
+        self.pack_start(Gtk.HSeparator(), expand=False, fill=True, padding=0)
         self.editor = self.Editor(pack_current_file_box=False)
-        self.editor.action_groups.get_action('close_colour_editor').set_visible(False)
+        self.editor.action_groups.get_action("close_colour_editor").set_visible(False)
         self.editor.set_file_path(None)
-        self._menubar = self.editor.ui_manager.get_widget('/paint_series_editor_menubar')
         hbox = Gtk.HBox()
-        hbox.pack_start(self._menubar, expand=False, fill=True, padding=0)
+        hbox.pack_start(self.editor.ui_manager.get_widget("/colln_editor_toolbar"), expand=False, fill=True, padding=0)
         hbox.pack_start(Gtk.VSeparator(), expand=False, fill=True, padding=0)
         hbox.pack_start(Gtk.Label("  "), expand=False, fill=True, padding=0)
         hbox.pack_start(self.editor.current_file_box, expand=True, fill=True, padding=0)
         self.pack_start(hbox, expand=False, fill=True, padding=0)
+        self.pack_start(Gtk.HSeparator(), expand=False, fill=True, padding=0)
         self.pack_start(self.editor, expand=True, fill=True, padding=0)
     def __getattr__(self, attr_name):
         return getattr(self.editor, attr_name)
 
-class ModelPaintStandardEditor(Gtk.VBox):
+class ModelPaintStandardEditor(ModelPaintSeriesEditor):
     class Editor(standards.PaintStandardEditor):
         PAINT_EDITOR = ModelPaintEditor
         PAINT_LIST_NOTEBOOK = ModelPaintListNotebook
-        UI_DESCR = """
-        <ui>
-          <menubar name="paint_standards_editor_menubar">
-            <menu action="paint_collection_editor_file_menu">
-              <menuitem action="new_paint_collection"/>
-              <menuitem action="open_paint_collection_file"/>
-              <menuitem action="save_paint_collection_to_file"/>
-              <menuitem action="save_paint_collection_as_file"/>
-            </menu>
-          </menubar>
-        </ui>
-        """
-    def __init__(self):
-        Gtk.VBox.__init__(self)
-        self.editor = self.Editor(pack_current_file_box=False)
-        self.editor.action_groups.get_action('close_colour_editor').set_visible(False)
-        self.editor.set_file_path(None)
-        self._menubar = self.editor.ui_manager.get_widget('/paint_standards_editor_menubar')
-        hbox = Gtk.HBox()
-        hbox.pack_start(self._menubar, expand=False, fill=True, padding=0)
-        hbox.pack_start(Gtk.VSeparator(), expand=False, fill=True, padding=0)
-        hbox.pack_start(Gtk.Label("  "), expand=False, fill=True, padding=0)
-        hbox.pack_start(self.editor.current_file_box, expand=True, fill=True, padding=0)
-        self.pack_start(hbox, expand=False, fill=True, padding=0)
-        self.pack_start(self.editor, expand=True, fill=True, padding=0)
-    def __getattr__(self, attr_name):
-        return getattr(self.editor, attr_name)
+        UI_DESCR = COLLN_EDITOR_UI_DESC
 
 @singleton
 class MainWindow(dialogue.MainWindow, actions.CAGandUIManager):
@@ -198,7 +164,7 @@ class MainWindow(dialogue.MainWindow, actions.CAGandUIManager):
                 msmm = msm.get_submenu()
                 msmm.prepend(self.paint_standards_manager.open_menu_item)
                 msmm.append(self.paint_standards_manager.remove_menu_item)
-        lmenu_bar = self.ui_manager.get_widget('/mcmmtk_left_menubar')
+        lmenu_bar = self.ui_manager.get_widget("/mcmmtk_left_menubar")
         vbox.pack_start(lmenu_bar, expand=False, fill=True, padding=0)
         self._stack = Gtk.Stack()
         self._stack.add_titled(ModelPaintMixer(paint_series_manager=self.paint_series_manager, paint_standards_manager=self.paint_standards_manager), "paint_mixer", self.MIXER_LABEL)
