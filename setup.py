@@ -57,7 +57,7 @@ URL = "http://sourceforge.net/projects/mcmmtk/"
 
 SCRIPTS = ["mcmmtk.py"]
 
-PACKAGES = ["mcmmtk", "mcmmtk/bab", "mcmmtk/gtx", "mcmmtk/epaint", "mcmmtk/pixbufx"]
+PACKAGES = ["mcmmtk_pkg", "mcmmtk_pkg/bab", "mcmmtk_pkg/gtx", "mcmmtk_pkg/epaint", "mcmmtk_pkg/pixbufx"]
 
 paints = glob.glob("data/*.psd")
 print("paints:", paints)
