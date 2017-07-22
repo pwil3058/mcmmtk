@@ -34,23 +34,27 @@ from .epaint import standards
 
 from . import APP_NAME
 
+from . import mpaint
+
 APP_ICON_PIXBUF = GdkPixbuf.Pixbuf.new_from_file(icons.APP_ICON_FILE)
 
 class ModelPaintMixer(pmix.PaintMixer):
-    PAINT = vpaint.ModelPaint
-    MATCHED_PAINT_LIST_VIEW = pmix.MatchedModelPaintListView
-    PAINT_SERIES_MANAGER = pseries.ModelPaintSeriesManager
-    PAINT_STANDARDS_MANAGER = standards.PaintStandardsManager
-    MIXED_PAINT_INFORMATION_DIALOGUE = pmix.MixedModelPaintInformationDialogue
-    MIXTURE = pmix.ModelMixture
-    MIXED_PAINT = pmix.MixedModelPaint
+    PAINT = mpaint.ModelPaint
+    MATCHED_PAINT_LIST_VIEW = mpaint.MatchedModelPaintListView
+    PAINT_SERIES_MANAGER = mpaint.ModelPaintSeriesManager
+    PAINT_STANDARDS_MANAGER = mpaint.ModelPaintStandardsManager
+    MIXED_PAINT_INFORMATION_DIALOGUE = mpaint.MixedModelPaintInformationDialogue
+    MIXTURE = mpaint.ModelMixture
+    MIXED_PAINT = mpaint.MixedModelPaint
+    TARGET_COLOUR = mpaint.ModelTargetColour
 
 class ModelPaintListNotebook(gpaint.PaintListNotebook):
-    class PAINT_LIST_VIEW(gpaint.ModelPaintListView):
+    class PAINT_LIST_VIEW(mpaint.ModelPaintListView):
         UI_DESCR = '''
             <ui>
                 <popup name="paint_list_popup">
                     <menuitem action="edit_clicked_paint"/>
+                    <menuitem action="show_paint_details"/>
                     <menuitem action="remove_selected_paints"/>
                 </popup>
             </ui>
@@ -73,7 +77,7 @@ class ModelPaintListNotebook(gpaint.PaintListNotebook):
             )
 
 class ModelPaintEditor(pedit.PaintEditor):
-    PAINT = vpaint.ModelPaint
+    PAINT = mpaint.ModelPaint
     RESET_CHARACTERISTICS = False
 
 COLLN_EDITOR_UI_DESC = """
@@ -91,6 +95,7 @@ class ModelPaintSeriesEditor(Gtk.VBox):
     class Editor(pseries.PaintSeriesEditor):
         PAINT_EDITOR = ModelPaintEditor
         PAINT_LIST_NOTEBOOK = ModelPaintListNotebook
+        PAINT_COLLECTION = mpaint.ModelPaintSeries
         UI_DESCR = COLLN_EDITOR_UI_DESC
     def __init__(self):
         Gtk.VBox.__init__(self)
@@ -113,6 +118,7 @@ class ModelPaintStandardEditor(ModelPaintSeriesEditor):
     class Editor(standards.PaintStandardEditor):
         PAINT_EDITOR = ModelPaintEditor
         PAINT_LIST_NOTEBOOK = ModelPaintListNotebook
+        PAINT_COLLECTION = mpaint.ModelPaintStandard
         UI_DESCR = COLLN_EDITOR_UI_DESC
 
 @singleton
@@ -150,8 +156,8 @@ class MainWindow(dialogue.MainWindow, actions.CAGandUIManager):
         self.set_default_icon(APP_ICON_PIXBUF)
         self.set_icon(APP_ICON_PIXBUF)
         self.connect("delete_event", lambda _w, _e: self.quit())
-        self.paint_series_manager = pseries.ModelPaintSeriesManager()
-        self.paint_standards_manager = standards.PaintStandardsManager()
+        self.paint_series_manager = mpaint.ModelPaintSeriesManager()
+        self.paint_standards_manager = mpaint.ModelPaintStandardsManager()
         vbox = Gtk.VBox()
         msm = self.ui_manager.get_widget("/mcmmtk_left_menubar/mcmmtk_series_manager_menu")
         if msm:
