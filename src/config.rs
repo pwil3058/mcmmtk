@@ -13,6 +13,8 @@
 // limitations under the License.
 
 use std::env;
+use std::fs::File;
+use std::io::{Read, Write};
 use std::path::PathBuf;
 
 use pathux;
@@ -40,6 +42,46 @@ fn get_config_dir_path() -> PathBuf {
 
 pub fn get_gui_config_dir_path() -> PathBuf {
     get_config_dir_path().join("rs_gui")
+}
+
+pub fn get_paint_series_files_data_path() -> PathBuf {
+    get_config_dir_path().join("paint_series_files")
+}
+
+pub fn get_series_file_paths() -> Vec<PathBuf> {
+    let mut vpb = Vec::new();
+    let file_path = get_config_dir_path().join("paint_series_files");
+    if !file_path.exists() {
+        return vpb
+    };
+    let mut file = File::open(&file_path).unwrap_or_else(
+        |err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err)
+    );
+    let mut string = String::new();
+    file.read_to_string(&mut string).unwrap_or_else(
+        |err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err)
+    );
+    for line in string.lines() {
+        vpb.push(PathBuf::from(line));
+    }
+
+    vpb
+}
+
+pub fn set_series_file_paths(file_paths: &Vec<PathBuf>) {
+    let file_path = get_config_dir_path().join("paint_series_files");
+    let mut file = File::create(&file_path).unwrap_or_else(
+        |err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err)
+    );
+    for file_path in file_paths.iter() {
+        if let Some(file_path_str) = file_path.to_str() {
+            write!(file, "{}\n", file_path_str).unwrap_or_else(
+                |err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err)
+            );
+        } else  {
+            panic!("File: {:?} Line: {:?}", file!(), line!())
+        };
+    }
 }
 
 #[cfg(test)]

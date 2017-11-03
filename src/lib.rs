@@ -12,15 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//#[macro_use]
+#[macro_use]
 extern crate pw_gix;
 
 extern crate gdk;
 extern crate gtk;
 
-mod config;
+pub mod config;
+pub mod model_paint;
 pub mod pathux;
 
 pub fn recollections() -> pw_gix::recollect::Recollections {
-    pw_gix::recollect::Recollections::new(&config::get_gui_config_dir_path().join("recollections"))
+    pw_gix::recollect::Recollections::new(Some(&config::get_gui_config_dir_path().join("recollections")))
 }

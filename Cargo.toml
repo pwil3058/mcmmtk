@@ -4,6 +4,7 @@ version = "0.1.0"
 authors = ["Peter Williams <pwil3058@gmail.com>"]
 
 [dependencies]
+lazy_static = "0.2.8"
 # TODO: change pw_gix dependency when it goes public
 #pw_gix = { git = "https://github.com/pwil3058/rs_pw_gix.git" }
 pw_gix = { git = "file:/home/peter/SRC/GITHUB/rs_pw_gix.git" }
@@ -13,5 +14,4 @@ gio = "0.2.0"
 gtk = "0.2.0"
 
 [features]
-default = ["gtk/v3_10"]
-
+default = ["gtk/v3_22"]
