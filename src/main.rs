@@ -55,7 +55,6 @@ impl ColourAttributeStackInterface for ColourAttributeStack {
     fn create() -> ColourAttributeStack {
         let vbox = gtk::Box::new(gtk::Orientation::Vertical, 0);
         let hcv_cads = HueChromaValueCADS::create();
-        //hcv_cads.pwo().set_size_request(200, 90);
         let rgb_entry_box = RGBHexEntryBox::create();
         let target_rgb_entry_box = RGBHexEntryBox::create();
         vbox.pack_start(&hcv_cads.pwo(), true, true, 0);
@@ -121,7 +120,12 @@ fn activate(app: &gtk::Application) {
         |arg| println!("ADD: {:?}", arg)
     );
     let psm = SeriesPaintManager::create();
-    vbox.pack_start(&psm.notebook, true, true, 0);
+    psm.set_target_colour(Some(&Colour::from((YELLOW + GREEN) * 0.5)));
+    let componeents_box_c = components_box.clone();
+    psm.connect_add_paint(
+        move |paint| componeents_box_c.add_series_paint(&paint)
+    );
+    vbox.pack_start(&psm.button(), true, true, 0);
     let label = gtk::Label::new("GUI is under construction");
     vbox.pack_start(&label, false, true, 0);
     window.add(&vbox);
