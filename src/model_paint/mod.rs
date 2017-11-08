@@ -74,13 +74,13 @@ impl FromStr for ModelPaintCharacteristics {
 
 pub type ModelSeriesPaint = SeriesPaint<ModelPaintCharacteristics>;
 pub type ModelSeriesPaintSpec = SeriesPaintSpec<ModelPaintCharacteristics>;
-pub type ModelSeriesPaintDisplayDialog = SeriesPaintDisplayDialog<ModelPaintCharacteristics, HueChromaValueCADS>;
+pub type ModelSeriesPaintDisplayDialog = SeriesPaintDisplayDialog<ModelPaintCharacteristics, HueGreynessValueCADS>;
 pub type ModelMixedPaint = MixedPaint<ModelPaintCharacteristics>;
 pub type ModelPaint = Paint<ModelPaintCharacteristics>;
 pub type ModelPaintSeries = PaintSeries<ModelPaintCharacteristics>;
 pub type ModelPaintComponentsBox = PaintComponentsBox<ModelPaintCharacteristics>;
-pub type ModelPaintMixer = PaintMixer<HueChromaValueCADS, ModelPaintCharacteristics>;
-pub type ModelPaintHueAttrWheel = PaintHueAttrWheel<ModelPaintCharacteristics, HueChromaValueCADS>;
+pub type ModelPaintMixer = PaintMixer<HueGreynessValueCADS, ModelPaintCharacteristics>;
+pub type ModelPaintHueAttrWheel = PaintHueAttrWheel<ModelPaintCharacteristics, HueGreynessValueCADS>;
 
 const IDEAL_PAINT_STR: &str =
 "Manufacturer: Imaginary
