@@ -124,16 +124,16 @@ impl ModelPaintSeriesViewInterface for ModelPaintSeriesView {
             gtk::Type::String,          // 1 Notes
             gtk::Type::String,          // 2 Greyness
             gtk::Type::String,          // 3 Value
-            gtk::Type::String,          // 4 Finish
-            gtk::Type::String,          // 5 Transparency
-            gtk::Type::String,          // 6 Metallic
-            gtk::Type::String,          // 7 Fluorescence
-            gdk::RGBA::static_type(),   // 8 Colour
-            gdk::RGBA::static_type(),   // 9 FG for Colour
-            gdk::RGBA::static_type(),   // 10 Monochrome Colour
-            gdk::RGBA::static_type(),   // 11 FG for Monochrome Colour
-            gdk::RGBA::static_type(),   // 12 Hue Colour
-            f64::static_type(),         // 13 Hue angle (radians)
+            gdk::RGBA::static_type(),   // 8 4 Colour
+            gdk::RGBA::static_type(),   // 9 5 FG for Colour
+            gdk::RGBA::static_type(),   // 10 6 Monochrome Colour
+            gdk::RGBA::static_type(),   // 11 7 FG for Monochrome Colour
+            gdk::RGBA::static_type(),   // 12 8 Hue Colour
+            f64::static_type(),         // 13 9 Hue angle (radians)
+            gtk::Type::String,          // 4 10 Finish
+            gtk::Type::String,          // 5 11 Transparency
+            gtk::Type::String,          // 6 12 Metallic
+            gtk::Type::String,          // 7 13 Fluorescence
         ]);
         for paint in series.get_series_paints().iter() {
             let rgba: gdk::RGBA = paint.colour().rgb().into();
@@ -146,16 +146,16 @@ impl ModelPaintSeriesViewInterface for ModelPaintSeriesView {
                 paint.notes().to_value(),
                 format!("{:5.4}", paint.colour().greyness()).to_value(),
                 format!("{:5.4}", paint.colour().value()).to_value(),
-                paint.characteristics().finish.abbrev().to_value(),
-                paint.characteristics().transparency.abbrev().to_value(),
-                paint.characteristics().metallic.abbrev().to_value(),
-                paint.characteristics().fluorescence.abbrev().to_value(),
                 rgba.to_value(),
                 frgba.to_value(),
                 mrgba.to_value(),
                 mfrgba.to_value(),
                 hrgba.to_value(),
                 paint.colour().hue().angle().radians().to_value(),
+                paint.characteristics().finish.abbrev().to_value(),
+                paint.characteristics().transparency.abbrev().to_value(),
+                paint.characteristics().metallic.abbrev().to_value(),
+                paint.characteristics().fluorescence.abbrev().to_value(),
             ];
             list_store.append_row(&row);
         }
@@ -187,27 +187,27 @@ impl ModelPaintSeriesViewInterface for ModelPaintSeriesView {
             }
         );
 
-        mspl.view.append_column(&text_column!("Name", 0, 8, 9, true, -1));
-        mspl.view.append_column(&text_column!("Notes", 1, 8, 9, true, -1));
+        mspl.view.append_column(&text_column!("Name", 0, 4, 5, true, -1));
+        mspl.view.append_column(&text_column!("Notes", 1, 4, 5, true, -1));
 
         let col = gtk::TreeViewColumn::new();
         col.set_title("Hue");
-        col.set_sort_column_id(13);
+        col.set_sort_column_id(9);
         col.set_fixed_width(40);
         let cell = gtk::CellRendererText::new();
         cell.set_property_editable(false);
         col.pack_start(&cell, true);
-        col.add_attribute(&cell, "background-rgba", 12);
+        col.add_attribute(&cell, "background-rgba", 8);
         mspl.view.append_column(&col);
 
         let fw = 60;
-        mspl.view.append_column(&text_column!("Grey", 2, 8, 9, false,fw));
-        mspl.view.append_column(&text_column!("Value", 3, 10, 11, false,fw));
+        mspl.view.append_column(&text_column!("Grey", 2, 4, 5, false,fw));
+        mspl.view.append_column(&text_column!("Value", 3, 6, 7, false,fw));
         let cfw = 30;
-        mspl.view.append_column(&text_column!("Fi.", 4, 8, 9, false, cfw));
-        mspl.view.append_column(&text_column!("Tr.", 5, 8, 9, false, cfw));
-        mspl.view.append_column(&text_column!("Me.", 6, 8, 9, false, cfw));
-        mspl.view.append_column(&text_column!("Fl.", 7, 8, 9, false, cfw));
+        mspl.view.append_column(&text_column!("Fi.", 10, 4, 5, false, cfw));
+        mspl.view.append_column(&text_column!("Tr.", 11, 4, 5, false, cfw));
+        mspl.view.append_column(&text_column!("Me.", 12, 4, 5, false, cfw));
+        mspl.view.append_column(&text_column!("Fl.", 13, 4, 5, false, cfw));
 
         mspl.view.show_all();
 
