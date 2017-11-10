@@ -14,6 +14,7 @@
 
 #[macro_use]
 extern crate pw_gix;
+extern crate epaint;
 
 extern crate gdk;
 extern crate gtk;
@@ -22,6 +23,6 @@ pub mod config;
 pub mod model_paint;
 pub mod pathux;
 
-pub fn recollections() -> pw_gix::recollect::Recollections {
-    pw_gix::recollect::Recollections::new(Some(&config::get_gui_config_dir_path().join("recollections")))
-}
+//pub fn recollections() -> pw_gix::recollect::Recollections {
+    //pw_gix::recollect::Recollections::new(Some(&config::get_gui_config_dir_path().join("recollections")))
+//}

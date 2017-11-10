@@ -25,6 +25,7 @@ use pw_gix::dialogue::*;
 use pw_gix::gtkx::list_store::*;
 use pw_gix::gtkx::notebook::*;
 use pw_gix::gtkx::paned::*;
+use pw_gix::gtkx::tree_view_column::*;
 use pw_gix::gtkx::window::*;
 use pw_gix::pwo::*;
 
@@ -119,7 +120,7 @@ macro_rules! text_column {
 
 impl ModelPaintSeriesViewInterface for ModelPaintSeriesView {
     fn create(series: &ModelPaintSeries) -> ModelPaintSeriesView {
-        let list_store = gtk::ListStore::new(&[
+        let spec = [
             gtk::Type::String,          // 0 Name
             gtk::Type::String,          // 1 Notes
             gtk::Type::String,          // 2 Greyness
@@ -134,7 +135,9 @@ impl ModelPaintSeriesViewInterface for ModelPaintSeriesView {
             gtk::Type::String,          // 5 11 Transparency
             gtk::Type::String,          // 6 12 Metallic
             gtk::Type::String,          // 7 13 Fluorescence
-        ]);
+        ];
+        let len = 14;
+        let list_store = gtk::ListStore::new(&spec[0..len]);
         for paint in series.get_series_paints().iter() {
             let rgba: gdk::RGBA = paint.colour().rgb().into();
             let frgba: gdk::RGBA = paint.colour().rgb().best_foreground_rgb().into();
@@ -187,7 +190,7 @@ impl ModelPaintSeriesViewInterface for ModelPaintSeriesView {
             }
         );
 
-        mspl.view.append_column(&text_column!("Name", 0, 4, 5, true, -1));
+        mspl.view.append_column(&simple_text_column("Name", 0, 0, 4, 5, -1, true));
         mspl.view.append_column(&text_column!("Notes", 1, 4, 5, true, -1));
 
         let col = gtk::TreeViewColumn::new();
@@ -198,7 +201,7 @@ impl ModelPaintSeriesViewInterface for ModelPaintSeriesView {
         cell.set_property_editable(false);
         col.pack_start(&cell, true);
         col.add_attribute(&cell, "background-rgba", 8);
-        mspl.view.append_column(&col);
+        mspl.view.append_column(&simple_text_column("Hue", -1, 9, 8, -1, 50, true));
 
         let fw = 60;
         mspl.view.append_column(&text_column!("Grey", 2, 4, 5, false,fw));

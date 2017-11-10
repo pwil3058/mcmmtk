@@ -2,6 +2,7 @@ extern crate gtk;
 extern crate gio;
 extern crate lazy_static;
 
+extern crate epaint;
 extern crate pw_gix;
 
 extern crate mcmmtk;
@@ -15,17 +16,14 @@ use gtk::prelude::*;
 use pw_gix::colour;
 use pw_gix::colour::*;
 use pw_gix::colour::attributes::*;
-//use pw_gix::gtkx::entry;
 use pw_gix::gtkx::entry::*;
 use pw_gix::gtkx::window::*;
 use pw_gix::pwo::*;
-use pw_gix::rgb_math::rgb::*;
-//use pw_gix::paint::*;
-use pw_gix::paint::components::*;
-use pw_gix::paint::hue_wheel::*;
-use pw_gix::paint::mixer::*;
-use pw_gix::paint::target::*;
 use pw_gix::recollections;
+use pw_gix::rgb_math::rgb::*;
+
+use epaint::mixer::*;
+use epaint::target::*;
 
 //use mcmmtk::recollections;
 use mcmmtk::config;

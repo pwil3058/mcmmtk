@@ -18,13 +18,13 @@ use gtk::prelude::*;
 use std::str::FromStr;
 
 use pw_gix::colour::attributes::*;
-use pw_gix::paint::*;
-use pw_gix::paint::characteristics::*;
-use pw_gix::paint::components::*;
-use pw_gix::paint::hue_wheel::*;
-use pw_gix::paint::mixed::*;
-use pw_gix::paint::mixer::*;
-use pw_gix::paint::series::*;
+use epaint::paint::*;
+use epaint::characteristics::*;
+use epaint::components::*;
+use epaint::hue_wheel::*;
+use epaint::mixed::*;
+use epaint::mixer::*;
+use epaint::series::*;
 
 pub mod series;
 
