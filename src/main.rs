@@ -7,6 +7,7 @@ extern crate pw_gix;
 
 extern crate mcmmtk;
 
+use std::path::*;
 use std::rc::Rc;
 
 use gio::ApplicationExt;
@@ -28,7 +29,7 @@ use epaint::target::*;
 //use mcmmtk::recollections;
 use mcmmtk::config;
 use mcmmtk::model_paint::*;
-use mcmmtk::model_paint::series::*;
+//use mcmmtk::model_paint::series::*;
 
 fn activate(app: &gtk::Application) {
     let window = gtk::ApplicationWindow::new(app);
@@ -42,7 +43,8 @@ fn activate(app: &gtk::Application) {
     let mixer = ModelPaintMixer::create();
     mixer.set_target_colour(Some(&current_target));
     vbox.pack_start(&mixer.pwo(), true, true, 0);
-    let psm = SeriesPaintManager::create();
+    let data_path = config::get_paint_series_files_data_path();
+    let psm = ModelPaintSeriesManager::create(&data_path);
     psm.set_target_colour(Some(&current_target));
     vbox.pack_start(&psm.button(), false, false, 0);
     let mixer_c = mixer.clone();

@@ -30,8 +30,7 @@ use epaint::hue_wheel::*;
 use epaint::mixed_paint::*;
 use epaint::mixer::*;
 use epaint::series_paint::*;
-
-pub mod series;
+pub use epaint::series_paint::manager::*;
 
 #[derive(Debug, PartialEq, Hash, Clone, Copy)]
 pub struct ModelPaintCharacteristics {
@@ -173,6 +172,7 @@ pub type ModelPaintComponentsBox = PaintComponentsBox<ModelPaintCharacteristics>
 pub type ModelPaintMixer = PaintMixer<ModelPaintAttributes, ModelPaintCharacteristics>;
 pub type ModelPaintHueAttrWheel = PaintHueAttrWheel<ModelPaintAttributes, ModelPaintCharacteristics>;
 pub type ModelPaintSeriesView = PaintSeriesView<ModelPaintAttributes, ModelPaintCharacteristics>;
+pub type ModelPaintSeriesManager = SeriesPaintManager<ModelPaintAttributes, ModelPaintCharacteristics>;
 
 const IDEAL_PAINT_STR: &str =
 "Manufacturer: Imaginary
