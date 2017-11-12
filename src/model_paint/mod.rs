@@ -131,17 +131,11 @@ impl ColourAttributesInterface for ModelPaintAttributes {
 
     fn tv_columns() -> Vec<gtk::TreeViewColumn> {
         let fw = 60;
-        let mut cols = vec![
-            simple_text_column("Name", 0, 0, 6, 7, -1, true),
-            simple_text_column("Notes", 1, 1, 6, 7, -1, true),
+        vec![
             simple_text_column("Hue", -1, 13, 10, -1, 50, true),
             simple_text_column("Grey", 3, 3, 6, 7, fw, false),
             simple_text_column("Value", 4, 4, 8, 9, fw, false),
-        ];
-        for col in ModelPaintCharacteristics::tv_columns(14).iter() {
-            cols.push(col.clone());
-        }
-        cols
+        ]
     }
 
     fn scalar_attributes() -> Vec<ScalarAttribute> {
