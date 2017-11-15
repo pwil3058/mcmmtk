@@ -15,6 +15,7 @@
 use gtk;
 use gtk::prelude::*;
 
+use std::cell::RefCell;
 use std::rc::Rc;
 use std::str::FromStr;
 
@@ -23,6 +24,7 @@ use pw_gix::colour::attributes::*;
 use pw_gix::gtkx::tree_view_column::*;
 use pw_gix::pwo::*;
 
+use epaint::display::*;
 use epaint::paint::*;
 use epaint::characteristics::*;
 use epaint::components::*;
@@ -41,6 +43,8 @@ pub struct ModelPaintCharacteristics {
 }
 
 impl CharacteristicsInterface for ModelPaintCharacteristics {
+    type Entry = Rc<ModelPaintCharacteristicsEntryCore>;
+
     fn tv_row_len() -> usize {
         4
     }
@@ -53,6 +57,15 @@ impl CharacteristicsInterface for ModelPaintCharacteristics {
         cols.push(simple_text_column("Me.", start_col_id + 2, start_col_id + 2, 6, 7, cfw, false));
         cols.push(simple_text_column("Fl.", start_col_id + 3, start_col_id + 3, 6, 7, cfw, false));
         cols
+    }
+
+    fn from_floats(floats: &Vec<f64>) -> Self {
+        ModelPaintCharacteristics {
+            finish: Finish::from(floats[0]),
+            transparency: Transparency::from(floats[1]),
+            fluorescence: Fluorescence::from(floats[2]),
+            metallic: Metallic::from(floats[3])
+        }
     }
 
     fn tv_rows(&self) -> Vec<gtk::Value> {
@@ -77,6 +90,15 @@ impl CharacteristicsInterface for ModelPaintCharacteristics {
         vbox.show_all();
         vbox
     }
+
+    fn to_floats(&self) -> Vec<f64> {
+        vec![
+            self.finish.into(),
+            self.transparency.into(),
+            self.fluorescence.into(),
+            self.metallic.into(),
+        ]
+    }
 }
 
 impl FromStr for ModelPaintCharacteristics {
@@ -96,6 +118,107 @@ impl FromStr for ModelPaintCharacteristics {
             Err(_) => Metallic::Nonmetallic,
         };
         Ok(ModelPaintCharacteristics{finish, transparency, fluorescence, metallic})
+    }
+}
+
+pub struct ModelPaintCharacteristicsEntryCore {
+    vbox: gtk::Box,
+    finish_entry: FinishEntry,
+    transparency_entry: TransparencyEntry,
+    fluorescence_entry: FluorescenceEntry,
+    metallic_entry: MetallicEntry,
+    changed_callbacks: RefCell<Vec<Box<Fn()>>>,
+}
+
+impl ModelPaintCharacteristicsEntryCore {
+    fn inform_changed(&self) {
+        for callback in self.changed_callbacks.borrow().iter() {
+            callback();
+        }
+    }
+}
+
+impl CharacteristicsEntryInterface<ModelPaintCharacteristics> for Rc<ModelPaintCharacteristicsEntryCore> {
+    fn create() -> Self {
+        let cei = Rc::new(
+            ModelPaintCharacteristicsEntryCore {
+                vbox: gtk::Box::new(gtk::Orientation::Vertical, 0),
+                finish_entry: FinishEntry::create(),
+                transparency_entry: TransparencyEntry::create(),
+                fluorescence_entry: FluorescenceEntry::create(),
+                metallic_entry: MetallicEntry::create(),
+                changed_callbacks: RefCell::new(Vec::new()),
+            }
+        );
+        let cei_c = cei.clone();
+        cei.finish_entry.combo_box_text().connect_changed(
+            move |_| cei_c.inform_changed()
+        );
+        let cei_c = cei.clone();
+        cei.transparency_entry.combo_box_text().connect_changed(
+            move |_| cei_c.inform_changed()
+        );
+        let cei_c = cei.clone();
+        cei.fluorescence_entry.combo_box_text().connect_changed(
+            move |_| cei_c.inform_changed()
+        );
+        let cei_c = cei.clone();
+        cei.metallic_entry.combo_box_text().connect_changed(
+            move |_| cei_c.inform_changed()
+        );
+        cei.vbox.pack_start(&cei.finish_entry.combo_box_text(), false, false, 0);
+        cei.vbox.pack_start(&cei.transparency_entry.combo_box_text(), false, false, 0);
+        cei.vbox.pack_start(&cei.fluorescence_entry.combo_box_text(), false, false, 0);
+        cei.vbox.pack_start(&cei.metallic_entry.combo_box_text(), false, false, 0);
+        cei.vbox.show_all();
+        cei
+    }
+
+    fn pwo(&self) -> gtk::Box {
+        self.vbox.clone()
+    }
+
+    fn get_characteristics(&self) -> Option<ModelPaintCharacteristics> {
+        let finish = if let Some(value) = self.finish_entry.get_value() {
+            value
+        } else {
+            return None
+        };
+        let transparency = if let Some(value) = self.transparency_entry.get_value() {
+            value
+        } else {
+            return None
+        };
+        let fluorescence = if let Some(value) = self.fluorescence_entry.get_value() {
+            value
+        } else {
+            return None
+        };
+        let metallic = if let Some(value) = self.metallic_entry.get_value() {
+            value
+        } else {
+            return None
+        };
+        Some(ModelPaintCharacteristics {finish, transparency, fluorescence, metallic})
+    }
+
+    fn set_characteristics(&self, o_characteristics: Option<&ModelPaintCharacteristics>) {
+        if let Some(characteristics) = o_characteristics {
+            self.finish_entry.set_value(Some(characteristics.finish));
+            self.transparency_entry.set_value(Some(characteristics.transparency));
+            self.fluorescence_entry.set_value(Some(characteristics.fluorescence));
+            self.metallic_entry.set_value(Some(characteristics.metallic));
+
+        } else {
+            self.finish_entry.set_value(None);
+            self.transparency_entry.set_value(None);
+            self.fluorescence_entry.set_value(None);
+            self.metallic_entry.set_value(None);
+        }
+    }
+
+    fn connect_changed<F: 'static + Fn()>(&self, callback: F) {
+        self.changed_callbacks.borrow_mut().push(Box::new(callback))
     }
 }
 
@@ -158,9 +281,9 @@ impl ColourAttributesInterface for ModelPaintAttributes {
 
 pub type ModelSeriesPaint = SeriesPaint<ModelPaintCharacteristics>;
 pub type ModelSeriesPaintSpec = SeriesPaintSpec<ModelPaintCharacteristics>;
-pub type ModelSeriesPaintDisplayDialog = SeriesPaintDisplayDialog<ModelPaintAttributes, ModelPaintCharacteristics>;
 pub type ModelMixedPaint = MixedPaint<ModelPaintCharacteristics>;
 pub type ModelPaint = Paint<ModelPaintCharacteristics>;
+pub type ModelPaintDisplayDialog = PaintDisplayDialog<ModelPaintAttributes, ModelPaintCharacteristics>;
 pub type ModelPaintSeries = PaintSeries<ModelPaintCharacteristics>;
 pub type ModelPaintComponentsBox = PaintComponentsBox<ModelPaintCharacteristics>;
 pub type ModelPaintMixer = PaintMixer<ModelPaintAttributes, ModelPaintCharacteristics>;

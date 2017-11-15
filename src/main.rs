@@ -24,7 +24,9 @@ use pw_gix::recollections;
 use pw_gix::rgb_math::rgb::*;
 
 use epaint::mixer::*;
+use epaint::paint::{CharacteristicsInterface, CharacteristicsEntryInterface};
 use epaint::target::*;
+use epaint::characteristics::*;
 
 //use mcmmtk::recollections;
 use mcmmtk::config;
@@ -51,6 +53,9 @@ fn activate(app: &gtk::Application) {
     psm.connect_add_paint(
         move |paint| mixer_c.add_series_paint(paint)
     );
+    let ce = <ModelPaintCharacteristics as CharacteristicsInterface>::Entry::create();
+    vbox.pack_start(&ce.pwo(), false, true, 0);
+    ce.connect_changed(|| println!("characteristics changed"));
     let label = gtk::Label::new("GUI is under construction");
     vbox.pack_start(&label, false, true, 0);
     window.add(&vbox);
