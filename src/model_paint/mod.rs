@@ -27,11 +27,12 @@ use pw_gix::pwo::*;
 use epaint::display::*;
 use epaint::paint::*;
 use epaint::characteristics::*;
-use epaint::components::*;
 use epaint::hue_wheel::*;
 use epaint::mixed_paint::*;
-use epaint::mixer::*;
+use epaint::mixed_paint::components::*;
+use epaint::mixed_paint::mixer::*;
 use epaint::series_paint::*;
+pub use epaint::series_paint::entry::*;
 pub use epaint::series_paint::manager::*;
 
 #[derive(Debug, PartialEq, Hash, Clone, Copy)]
@@ -122,7 +123,7 @@ impl FromStr for ModelPaintCharacteristics {
 }
 
 pub struct ModelPaintCharacteristicsEntryCore {
-    vbox: gtk::Box,
+    grid: gtk::Grid,
     finish_entry: FinishEntry,
     transparency_entry: TransparencyEntry,
     fluorescence_entry: FluorescenceEntry,
@@ -142,7 +143,7 @@ impl CharacteristicsEntryInterface<ModelPaintCharacteristics> for Rc<ModelPaintC
     fn create() -> Self {
         let cei = Rc::new(
             ModelPaintCharacteristicsEntryCore {
-                vbox: gtk::Box::new(gtk::Orientation::Vertical, 0),
+                grid: gtk::Grid::new(),
                 finish_entry: FinishEntry::create(),
                 transparency_entry: TransparencyEntry::create(),
                 fluorescence_entry: FluorescenceEntry::create(),
@@ -166,16 +167,33 @@ impl CharacteristicsEntryInterface<ModelPaintCharacteristics> for Rc<ModelPaintC
         cei.metallic_entry.combo_box_text().connect_changed(
             move |_| cei_c.inform_changed()
         );
-        cei.vbox.pack_start(&cei.finish_entry.combo_box_text(), false, false, 0);
-        cei.vbox.pack_start(&cei.transparency_entry.combo_box_text(), false, false, 0);
-        cei.vbox.pack_start(&cei.fluorescence_entry.combo_box_text(), false, false, 0);
-        cei.vbox.pack_start(&cei.metallic_entry.combo_box_text(), false, false, 0);
-        cei.vbox.show_all();
+        cei.finish_entry.combo_box_text().set_hexpand(true);
+        cei.transparency_entry.combo_box_text().set_hexpand(true);
+        cei.fluorescence_entry.combo_box_text().set_hexpand(true);
+        cei.metallic_entry.combo_box_text().set_hexpand(true);
+        let label = gtk::Label::new(Some(Finish::prompt().as_str()));
+        label.set_halign(gtk::Align::End);
+        cei.grid.attach(&label, 0, 0, 1, 1);
+        cei.grid.attach_next_to(&cei.finish_entry.combo_box_text(), Some(&label), gtk::PositionType::Right, 1, 1);
+        let label = gtk::Label::new(Some(Transparency::prompt().as_str()));
+        label.set_halign(gtk::Align::End);
+        cei.grid.attach(&label, 0, 1, 1, 1);
+        cei.grid.attach_next_to(&cei.transparency_entry.combo_box_text(), Some(&label), gtk::PositionType::Right, 1, 1);
+        let label = gtk::Label::new(Some(Fluorescence::prompt().as_str()));
+        label.set_halign(gtk::Align::End);
+        cei.grid.attach(&label, 0, 2, 1, 1);
+        cei.grid.attach_next_to(&cei.fluorescence_entry.combo_box_text(), Some(&label), gtk::PositionType::Right, 1, 1);
+        let label = gtk::Label::new(Some(Metallic::prompt().as_str()));
+        label.set_halign(gtk::Align::End);
+        cei.grid.attach(&label, 0, 3, 1, 1);
+        cei.grid.attach_next_to(&cei.metallic_entry.combo_box_text(), Some(&label), gtk::PositionType::Right, 1, 1);
+
+        cei.grid.show_all();
         cei
     }
 
-    fn pwo(&self) -> gtk::Box {
-        self.vbox.clone()
+    fn pwo(&self) -> gtk::Grid {
+        self.grid.clone()
     }
 
     fn get_characteristics(&self) -> Option<ModelPaintCharacteristics> {
@@ -255,9 +273,9 @@ impl ColourAttributesInterface for ModelPaintAttributes {
     fn tv_columns() -> Vec<gtk::TreeViewColumn> {
         let fw = 60;
         vec![
-            simple_text_column("Hue", -1, 13, 10, -1, 50, true),
-            simple_text_column("Grey", 3, 3, 6, 7, fw, false),
-            simple_text_column("Value", 4, 4, 8, 9, fw, false),
+            simple_text_column("Hue", -1, SP_HUE_ANGLE, SP_HUE_RGB, -1, 50, false),
+            simple_text_column("Grey", SP_GREYNESS, SP_GREYNESS, SP_RGB, SP_RGB_FG, fw, false),
+            simple_text_column("Value", SP_VALUE, SP_VALUE, SP_MONO_RGB, SP_MONO_RGB, fw, false),
         ]
     }
 
@@ -290,6 +308,7 @@ pub type ModelPaintMixer = PaintMixer<ModelPaintAttributes, ModelPaintCharacteri
 pub type ModelPaintHueAttrWheel = PaintHueAttrWheel<ModelPaintAttributes, ModelPaintCharacteristics>;
 pub type ModelPaintSeriesView = PaintSeriesView<ModelPaintAttributes, ModelPaintCharacteristics>;
 pub type ModelPaintSeriesManager = SeriesPaintManager<ModelPaintAttributes, ModelPaintCharacteristics>;
+pub type ModelSeriesPaintEntry = SeriesPaintEntry<ModelPaintAttributes, ModelPaintCharacteristics>;
 
 const IDEAL_PAINT_STR: &str =
 "Manufacturer: Imaginary

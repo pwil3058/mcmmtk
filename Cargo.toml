@@ -13,8 +13,9 @@ pw_gix = { git = "file:/home/peter/SRC/GITHUB/rs_pw_gix.git" }
 epaint = { git = "file:/home/peter/SRC/GITHUB/rs_epaint.git" }
 
 gdk = "0.6.0"
+gdk-pixbuf = "0.2.0"
 gio = "0.2.0"
 gtk = "0.2.0"
 
 [features]
-default = ["gtk/v3_22"]
+default = ["gtk/v3_14"]
