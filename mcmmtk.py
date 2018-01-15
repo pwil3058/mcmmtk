@@ -1,4 +1,4 @@
-#! /bin/env python3
+#! /usr/bin/env python3
 ### Copyright: Peter Williams (2014) - All rights reserved
 ###
 ### This program is free software; you can redistribute it and/or modify
