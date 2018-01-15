@@ -38,6 +38,10 @@ class ModelPaint(vpaint.Paint):
         NAMES = ("transparency", "finish", "metallic", "fluorescence")
     EXTRAS = [vpaint.EXTRA("notes", _("Notes:"), "")]
 
+# allow reading of newer specification files
+def PaintSpec(name, rgb, **kwargs):
+    return ModelPaint(name, rgb, **kwargs)
+
 class ModelTargetColour(vpaint.TargetColour):
     COLOUR = ModelPaint.COLOUR
 
