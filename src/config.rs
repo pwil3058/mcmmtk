@@ -19,7 +19,7 @@ use std::path::PathBuf;
 
 use pathux;
 
-const DEFAULT_CONFIG_DIR_PATH: &str = "~/.config/mcmmtk";
+const DEFAULT_CONFIG_DIR_PATH: &str = "~/.config/mcmmtk/ng";
 
 const DCDP_OVERRIDE_ENVAR: &str = "MCMMTK_CONFIG_DIR";
 
@@ -44,6 +44,7 @@ pub fn get_gui_config_dir_path() -> PathBuf {
     get_config_dir_path().join("rs_gui")
 }
 
+// SERIES PAINT DATA FILES
 pub fn get_paint_series_files_data_path() -> PathBuf {
     get_config_dir_path().join("paint_series_files")
 }
@@ -70,6 +71,47 @@ pub fn get_series_file_paths() -> Vec<PathBuf> {
 
 pub fn set_series_file_paths(file_paths: &Vec<PathBuf>) {
     let file_path = get_config_dir_path().join("paint_series_files");
+    let mut file = File::create(&file_path).unwrap_or_else(
+        |err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err)
+    );
+    for file_path in file_paths.iter() {
+        if let Some(file_path_str) = file_path.to_str() {
+            write!(file, "{}\n", file_path_str).unwrap_or_else(
+                |err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err)
+            );
+        } else  {
+            panic!("File: {:?} Line: {:?}", file!(), line!())
+        };
+    }
+}
+
+// PAINT STANDARD DATA FILES
+pub fn get_paint_standards_files_data_path() -> PathBuf {
+    get_config_dir_path().join("paint_standards_files")
+}
+
+pub fn get_standards_file_paths() -> Vec<PathBuf> {
+    let mut vpb = Vec::new();
+    let file_path = get_config_dir_path().join("paint_standards_files");
+    if !file_path.exists() {
+        return vpb
+    };
+    let mut file = File::open(&file_path).unwrap_or_else(
+        |err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err)
+    );
+    let mut string = String::new();
+    file.read_to_string(&mut string).unwrap_or_else(
+        |err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err)
+    );
+    for line in string.lines() {
+        vpb.push(PathBuf::from(line));
+    }
+
+    vpb
+}
+
+pub fn set_standards_file_paths(file_paths: &Vec<PathBuf>) {
+    let file_path = get_config_dir_path().join("paint_standards_files");
     let mut file = File::create(&file_path).unwrap_or_else(
         |err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err)
     );
