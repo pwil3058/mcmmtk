@@ -15,16 +15,16 @@
 use std::env;
 use std::fs::File;
 use std::io::{Read, Write};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
-use pathux;
+use pw_pathux;
 
 const DEFAULT_CONFIG_DIR_PATH: &str = "~/.config/mcmmtk/ng";
 
 const DCDP_OVERRIDE_ENVAR: &str = "MCMMTK_CONFIG_DIR";
 
 pub fn abs_default_config_dir_path() -> PathBuf {
-    pathux::expand_home_dir(DEFAULT_CONFIG_DIR_PATH)
+    pw_pathux::expand_home_dir_or_mine(&Path::new(DEFAULT_CONFIG_DIR_PATH))
 }
 
 fn get_config_dir_path() -> PathBuf {
@@ -32,7 +32,7 @@ fn get_config_dir_path() -> PathBuf {
         Ok(dir_path) => if dir_path.len() == 0 {
             abs_default_config_dir_path()
         } else if dir_path.starts_with("~") {
-            pathux::expand_home_dir(&dir_path)
+            pw_pathux::expand_home_dir_or_mine(&Path::new(&dir_path))
         } else {
             PathBuf::from(dir_path)
         },

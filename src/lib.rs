@@ -14,6 +14,7 @@
 
 extern crate pw_gix;
 extern crate epaint;
+extern crate pw_pathux;
 
 extern crate gdk;
 extern crate gdk_pixbuf;
@@ -21,4 +22,3 @@ extern crate gtk;
 
 pub mod config;
 pub mod icon;
-pub mod pathux;
