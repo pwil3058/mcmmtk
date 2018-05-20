@@ -12,8 +12,8 @@ pw_gix = { git = "https://github.com/pwil3058/rs_pw_gix.git" }
 pw_pathux = { git = "https://github.com/pwil3058/rs_pw_pathux.git" }
 #pw_pathux = { git = "file:/home/peter/SRC/GITHUB/rs_pw_pathux.git" }
 # TODO: change epaint dependency when it goes public
-#epaint = { git = "https://github.com/pwil3058/rs_epaint.git" }
-epaint = { git = "file:/home/peter/SRC/GITHUB/rs_epaint.git" }
+epaint = { git = "https://github.com/pwil3058/rs_epaint.git" }
+#epaint = { git = "file:/home/peter/SRC/GITHUB/rs_epaint.git" }
 
 gdk = "0.8.0"
 gdk-pixbuf = "0.4.0"
