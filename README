@@ -11,19 +11,27 @@ this time.
 
 REQUIREMENTS:
 
-This software requires:
+There are two versions of this software: a Python3 script and a Rust
+compilable program.
+
+The Python3 version of the software requires:
  - Python 3.4.3 or later
  - PyGObject 3.22 or later
+
+The Rust version requires rustc 1.26.2 or later.
 
 INSTALLATION:
 
 It is NOT necessary to install this software in order to use it.  All
-that is necessary for the applications to be usable is for the base
-directory to be in the user's PATH environment variable.
+that is necessary for the Python3 version to be usable is for the base
+directory to be in the user's PATH environment variable.  For the Rust
+version all that is required is for the .target/release and/or
+.target/debug (as appropriate) to be in the user's PATH environment
+variable.
 
 USAGE:
 
-The software's GUI (mcmmtk.py) has 3 selectable components:
+The software's GUI (mcmmtk.py or mcmmtk_rs) has 3 selectable components:
 
 1. The Paint Mixer is the component that (once the user
 has specified a colour to be matched and selected some paints for use)
@@ -79,22 +87,18 @@ to its accuracy is made (caveat emptor).
 
 INTERNATIONALIZATION:
 
-The code is extensively hooked for i18n but (at the moment) there is no
-localization available for languages other than English.
+The Python3 code is extensively hooked for i18n but (at the moment)
+there is no localization available for languages other than English.
 
 BUGS:
 
 It would be greatly appreciated if any bugs encountered by users are
 reported by creating an issue at:
 
-<http://sourceforge.net/p/mcmmtk/tickets/>
+<https://github.com/pwil3058/mcmmtk/issues>
 
 FEATURE REQUESTS:
 
 Feature requests can be made by creating an issue at:
 
-<http://sourceforge.net/p/mcmmtk/tickets/>
-
-or on the discussion list:
-
-<https://sourceforge.net/p/mcmmtk/discussion/>
+<https://github.com/pwil3058/mcmmtk/issues>.
