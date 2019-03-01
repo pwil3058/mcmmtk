@@ -1,6 +1,6 @@
 extern crate gdk_pixbuf;
-extern crate gtk;
 extern crate gio;
+extern crate gtk;
 extern crate lazy_static;
 
 extern crate epaint;
@@ -51,58 +51,83 @@ fn activate(app: &gtk::Application) {
     mixer.set_manager_icons(&app_icon);
     stack.add_titled(&mixer.pwo(), "paint_mixer", "Paint Mixer");
     let editor = BasicModelPaintEditor::create();
-    stack.add_titled(&editor.pwo(), "series_paint_editor", "Series Paint Editor/Creator");
+    stack.add_titled(
+        &editor.pwo(),
+        "series_paint_editor",
+        "Series Paint Editor/Creator",
+    );
     let standard_editor = ModelPaintStandardEditor::create();
-    stack.add_titled(&standard_editor.pwo(), "paint_standard_editor", "Paint Standard Editor/Creator");
+    stack.add_titled(
+        &standard_editor.pwo(),
+        "paint_standard_editor",
+        "Paint Standard Editor/Creator",
+    );
     let stack_switcher = gtk::StackSwitcher::new();
     stack_switcher.set_stack(Some(&stack));
     let hbox = gtk::Box::new(gtk::Orientation::Horizontal, 0);
     hbox.pack_start(&gtk::Label::new("Mode:"), false, false, 0);
     hbox.pack_start(&stack_switcher, false, false, 2);
-    hbox.pack_start(&gtk::Box::new(gtk::Orientation::Horizontal, 0), true, true, 0);
+    hbox.pack_start(
+        &gtk::Box::new(gtk::Orientation::Horizontal, 0),
+        true,
+        true,
+        0,
+    );
     let button = gtk::Button::new_with_label("Image Viewer");
     hbox.pack_start(&button, false, false, 0);
-    button.connect_clicked(
-        |_| launch_image_viewer()
-    );
+    button.connect_clicked(|_| launch_image_viewer());
     if sample::screen_sampling_available() {
         let btn = gtk::Button::new_with_label("Take Sample");
         btn.set_tooltip_text("Take a sample of a portion of the screen");
         let window_c = window.clone();
-        btn.connect_clicked(
-            move |_| {
-                if let Err(err) = sample::take_screen_sample() {
-                    window_c.report_error("Failure", &err);
-                }
+        btn.connect_clicked(move |_| {
+            if let Err(err) = sample::take_screen_sample() {
+                window_c.report_error("Failure", &err);
             }
-        );
+        });
         hbox.pack_start(&btn, false, false, 0);
     }
     let vbox = gtk::Box::new(gtk::Orientation::Vertical, 0);
     vbox.pack_start(&hbox, false, false, 0);
     vbox.pack_start(&stack, true, true, 0);
     window.add(&vbox);
-    window.connect_delete_event(
-        move |_,_| {
-            let buttons = &[("Cancel", 0), ("Continue Discarding Changes", 1)];
-            if editor.get_file_status().needs_saving() {
-                if standard_editor.get_file_status().needs_saving() {
-                    if editor.ask_question("Both Series Paint and Standards Editors have unsaved changes!", None, buttons) == 0 {
-                        return gtk::Inhibit(true);
-                    }
-                } else {
-                    if editor.ask_question("The Series Paint Editor has unsaved changes!", None, buttons) == 0 {
-                        return gtk::Inhibit(true);
-                    }
-                }
-            } else if standard_editor.get_file_status().needs_saving() {
-                if standard_editor.ask_question("The Paint Standards Editor has unsaved changes!", None, buttons) == 0 {
+    window.connect_delete_event(move |_, _| {
+        let buttons = [
+            ("Cancel", gtk::ResponseType::Cancel),
+            ("Continue Discarding Changes", gtk::ResponseType::Other(1)),
+        ];
+        if editor.get_file_status().needs_saving() {
+            if standard_editor.get_file_status().needs_saving() {
+                if editor.ask_question(
+                    "Both Series Paint and Standards Editors have unsaved changes!",
+                    None,
+                    &buttons,
+                ) == gtk::ResponseType::Cancel
+                {
                     return gtk::Inhibit(true);
                 }
-            };
-            gtk::Inhibit(false)
-        }
-    );
+            } else {
+                if editor.ask_question(
+                    "The Series Paint Editor has unsaved changes!",
+                    None,
+                    &buttons,
+                ) == gtk::ResponseType::Cancel
+                {
+                    return gtk::Inhibit(true);
+                }
+            }
+        } else if standard_editor.get_file_status().needs_saving() {
+            if standard_editor.ask_question(
+                "The Paint Standards Editor has unsaved changes!",
+                None,
+                &buttons,
+            ) == gtk::ResponseType::Cancel
+            {
+                return gtk::Inhibit(true);
+            }
+        };
+        gtk::Inhibit(false)
+    });
     window.show_all();
     stack.set_visible_child(&mixer.pwo());
 }
@@ -110,9 +135,8 @@ fn activate(app: &gtk::Application) {
 fn main() {
     recollections::init(&config::get_gui_config_dir_path().join("recollections"));
     let flags = gio::ApplicationFlags::empty();
-    let app = gtk::Application::new("mcmmtk.pw.nest", flags).unwrap_or_else(
-        |err| panic!("{:?}: line {:?}: {:?}", file!(), line!(), err)
-    );
+    let app = gtk::Application::new("mcmmtk.pw.nest", flags)
+        .unwrap_or_else(|err| panic!("{:?}: line {:?}: {:?}", file!(), line!(), err));
     app.connect_activate(activate);
     app.run(&[]);
 }

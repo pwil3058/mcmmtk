@@ -29,14 +29,16 @@ pub fn abs_default_config_dir_path() -> PathBuf {
 
 fn get_config_dir_path() -> PathBuf {
     match env::var(DCDP_OVERRIDE_ENVAR) {
-        Ok(dir_path) => if dir_path.len() == 0 {
-            abs_default_config_dir_path()
-        } else if dir_path.starts_with("~") {
-            pw_pathux::expand_home_dir_or_mine(&Path::new(&dir_path))
-        } else {
-            PathBuf::from(dir_path)
-        },
-        Err(_) => abs_default_config_dir_path()
+        Ok(dir_path) => {
+            if dir_path.len() == 0 {
+                abs_default_config_dir_path()
+            } else if dir_path.starts_with("~") {
+                pw_pathux::expand_home_dir_or_mine(&Path::new(&dir_path))
+            } else {
+                PathBuf::from(dir_path)
+            }
+        }
+        Err(_) => abs_default_config_dir_path(),
     }
 }
 
@@ -53,15 +55,13 @@ pub fn get_series_file_paths() -> Vec<PathBuf> {
     let mut vpb = Vec::new();
     let file_path = get_config_dir_path().join("paint_series_files");
     if !file_path.exists() {
-        return vpb
+        return vpb;
     };
-    let mut file = File::open(&file_path).unwrap_or_else(
-        |err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err)
-    );
+    let mut file = File::open(&file_path)
+        .unwrap_or_else(|err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err));
     let mut string = String::new();
-    file.read_to_string(&mut string).unwrap_or_else(
-        |err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err)
-    );
+    file.read_to_string(&mut string)
+        .unwrap_or_else(|err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err));
     for line in string.lines() {
         vpb.push(PathBuf::from(line));
     }
@@ -71,15 +71,14 @@ pub fn get_series_file_paths() -> Vec<PathBuf> {
 
 pub fn set_series_file_paths(file_paths: &Vec<PathBuf>) {
     let file_path = get_config_dir_path().join("paint_series_files");
-    let mut file = File::create(&file_path).unwrap_or_else(
-        |err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err)
-    );
+    let mut file = File::create(&file_path)
+        .unwrap_or_else(|err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err));
     for file_path in file_paths.iter() {
         if let Some(file_path_str) = file_path.to_str() {
-            write!(file, "{}\n", file_path_str).unwrap_or_else(
-                |err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err)
-            );
-        } else  {
+            write!(file, "{}\n", file_path_str).unwrap_or_else(|err| {
+                panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err)
+            });
+        } else {
             panic!("File: {:?} Line: {:?}", file!(), line!())
         };
     }
@@ -94,15 +93,13 @@ pub fn get_standards_file_paths() -> Vec<PathBuf> {
     let mut vpb = Vec::new();
     let file_path = get_config_dir_path().join("paint_standards_files");
     if !file_path.exists() {
-        return vpb
+        return vpb;
     };
-    let mut file = File::open(&file_path).unwrap_or_else(
-        |err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err)
-    );
+    let mut file = File::open(&file_path)
+        .unwrap_or_else(|err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err));
     let mut string = String::new();
-    file.read_to_string(&mut string).unwrap_or_else(
-        |err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err)
-    );
+    file.read_to_string(&mut string)
+        .unwrap_or_else(|err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err));
     for line in string.lines() {
         vpb.push(PathBuf::from(line));
     }
@@ -112,15 +109,14 @@ pub fn get_standards_file_paths() -> Vec<PathBuf> {
 
 pub fn set_standards_file_paths(file_paths: &Vec<PathBuf>) {
     let file_path = get_config_dir_path().join("paint_standards_files");
-    let mut file = File::create(&file_path).unwrap_or_else(
-        |err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err)
-    );
+    let mut file = File::create(&file_path)
+        .unwrap_or_else(|err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err));
     for file_path in file_paths.iter() {
         if let Some(file_path_str) = file_path.to_str() {
-            write!(file, "{}\n", file_path_str).unwrap_or_else(
-                |err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err)
-            );
-        } else  {
+            write!(file, "{}\n", file_path_str).unwrap_or_else(|err| {
+                panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err)
+            });
+        } else {
             panic!("File: {:?} Line: {:?}", file!(), line!())
         };
     }
@@ -135,9 +131,15 @@ mod tests {
         let new_path = "./TEST/config";
         env::set_var(DCDP_OVERRIDE_ENVAR, new_path);
         assert_eq!(get_config_dir_path(), PathBuf::from(new_path));
-        assert_eq!(get_gui_config_dir_path(), PathBuf::from(new_path).join("rs_gui"));
+        assert_eq!(
+            get_gui_config_dir_path(),
+            PathBuf::from(new_path).join("rs_gui")
+        );
         env::set_var(DCDP_OVERRIDE_ENVAR, "");
         assert_eq!(get_config_dir_path(), abs_default_config_dir_path());
-        assert_eq!(get_gui_config_dir_path(), abs_default_config_dir_path().join("rs_gui"));
+        assert_eq!(
+            get_gui_config_dir_path(),
+            abs_default_config_dir_path().join("rs_gui")
+        );
     }
 }
