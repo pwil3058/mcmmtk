@@ -7,13 +7,13 @@ authors = ["Peter Williams <pwil3058@gmail.com>"]
 lazy_static = "0.2.8"
 # TODO: change pw_gix dependency when it goes public
 #pw_gix = { git = "https://github.com/pwil3058/rs_pw_gix.git" }
-pw_gix = { path = "/home/peter/SRC/GITHUB/rs_pw_gix.git" }
+pw_gix = { path = "../../CRATES/rs_pw_gix.git" }
 # TODO: change pw_pathux dependency when it goes public
 #pw_pathux = { git = "https://github.com/pwil3058/rs_pw_pathux.git" }
-pw_pathux = { path = "/home/peter/SRC/GITHUB/rs_pw_pathux.git" }
+pw_pathux = { path = "../../CRATES/rs_pw_pathux.git" }
 # TODO: change epaint dependency when it goes public
 # epaint = { git = "https://github.com/pwil3058/rs_epaint.git" }
-epaint = { path = "/home/peter/SRC/GITHUB/rs_epaint.git" }
+epaint = { path = "../../CRATES/rs_epaint.git" }
 
 gdk = "0.10.0"
 gdk-pixbuf = "0.6.0"
