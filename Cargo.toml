@@ -15,10 +15,10 @@ pw_pathux = { path = "../../CRATES/rs_pw_pathux.git" }
 # epaint = { git = "https://github.com/pwil3058/rs_epaint.git" }
 epaint = { path = "../../CRATES/rs_epaint.git" }
 
-gdk = "0.10.0"
-gdk-pixbuf = "0.6.0"
-gio = "0.6.0"
-gtk = "0.6.0"
+gdk = "0.11.0"
+gdk-pixbuf = "0.7.0"
+gio = "0.7.0"
+gtk = "0.7.0"
 
 [features]
 default = ["gtk/v3_18"]

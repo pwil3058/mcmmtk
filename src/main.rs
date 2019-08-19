@@ -65,7 +65,7 @@ fn activate(app: &gtk::Application) {
     let stack_switcher = gtk::StackSwitcher::new();
     stack_switcher.set_stack(Some(&stack));
     let hbox = gtk::Box::new(gtk::Orientation::Horizontal, 0);
-    hbox.pack_start(&gtk::Label::new("Mode:"), false, false, 0);
+    hbox.pack_start(&gtk::Label::new(Some("Mode:")), false, false, 0);
     hbox.pack_start(&stack_switcher, false, false, 2);
     hbox.pack_start(
         &gtk::Box::new(gtk::Orientation::Horizontal, 0),
@@ -78,7 +78,7 @@ fn activate(app: &gtk::Application) {
     button.connect_clicked(|_| launch_image_viewer());
     if sample::screen_sampling_available() {
         let btn = gtk::Button::new_with_label("Take Sample");
-        btn.set_tooltip_text("Take a sample of a portion of the screen");
+        btn.set_tooltip_text(Some("Take a sample of a portion of the screen"));
         let window_c = window.clone();
         btn.connect_clicked(move |_| {
             if let Err(err) = sample::take_screen_sample() {
@@ -135,7 +135,7 @@ fn activate(app: &gtk::Application) {
 fn main() {
     recollections::init(&config::get_gui_config_dir_path().join("recollections"));
     let flags = gio::ApplicationFlags::empty();
-    let app = gtk::Application::new("mcmmtk.pw.nest", flags)
+    let app = gtk::Application::new(None, flags)
         .unwrap_or_else(|err| panic!("{:?}: line {:?}: {:?}", file!(), line!(), err));
     app.connect_activate(activate);
     app.run(&[]);
