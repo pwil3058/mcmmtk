@@ -1,12 +1,12 @@
-extern crate gdk_pixbuf;
-extern crate gio;
-extern crate gtk;
-extern crate lazy_static;
 
-extern crate epaint;
-extern crate pw_gix;
+use gio;
+use gtk;
 
-extern crate mcmmtk_rs;
+
+
+
+
+
 
 use gio::{ApplicationExt, ApplicationExtManual};
 

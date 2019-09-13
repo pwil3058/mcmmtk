@@ -2,6 +2,7 @@
 name = "mcmmtk_rs"
 version = "0.1.0"
 authors = ["Peter Williams <pwil3058@gmail.com>"]
+edition = "2018"
 
 [dependencies]
 lazy_static = "0.2.8"

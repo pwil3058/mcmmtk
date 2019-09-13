@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-extern crate epaint;
-extern crate pw_gix;
-extern crate pw_pathux;
 
-extern crate gdk;
-extern crate gdk_pixbuf;
-extern crate gtk;
+
+
+
+
+
+
 
 pub mod config;
 pub mod icon;
