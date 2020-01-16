@@ -8,7 +8,7 @@ use gtk;
 
 
 
-use gio::{ApplicationExt, ApplicationExtManual};
+use gio::{ApplicationExt, prelude::ApplicationExtManual};
 
 use gtk::prelude::*;
 
