@@ -1,22 +1,11 @@
-
-use gio;
-use gtk;
-
-
-
-
-
-
-
-use gio::{ApplicationExt, prelude::ApplicationExtManual};
-
-use gtk::prelude::*;
-
-use pw_gix::gdk_pixbufx::iview::*;
-use pw_gix::gtkx::dialog::dialog_user::DialogUser;
-use pw_gix::gtkx::window::*;
-use pw_gix::recollections;
-use pw_gix::sample;
+use pw_gix::{
+    gdk_pixbufx::iview::*,
+    gio::{self, prelude::ApplicationExtManual, ApplicationExt},
+    gtk::{self, prelude::*},
+    gtkx::{dialog::dialog_user::DialogUser, window::*},
+    recollections, sample,
+    wrapper::*,
+};
 
 use epaint::model_paint::*;
 
@@ -73,11 +62,11 @@ fn activate(app: &gtk::Application) {
         true,
         0,
     );
-    let button = gtk::Button::new_with_label("Image Viewer");
+    let button = gtk::Button::with_label("Image Viewer");
     hbox.pack_start(&button, false, false, 0);
     button.connect_clicked(|_| launch_image_viewer());
     if sample::screen_sampling_available() {
-        let btn = gtk::Button::new_with_label("Take Sample");
+        let btn = gtk::Button::with_label("Take Sample");
         btn.set_tooltip_text(Some("Take a sample of a portion of the screen"));
         let window_c = window.clone();
         btn.connect_clicked(move |_| {
