@@ -1,5 +1,5 @@
 use pw_gix::{
-    gdk_pixbufx::iview::*,
+    gdk_pixbufx::viewer::*,
     gio::{self, prelude::ApplicationExtManual, ApplicationExt},
     gtk::{self, prelude::*},
     gtkx::{dialog::dialog_user::DialogUser, window::*},
@@ -18,11 +18,9 @@ fn launch_image_viewer() {
     window.set_destroy_with_parent(true);
     window.set_title("mcmmtk: Image Viewer");
 
-    let iview = PixbufView::create();
-    window.add(&iview.pwo());
+    let viewer = PixbufViewBuilder::new().load_last_image(true).build();
+    window.add(&viewer.pwo());
     window.show_all();
-
-    iview.reload_last_image();
 
     window.present();
 }
