@@ -7,6 +7,19 @@ edition = "2018"
 [dependencies]
 lazy_static = "0.2.8"
 
+colour_math = { git = "https://github.com/pwil3058/rs_colour_math.git" }
 pw_gix = { git = "https://github.com/pwil3058/rs_pw_gix.git" }
 pw_pathux = { git = "https://github.com/pwil3058/rs_pw_pathux.git" }
-epaint = { git = "https://github.com/pwil3058/rs_epaint.git" }
+
+
+[dependencies.apaint]
+git = "https://github.com/pwil3058/rs_apaint.git"
+version = "*"
+#path = "/home/peter/SRC/GITHUB/RUST/CRATES/rs_apaint.git/apaint"
+#features = ["targeted_mixtures"]
+
+[dependencies.apaint_gtk]
+git = "https://github.com/pwil3058/rs_apaint.git"
+version = "*"
+#path = "/home/peter/SRC/GITHUB/RUST/CRATES/rs_apaint.git/apaint_gtk"
+#features = ["targeted_mixtures"]

@@ -1,145 +1,39 @@
-// Copyright 2017 Peter Williams <pwil3058@gmail.com>
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//    http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright 2020 Peter Williams <pwil3058@gmail.com> <pwil3058@bigpond.net.au>
 
-use std::env;
-use std::fs::File;
-use std::io::{Read, Write};
-use std::path::{Path, PathBuf};
+use std::{
+    env,
+    path::{Path, PathBuf},
+};
 
-use pw_pathux;
+use pw_pathux::expand_home_dir_or_mine;
 
-const DEFAULT_CONFIG_DIR_PATH: &str = "~/.config/mcmmtk/ng";
+const DEFAULT_CONFIG_DIR_PATH: &str = "~/.config/mcmmtk_gtk";
 
-const DCDP_OVERRIDE_ENVAR: &str = "MCMMTK_CONFIG_DIR";
+const DCDP_OVERRIDE_ENVAR: &str = "MCMMTK_GTK_CONFIG_DIR";
 
-pub fn abs_default_config_dir_path() -> PathBuf {
-    pw_pathux::expand_home_dir_or_mine(&Path::new(DEFAULT_CONFIG_DIR_PATH))
+fn abs_default_config_dir_path() -> PathBuf {
+    expand_home_dir_or_mine(&Path::new(DEFAULT_CONFIG_DIR_PATH))
 }
 
-fn get_config_dir_path() -> PathBuf {
+pub fn config_dir_path() -> PathBuf {
     match env::var(DCDP_OVERRIDE_ENVAR) {
         Ok(dir_path) => {
-            if dir_path.len() == 0 {
+            if dir_path.is_empty() {
                 abs_default_config_dir_path()
-            } else if dir_path.starts_with("~") {
-                pw_pathux::expand_home_dir_or_mine(&Path::new(&dir_path))
+            } else if dir_path.starts_with('~') {
+                expand_home_dir_or_mine(&Path::new(&dir_path))
             } else {
-                PathBuf::from(dir_path)
+                dir_path.into()
             }
         }
         Err(_) => abs_default_config_dir_path(),
     }
 }
 
-pub fn get_gui_config_dir_path() -> PathBuf {
-    get_config_dir_path().join("rs_gui")
+pub fn gui_config_dir_path() -> PathBuf {
+    config_dir_path().join("gui")
 }
 
-// SERIES PAINT DATA FILES
-pub fn get_paint_series_files_data_path() -> PathBuf {
-    get_config_dir_path().join("paint_series_files")
-}
-
-pub fn get_series_file_paths() -> Vec<PathBuf> {
-    let mut vpb = Vec::new();
-    let file_path = get_config_dir_path().join("paint_series_files");
-    if !file_path.exists() {
-        return vpb;
-    };
-    let mut file = File::open(&file_path)
-        .unwrap_or_else(|err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err));
-    let mut string = String::new();
-    file.read_to_string(&mut string)
-        .unwrap_or_else(|err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err));
-    for line in string.lines() {
-        vpb.push(PathBuf::from(line));
-    }
-
-    vpb
-}
-
-pub fn set_series_file_paths(file_paths: &Vec<PathBuf>) {
-    let file_path = get_config_dir_path().join("paint_series_files");
-    let mut file = File::create(&file_path)
-        .unwrap_or_else(|err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err));
-    for file_path in file_paths.iter() {
-        if let Some(file_path_str) = file_path.to_str() {
-            write!(file, "{}\n", file_path_str).unwrap_or_else(|err| {
-                panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err)
-            });
-        } else {
-            panic!("File: {:?} Line: {:?}", file!(), line!())
-        };
-    }
-}
-
-// PAINT STANDARD DATA FILES
-pub fn get_paint_standards_files_data_path() -> PathBuf {
-    get_config_dir_path().join("paint_standards_files")
-}
-
-pub fn get_standards_file_paths() -> Vec<PathBuf> {
-    let mut vpb = Vec::new();
-    let file_path = get_config_dir_path().join("paint_standards_files");
-    if !file_path.exists() {
-        return vpb;
-    };
-    let mut file = File::open(&file_path)
-        .unwrap_or_else(|err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err));
-    let mut string = String::new();
-    file.read_to_string(&mut string)
-        .unwrap_or_else(|err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err));
-    for line in string.lines() {
-        vpb.push(PathBuf::from(line));
-    }
-
-    vpb
-}
-
-pub fn set_standards_file_paths(file_paths: &Vec<PathBuf>) {
-    let file_path = get_config_dir_path().join("paint_standards_files");
-    let mut file = File::create(&file_path)
-        .unwrap_or_else(|err| panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err));
-    for file_path in file_paths.iter() {
-        if let Some(file_path_str) = file_path.to_str() {
-            write!(file, "{}\n", file_path_str).unwrap_or_else(|err| {
-                panic!("File: {:?} Line: {:?} : {:?}", file!(), line!(), err)
-            });
-        } else {
-            panic!("File: {:?} Line: {:?}", file!(), line!())
-        };
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn get_config_dir_works() {
-        let new_path = "./TEST/config";
-        env::set_var(DCDP_OVERRIDE_ENVAR, new_path);
-        assert_eq!(get_config_dir_path(), PathBuf::from(new_path));
-        assert_eq!(
-            get_gui_config_dir_path(),
-            PathBuf::from(new_path).join("rs_gui")
-        );
-        env::set_var(DCDP_OVERRIDE_ENVAR, "");
-        assert_eq!(get_config_dir_path(), abs_default_config_dir_path());
-        assert_eq!(
-            get_gui_config_dir_path(),
-            abs_default_config_dir_path().join("rs_gui")
-        );
-    }
+pub fn recollection_file_path() -> PathBuf {
+    gui_config_dir_path().join("recollections")
 }
