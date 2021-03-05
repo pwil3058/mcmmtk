@@ -14,7 +14,8 @@ use apaint_gtk::{
     characteristics::CharacteristicType,
     colour::ScalarAttribute,
     factory::{BasicPaintFactory, BasicPaintFactoryBuilder},
-    mixer::targeted::{TargetedPaintMixer, TargetedPaintMixerBuilder},
+    mixer::palette::{PalettePaintMixer, PalettePaintMixerBuilder},
+    //mixer::targeted::{TargetedPaintMixer, TargetedPaintMixerBuilder},
 };
 
 use crate::config;
@@ -22,7 +23,7 @@ use crate::config;
 #[derive(PWO, Wrapper)]
 pub struct ModellersColourMixerMatcherTK {
     vbox: gtk::Box,
-    mixer: Rc<TargetedPaintMixer>,
+    mixer: Rc<PalettePaintMixer>,
     factory: Rc<BasicPaintFactory>,
 }
 
@@ -39,7 +40,7 @@ impl ModellersColourMixerMatcherTK {
             CharacteristicType::Fluorescence,
             CharacteristicType::Metallicness,
         ];
-        let mixer = TargetedPaintMixerBuilder::new()
+        let mixer = PalettePaintMixerBuilder::new()
             .attributes(&attributes)
             .characteristics(&characteristics)
             .config_dir_path(&config::config_dir_path())
