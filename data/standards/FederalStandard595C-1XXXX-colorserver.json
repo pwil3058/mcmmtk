@@ -1,0 +1,3378 @@
+{
+  "series_id": {
+    "proprietor": "U.S. Government",
+    "series_name": "Federal Standard 595C: FS1XXXX (Gloss) (<http://www.colorserver.net/>)"
+  },
+  "paint_list": [
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            451364375650333974
+          ]
+        },
+        "chroma": {
+          "Shade": 2806911297826072272
+        },
+        "sum": 3129768022515854160
+      },
+      "id": "FS10032",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            5380300354831955285
+          ]
+        },
+        "chroma": {
+          "Shade": 1729408645591996416
+        },
+        "sum": 13888750226367233024
+      },
+      "id": "FS10045",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            354745078340568139
+          ]
+        },
+        "chroma": {
+          "Shade": 3747052065449325600
+        },
+        "sum": 4661015260800434336
+      },
+      "id": "FS10049",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            7328158604624343676
+          ]
+        },
+        "chroma": {
+          "Shade": 5260284630342322176
+        },
+        "sum": 10808804034949977600
+      },
+      "id": "FS10055",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            6545618864864680969
+          ]
+        },
+        "chroma": {
+          "Shade": 2233819500556328960
+        },
+        "sum": 11673508357745976320
+      },
+      "id": "FS10059",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            5534023222112866463
+          ]
+        },
+        "chroma": {
+          "Shade": 2893606913523066368
+        },
+        "sum": 8753160913407277568
+      },
+      "id": "FS10070",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            3074457345618258602
+          ]
+        },
+        "chroma": {
+          "Shade": 3458817291183992832
+        },
+        "sum": 10952921422082643968
+      },
+      "id": "FS10075",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Primary": "Red"
+        },
+        "chroma": {
+          "Shade": 7061751969500652544
+        },
+        "sum": 7061751969500652544
+      },
+      "id": "FS10076",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            9708812670373448218
+          ]
+        },
+        "chroma": {
+          "Shade": 2738230355520660992
+        },
+        "sum": 12177919212710308864
+      },
+      "id": "FS10080",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            7627019184322219086
+          ]
+        },
+        "chroma": {
+          "Shade": 7494104130898651136
+        },
+        "sum": 10592627954250978304
+      },
+      "id": "FS10091",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            8564559748508005480
+          ]
+        },
+        "chroma": {
+          "Shade": 8070573679429316096
+        },
+        "sum": 18951436407945627136
+      },
+      "id": "FS10115",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            9042521604759582210
+          ]
+        },
+        "chroma": {
+          "Shade": 3674993371882992640
+        },
+        "sum": 23202899328359286784
+      },
+      "id": "FS10129",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            10061860403841572741
+          ]
+        },
+        "chroma": {
+          "Shade": 3963228146148326400
+        },
+        "sum": 22770547166961287168
+      },
+      "id": "FS10219",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            5476377146882524159
+          ]
+        },
+        "chroma": {
+          "Shade": 4611756388245323776
+        },
+        "sum": 23491134102624617472
+      },
+      "id": "FS10233",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            13650590614545069505
+          ]
+        },
+        "chroma": {
+          "Shade": 7205869356633318400
+        },
+        "sum": 31994059943451935744
+      },
+      "id": "FS10260",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            12297829382473032401
+          ]
+        },
+        "chroma": {
+          "Shade": 6269106340270987264
+        },
+        "sum": 25580836216048281600
+      },
+      "id": "FS10266",
+      "name": "Yellow Sand",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            10376293541461618687
+          ]
+        },
+        "chroma": {
+          "Tint": 3458817291183992832
+        },
+        "sum": 29183770894364940288
+      },
+      "id": "FS10324",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            10786655432931853039
+          ]
+        },
+        "chroma": {
+          "Shade": 8536140394893047808
+        },
+        "sum": 28719048616716439552
+      },
+      "id": "FS10371",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            15554871288694302
+          ]
+        },
+        "chroma": {
+          "Shade": 11683360132256997376
+        },
+        "sum": 11693211906768019492
+      },
+      "id": "FS11086",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedMagenta",
+            116751544770313615
+          ]
+        },
+        "chroma": {
+          "Shade": 11385273583480643328
+        },
+        "sum": 11673508357745976064
+      },
+      "id": "FS11105",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Primary": "Red"
+        },
+        "chroma": {
+          "Shade": 13258799616205305856
+        },
+        "sum": 13258799616205305856
+      },
+      "id": "FS11120",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            2966958837030207528
+          ]
+        },
+        "chroma": {
+          "Shade": 10304393179985645568
+        },
+        "sum": 11961743132011308800
+      },
+      "id": "FS11136",
+      "name": "Insignia Red",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedMagenta",
+            116751544770313615
+          ]
+        },
+        "chroma": {
+          "Shade": 11385273583480643328
+        },
+        "sum": 11673508357745976064
+      },
+      "id": "FS11140",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            4088711315306756773
+          ]
+        },
+        "chroma": {
+          "Shade": 13979386551868637184
+        },
+        "sum": 17077910375220964352
+      },
+      "id": "FS11302",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            4088711315306756771
+          ]
+        },
+        "chroma": {
+          "Shade": 14033993530586873856
+        },
+        "sum": 17144620962624171008
+      },
+      "id": "FS11310",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Primary": "Red"
+        },
+        "chroma": {
+          "Shade": 12682330067674639872
+        },
+        "sum": 13114682229072638976
+      },
+      "id": "FS11328",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            2520047004605129645
+          ]
+        },
+        "chroma": {
+          "Shade": 13238251629368030976
+        },
+        "sum": 15263776468834177536
+      },
+      "id": "FS11350",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            3436158209808642109
+          ]
+        },
+        "chroma": {
+          "Shade": 14699973487531970304
+        },
+        "sum": 17654379923751631104
+      },
+      "id": "FS11400",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            2813910112938743203
+          ]
+        },
+        "chroma": {
+          "Tint": 4251462920413659136
+        },
+        "sum": 41649924881340579840
+      },
+      "id": "FS11630",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            7794398904384319039
+          ]
+        },
+        "chroma": {
+          "Tint": 5116167243209656320
+        },
+        "sum": 45541094333922572288
+      },
+      "id": "FS11670",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            5534023222112864829
+          ]
+        },
+        "chroma": {
+          "Shade": 8647043227959983104
+        },
+        "sum": 19023495101511961600
+      },
+      "id": "FS12160",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            2715510548921710643
+          ]
+        },
+        "chroma": {
+          "Shade": 14195562632567637248
+        },
+        "sum": 16933792988088298240
+      },
+      "id": "FS12197",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            162526379504048902
+          ]
+        },
+        "chroma": {
+          "Shade": 16357323439557633792
+        },
+        "sum": 16717616907389299712
+      },
+      "id": "FS12199",
+      "name": "",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            5425512962855750286
+          ]
+        },
+        "chroma": {
+          "Shade": 14699973487531970048
+        },
+        "sum": 19455847262909960192
+      },
+      "id": "FS12215",
+      "name": "FS12215",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            7115172714145112596
+          ]
+        },
+        "chroma": {
+          "Shade": 15132325648929969664
+        },
+        "sum": 21401431989200956928
+      },
+      "id": "FS12243",
+      "name": "FS12243",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            4930466157950018853
+          ]
+        },
+        "chroma": {
+          "Shade": 15636736503894300400
+        },
+        "sum": 20047516692114773264
+      },
+      "id": "FS12246",
+      "name": "FS12246",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            8967167258053253953
+          ]
+        },
+        "chroma": {
+          "Shade": 15564677810327967744
+        },
+        "sum": 23130840634792951808
+      },
+      "id": "FS12300",
+      "name": "FS12300",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            7962056202754978010
+          ]
+        },
+        "chroma": {
+          "Shade": 16861734294521963776
+        },
+        "sum": 24788190586818614016
+      },
+      "id": "FS12473",
+      "name": "FS12473",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            10798094091927543344
+          ]
+        },
+        "chroma": {
+          "Tint": 5908812872439320576
+        },
+        "sum": 40280809703580250112
+      },
+      "id": "FS12648",
+      "name": "FS12648",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            14164464199455548171
+          ]
+        },
+        "chroma": {
+          "Shade": 12105860519143974912
+        },
+        "sum": 21401431989200955392
+      },
+      "id": "FS13275",
+      "name": "FS13275",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            12971683047266077424
+          ]
+        },
+        "chroma": {
+          "Shade": 15780853891026966528
+        },
+        "sum": 26877892700242276352
+      },
+      "id": "FS13415",
+      "name": "FS13415",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            12136015837966809894
+          ]
+        },
+        "chroma": {
+          "Shade": 16429382133123966464
+        },
+        "sum": 27670538329471943168
+      },
+      "id": "FS13432",
+      "name": "FS13432",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            13972427426043828971
+          ]
+        },
+        "chroma": {
+          "Shade": 16933792988088299520
+        },
+        "sum": 29760240442895605760
+      },
+      "id": "FS13507",
+      "name": "FS13507",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            12423317437396231695
+          ]
+        },
+        "chroma": {
+          "Tint": 3530875984750327808
+        },
+        "sum": 37686696735192256512
+      },
+      "id": "FS13522",
+      "name": "FS13522",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            13732576143761553990
+          ]
+        },
+        "chroma": {
+          "Tint": 6485282420969986048
+        },
+        "sum": 37254344573794254848
+      },
+      "id": "FS13523",
+      "name": "FS13523",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            9042521604759579690
+          ]
+        },
+        "chroma": {
+          "Tint": 3674993371882993664
+        },
+        "sum": 38767577138687252480
+      },
+      "id": "FS13531",
+      "name": "FS13531",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            13972427426043832756
+          ]
+        },
+        "chroma": {
+          "Shade": 16933792988088296960
+        },
+        "sum": 30192592604293603840
+      },
+      "id": "FS13538",
+      "name": "FS13538",
+      "notes": "Orange Yellow",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            12701036903209859437
+          ]
+        },
+        "chroma": {
+          "Tint": 4395580307546324992
+        },
+        "sum": 40929337945677248512
+      },
+      "id": "FS13578",
+      "name": "FS13578",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            16776995687727218609
+          ]
+        },
+        "chroma": {
+          "Shade": 16717616907389300736
+        },
+        "sum": 31922001249885601792
+      },
+      "id": "FS13591",
+      "name": "FS13591",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            12928487299522931312
+          ]
+        },
+        "chroma": {
+          "Tint": 8430867147260983296
+        },
+        "sum": 38767577138687252480
+      },
+      "id": "FS13594",
+      "name": "FS13594",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            13790284404617821572
+          ]
+        },
+        "chroma": {
+          "Tint": 7422045437332318208
+        },
+        "sum": 37398461960926922752
+      },
+      "id": "FS13596",
+      "name": "FS13596",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            10798094091927539601
+          ]
+        },
+        "chroma": {
+          "Tint": 5908812872439322624
+        },
+        "sum": 43307274833366247424
+      },
+      "id": "FS13613",
+      "name": "FS13613",
+      "notes": "Radome Tan",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            15227849134672986671
+          ]
+        },
+        "chroma": {
+          "Tint": 10736745341383645184
+        },
+        "sum": 37110227186661591040
+      },
+      "id": "FS13618",
+      "name": "FS13618",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            15981090162867184356
+          ]
+        },
+        "chroma": {
+          "Shade": 14555856100399304192
+        },
+        "sum": 27598479635905610240
+      },
+      "id": "FS13637",
+      "name": "FS13637",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            15436605919422216859
+          ]
+        },
+        "chroma": {
+          "Shade": 17222027762353633280
+        },
+        "sum": 31633766475620270080
+      },
+      "id": "FS13655",
+      "name": "FS13655",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            16452501471146356845
+          ]
+        },
+        "chroma": {
+          "Tint": 10664686647817311232
+        },
+        "sum": 36821992412396256256
+      },
+      "id": "FS13670",
+      "name": "FS13670",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            14823276487802321772
+          ]
+        },
+        "chroma": {
+          "Tint": 4035286839714658304
+        },
+        "sum": 44244037849728573440
+      },
+      "id": "FS13690",
+      "name": "FS13690",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            13615453959166574603
+          ]
+        },
+        "chroma": {
+          "Tint": 9079395389357981696
+        },
+        "sum": 40641103171411914752
+      },
+      "id": "FS13695",
+      "name": "FS13695",
+      "notes": "Yellow Sand",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            13563782407139379135
+          ]
+        },
+        "chroma": {
+          "Tint": 4899991162510657536
+        },
+        "sum": 43594383690544603136
+      },
+      "id": "FS13711",
+      "name": "FS13711",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            12297829382473034410
+          ]
+        },
+        "chroma": {
+          "Shade": 864704322795998208
+        },
+        "sum": 7277928050199652352
+      },
+      "id": "FS14036",
+      "name": "FS14036",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            1676976733973590185
+          ]
+        },
+        "chroma": {
+          "Shade": 792645629229664768
+        },
+        "sum": 9727923631454980096
+      },
+      "id": "FS14050",
+      "name": "FS14050",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            7378697629483820646
+          ]
+        },
+        "chroma": {
+          "Shade": 720586935663331840
+        },
+        "sum": 7926456292296650240
+      },
+      "id": "FS14052",
+      "name": "FS14052",
+      "notes": "USMC Green",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            1676976733973611849
+          ]
+        },
+        "chroma": {
+          "Shade": 792645629229665792
+        },
+        "sum": 8214691066561982976
+      },
+      "id": "FS14056",
+      "name": "FS14056",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            8646911284551352319
+          ]
+        },
+        "chroma": {
+          "Shade": 4611756388245323776
+        },
+        "sum": 6773517195235319296
+      },
+      "id": "FS14062",
+      "name": "FS14062",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            15811494920322473481
+          ]
+        },
+        "chroma": {
+          "Shade": 1008821709928664832
+        },
+        "sum": 6845575888801652992
+      },
+      "id": "FS14064",
+      "name": "FS14064",
+      "notes": "Dark Green",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            9223372036854775124
+          ]
+        },
+        "chroma": {
+          "Shade": 3458817291183993088
+        },
+        "sum": 5404402017474989056
+      },
+      "id": "FS14066",
+      "name": "FS14066",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            5675921253449094355
+          ]
+        },
+        "chroma": {
+          "Shade": 936763016362331136
+        },
+        "sum": 10952921422082644480
+      },
+      "id": "FS14077",
+      "name": "FS14077",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            10540996613548319220
+          ]
+        },
+        "chroma": {
+          "Shade": 1008821709928665088
+        },
+        "sum": 13258799616205305344
+      },
+      "id": "FS14079",
+      "name": "FS14079",
+      "notes": "Forest Green",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            15534100272597514256
+          ]
+        },
+        "chroma": {
+          "Shade": 1374463283923457024
+        },
+        "sum": 11212726789901884416
+      },
+      "id": "FS14081",
+      "name": "FS14081",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            12912720851596692684
+          ]
+        },
+        "chroma": {
+          "Shade": 720586935663331840
+        },
+        "sum": 11601449664179642880
+      },
+      "id": "FS14084",
+      "name": "FS14084",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            9323401582106286121
+          ]
+        },
+        "chroma": {
+          "Shade": 6410690413957961488
+        },
+        "sum": 9859374451359188720
+      },
+      "id": "FS14090",
+      "name": "FS14090",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            5929310595120924964
+          ]
+        },
+        "chroma": {
+          "Shade": 2017643419857329152
+        },
+        "sum": 16501440826690298880
+      },
+      "id": "FS14097",
+      "name": "FS14097",
+      "notes": "Field Green",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            9018408213813559279
+          ]
+        },
+        "chroma": {
+          "Shade": 3242641210484993024
+        },
+        "sum": 13474975696904305152
+      },
+      "id": "FS14108",
+      "name": "FS14108",
+      "notes": "Medium Green",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            9838263505978427528
+          ]
+        },
+        "chroma": {
+          "Shade": 4323521613979991040
+        },
+        "sum": 6629399808102652928
+      },
+      "id": "FS14109",
+      "name": "FS14109",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            292805461487454223
+          ]
+        },
+        "chroma": {
+          "Shade": 4539697694678990848
+        },
+        "sum": 11529390970613309952
+      },
+      "id": "FS14110",
+      "name": "FS14110",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            11262222697633199512
+          ]
+        },
+        "chroma": {
+          "Shade": 6845575888801652736
+        },
+        "sum": 11024980115648977408
+      },
+      "id": "FS14115",
+      "name": "FS14115",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            13043152375350188672
+          ]
+        },
+        "chroma": {
+          "Shade": 7133810663066985216
+        },
+        "sum": 12394095293409307904
+      },
+      "id": "FS14120",
+      "name": "FS14120",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            13091237729729357716
+          ]
+        },
+        "chroma": {
+          "Shade": 4485090715960754176
+        },
+        "sum": 15480796987348408320
+      },
+      "id": "FS14151",
+      "name": "FS14151",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            16504981539634855435
+          ]
+        },
+        "chroma": {
+          "Shade": 1369115177760330752
+        },
+        "sum": 20752903747103956992
+      },
+      "id": "FS14158",
+      "name": "FS14158",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            1676976733973636763
+          ]
+        },
+        "chroma": {
+          "Tint": 792645629229665280
+        },
+        "sum": 20987657459738028032
+      },
+      "id": "FS14159",
+      "name": "FS14159",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            5705178579497799259
+          ]
+        },
+        "chroma": {
+          "Shade": 6989693275934319104
+        },
+        "sum": 13907327858302304768
+      },
+      "id": "FS14187",
+      "name": "FS14187",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            7349874591868650407
+          ]
+        },
+        "chroma": {
+          "Shade": 9259542123273813520
+        },
+        "sum": 13363509905293883376
+      },
+      "id": "FS14193",
+      "name": "FS14193",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            3623467585907234523
+          ]
+        },
+        "chroma": {
+          "Shade": 4035286839714658304
+        },
+        "sum": 20176434198573292544
+      },
+      "id": "FS14223",
+      "name": "FS14223",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            9971213012815978058
+          ]
+        },
+        "chroma": {
+          "Tint": 2666171661954328576
+        },
+        "sum": 28967594813665939456
+      },
+      "id": "FS14241",
+      "name": "FS14241",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            17492602138862509114
+          ]
+        },
+        "chroma": {
+          "Shade": 4179404226847324160
+        },
+        "sum": 23923486264022616064
+      },
+      "id": "FS14255",
+      "name": "FS14255",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            15553137160186479756
+          ]
+        },
+        "chroma": {
+          "Shade": 3674993371882992640
+        },
+        "sum": 24499955812553283584
+      },
+      "id": "FS14257",
+      "name": "FS14257",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            8384883669867979090
+          ]
+        },
+        "chroma": {
+          "Shade": 4755873775377990656
+        },
+        "sum": 23355461093644257280
+      },
+      "id": "FS14260",
+      "name": "FS14260",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            3843071682022831445
+          ]
+        },
+        "chroma": {
+          "Tint": 3458817291183992832
+        },
+        "sum": 24932307973951283200
+      },
+      "id": "FS14272",
+      "name": "FS14272",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            8454757700450202965
+          ]
+        },
+        "chroma": {
+          "Tint": 1729408645591996416
+        },
+        "sum": 28030831797303609344
+      },
+      "id": "FS14277",
+      "name": "FS14277",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            10597065744471448342
+          ]
+        },
+        "chroma": {
+          "Tint": 3386758597617658880
+        },
+        "sum": 30408768684992603136
+      },
+      "id": "FS14325",
+      "name": "FS14325",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            4216398645419327367
+          ]
+        },
+        "chroma": {
+          "Tint": 2522054274821660672
+        },
+        "sum": 35308759847503261696
+      },
+      "id": "FS14449",
+      "name": "FS14449",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            1229782938247298780
+          ]
+        },
+        "chroma": {
+          "Tint": 2161760806989996032
+        },
+        "sum": 36677875025263591424
+      },
+      "id": "FS14491",
+      "name": "FS14491",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            838488366986818381
+          ]
+        },
+        "chroma": {
+          "Tint": 1585291258459330560
+        },
+        "sum": 38623459751554586624
+      },
+      "id": "FS14516",
+      "name": "FS14516",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            8242162245700004828
+          ]
+        },
+        "chroma": {
+          "Tint": 3386758597617659904
+        },
+        "sum": 35380818541069594624
+      },
+      "id": "FS14533",
+      "name": "FS14533",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            10145709240540256665
+          ]
+        },
+        "chroma": {
+          "Tint": 2882347742653327360
+        },
+        "sum": 43371733586595500032
+      },
+      "id": "FS14672",
+      "name": "FS14672",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            9223372036854775807
+          ]
+        },
+        "chroma": {
+          "Shade": 1729408645591996416
+        },
+        "sum": 9511747550755980288
+      },
+      "id": "FS15042",
+      "name": "FS15042",
+      "notes": "Sea Blue",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            2235968978631460561
+          ]
+        },
+        "chroma": {
+          "Shade": 2377936887688995328
+        },
+        "sum": 8286749760128316416
+      },
+      "id": "FS15044",
+      "name": "FS15044",
+      "notes": "Insignia Blue",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            10348173504763894457
+          ]
+        },
+        "chroma": {
+          "Shade": 2954406436219660416
+        },
+        "sum": 6765072817083014016
+      },
+      "id": "FS15045",
+      "name": "FS15045",
+      "notes": "Dark Blue",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            4427218577690292753
+          ]
+        },
+        "chroma": {
+          "Shade": 3617008641903834368
+        },
+        "sum": 10561665234359194368
+      },
+      "id": "FS15048",
+      "name": "FS15048",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            7449646645151935566
+          ]
+        },
+        "chroma": {
+          "Shade": 3747052065449325568
+        },
+        "sum": 10448510567118311936
+      },
+      "id": "FS15050",
+      "name": "FS15050",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            7094901566811366005
+          ]
+        },
+        "chroma": {
+          "Shade": 6557341114536319744
+        },
+        "sum": 9295571470056980736
+      },
+      "id": "FS15052",
+      "name": "FS15052",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            8070450532247928660
+          ]
+        },
+        "chroma": {
+          "Shade": 3458817291183992320
+        },
+        "sum": 12970564841939973120
+      },
+      "id": "FS15053",
+      "name": "FS15053",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            3726614964385767869
+          ]
+        },
+        "chroma": {
+          "Shade": 7133810663066985472
+        },
+        "sum": 8574984534393649152
+      },
+      "id": "FS15056",
+      "name": "FS15056",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            9859466660086139656
+          ]
+        },
+        "chroma": {
+          "Shade": 8358808453694649344
+        },
+        "sum": 12826447454807306752
+      },
+      "id": "FS15065",
+      "name": "FS15065",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            9511602413006488079
+          ]
+        },
+        "chroma": {
+          "Shade": 4611756388245323520
+        },
+        "sum": 13258799616205305600
+      },
+      "id": "FS15080",
+      "name": "FS15080",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            10716679890440789363
+          ]
+        },
+        "chroma": {
+          "Shade": 7566162824464984064
+        },
+        "sum": 11961743132011309056
+      },
+      "id": "FS15090",
+      "name": "FS15090",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            9943947977234056231
+          ]
+        },
+        "chroma": {
+          "Shade": 9223512776490647040
+        },
+        "sum": 19816140730741625344
+      },
+      "id": "FS15092",
+      "name": "FS15092",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            7478409759611981624
+          ]
+        },
+        "chroma": {
+          "Shade": 10706345580035346944
+        },
+        "sum": 16331990305100718592
+      },
+      "id": "FS15095",
+      "name": "FS15095",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            9307990128936011378
+          ]
+        },
+        "chroma": {
+          "Shade": 7854397598730317312
+        },
+        "sum": 15708795197460634112
+      },
+      "id": "FS15102",
+      "name": "FS15102",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            11212726789901884818
+          ]
+        },
+        "chroma": {
+          "Shade": 3674993371882992640
+        },
+        "sum": 23851427570456285184
+      },
+      "id": "FS15107",
+      "name": "FS15107",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            6347266778050598647
+          ]
+        },
+        "chroma": {
+          "Shade": 6701458501668985856
+        },
+        "sum": 21761725457032622080
+      },
+      "id": "FS15123",
+      "name": "FS15123",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            10291341430595854036
+          ]
+        },
+        "chroma": {
+          "Shade": 6845575888801652736
+        },
+        "sum": 17582321230185296896
+      },
+      "id": "FS15125",
+      "name": "FS15125",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            10281791778788933155
+          ]
+        },
+        "chroma": {
+          "Shade": 4395580307546323968
+        },
+        "sum": 23699710242986542080
+      },
+      "id": "FS15177",
+      "name": "FS15177",
+      "notes": "Medium Blue",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            8513881880173638470
+          ]
+        },
+        "chroma": {
+          "Shade": 9367630163623314176
+        },
+        "sum": 19960258117874291968
+      },
+      "id": "FS15180",
+      "name": "FS15180",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            10584197419341547699
+          ]
+        },
+        "chroma": {
+          "Shade": 8791160615092647936
+        },
+        "sum": 22482312392695953408
+      },
+      "id": "FS15182",
+      "name": "FS15182",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            11010847237795625249
+          ]
+        },
+        "chroma": {
+          "Shade": 9295571470056979968
+        },
+        "sum": 27364570361086769664
+      },
+      "id": "FS15187",
+      "name": "FS15187",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            14347467612885204962
+          ]
+        },
+        "chroma": {
+          "Shade": 4539697694678990848
+        },
+        "sum": 23419075409058285568
+      },
+      "id": "FS15193",
+      "name": "FS15193",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            12468632568340713196
+          ]
+        },
+        "chroma": {
+          "Tint": 7782338905163984896
+        },
+        "sum": 34207612936442730496
+      },
+      "id": "FS15200",
+      "name": "FS15200",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            10341356526170505847
+          ]
+        },
+        "chroma": {
+          "Tint": 4755873775377991680
+        },
+        "sum": 37254344573794256896
+      },
+      "id": "FS15450",
+      "name": "FS15450",
+      "notes": "Air Superiority Blue",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            14411518807585585151
+          ]
+        },
+        "chroma": {
+          "Tint": 2305878194122661888
+        },
+        "sum": 39560222767916920832
+      },
+      "id": "FS15526",
+      "name": "FS15526",
+      "notes": "Light Sky Blue",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            14757395258967651777
+          ]
+        },
+        "chroma": {
+          "Shade": 720586935663331328
+        },
+        "sum": 15564677810327968768
+      },
+      "id": "FS16081",
+      "name": "FS16081",
+      "notes": "Dark Gunship Gray",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            9708812670373446766
+          ]
+        },
+        "chroma": {
+          "Shade": 1369115177760329728
+        },
+        "sum": 16357323439557633024
+      },
+      "id": "FS16099",
+      "name": "FS16099",
+      "notes": "Dark Gray",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            9932862193535920163
+          ]
+        },
+        "chroma": {
+          "Shade": 936763016362331136
+        },
+        "sum": 21113197214935623680
+      },
+      "id": "FS16152",
+      "name": "FS16152",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            14019525496019258598
+          ]
+        },
+        "chroma": {
+          "Shade": 3602934678316658688
+        },
+        "sum": 19527905956476294144
+      },
+      "id": "FS16160",
+      "name": "FS16160",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            17608255706722756522
+          ]
+        },
+        "chroma": {
+          "Shade": 1585291258459329536
+        },
+        "sum": 20176434198573291520
+      },
+      "id": "FS16165",
+      "name": "FS16165",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Secondary": "Cyan"
+        },
+        "chroma": {
+          "Shade": 864704322795997184
+        },
+        "sum": 23995544957588948992
+      },
+      "id": "FS16187",
+      "name": "FS16187",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            9932862193535909305
+          ]
+        },
+        "chroma": {
+          "Shade": 936763016362332160
+        },
+        "sum": 25869070990313613312
+      },
+      "id": "FS16231",
+      "name": "FS16231",
+      "notes": "Dark Gull Gray",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            12297829382473034410
+          ]
+        },
+        "chroma": {
+          "Shade": 648528242096999424
+        },
+        "sum": 26373481845277945856
+      },
+      "id": "FS16251",
+      "name": "FS16251",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            7378697629483852102
+          ]
+        },
+        "chroma": {
+          "Tint": 720586935663331328
+        },
+        "sum": 30624944765691602944
+      },
+      "id": "FS16307",
+      "name": "FS16307",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            12297829382473014992
+          ]
+        },
+        "chroma": {
+          "Shade": 648528242097000448
+        },
+        "sum": 29399946975063939072
+      },
+      "id": "FS16314",
+      "name": "FS16314",
+      "notes": "Flint Gray",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            15902365580784088115
+          ]
+        },
+        "chroma": {
+          "Shade": 2089702113423663104
+        },
+        "sum": 26589657925976944640
+      },
+      "id": "FS16350",
+      "name": "FS16350",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            15534100272597525863
+          ]
+        },
+        "chroma": {
+          "Shade": 1369115177760329728
+        },
+        "sum": 31273473007788603392
+      },
+      "id": "FS16357",
+      "name": "FS16357",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            15902365580784088115
+          ]
+        },
+        "chroma": {
+          "Shade": 2089702113423663104
+        },
+        "sum": 33723468589043929088
+      },
+      "id": "FS16360",
+      "name": "FS16360",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            10540996613548331257
+          ]
+        },
+        "chroma": {
+          "Tint": 1008821709928663040
+        },
+        "sum": 31849942556319268864
+      },
+      "id": "FS16376",
+      "name": "FS16376",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            16210775095078098516
+          ]
+        },
+        "chroma": {
+          "Tint": 2377936887688994816
+        },
+        "sum": 37758755428758587392
+      },
+      "id": "FS16405",
+      "name": "FS16405",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            10540996613548309858
+          ]
+        },
+        "chroma": {
+          "Tint": 1008821709928665088
+        },
+        "sum": 35957288089600260096
+      },
+      "id": "FS16440",
+      "name": "FS16440",
+      "notes": "Light Gull Grey",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Secondary": "Cyan"
+        },
+        "chroma": {
+          "Shade": 1008821709928665088
+        },
+        "sum": 34660231605406263296
+      },
+      "id": "FS16473",
+      "name": "FS16473",
+      "notes": "Sky Gray",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            7378697629483831131
+          ]
+        },
+        "chroma": {
+          "Tint": 720586935663333376
+        },
+        "sum": 39704340155049584640
+      },
+      "id": "FS16492",
+      "name": "FS16492",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            3689348814741899837
+          ]
+        },
+        "chroma": {
+          "Tint": 720586935663331328
+        },
+        "sum": 40857279252110913536
+      },
+      "id": "FS16515",
+      "name": "FS16515",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            15811494920322471029
+          ]
+        },
+        "chroma": {
+          "Tint": 3026465129785995264
+        },
+        "sum": 39132092795595071488
+      },
+      "id": "FS16555",
+      "name": "FS16555",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueMagenta",
+            3689348814741899837
+          ]
+        },
+        "chroma": {
+          "Shade": 360293467831665664
+        },
+        "sum": 7579673829508672000
+      },
+      "id": "FS17038",
+      "name": "FS17038",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            16470307208669243627
+          ]
+        },
+        "chroma": {
+          "Shade": 6052930259571988480
+        },
+        "sum": 29174482078397405184
+      },
+      "id": "FS17043",
+      "name": "FS17043",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedMagenta",
+            17763531330238825053
+          ]
+        },
+        "chroma": {
+          "Shade": 3891169452581991936
+        },
+        "sum": 17764719798275076608
+      },
+      "id": "FS17100",
+      "name": "FS17100",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedMagenta",
+            9652366085080579368
+          ]
+        },
+        "chroma": {
+          "Shade": 6197047646704653312
+        },
+        "sum": 23913353010239851520
+      },
+      "id": "FS17142",
+      "name": "FS17142",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedMagenta",
+            12085797841395913906
+          ]
+        },
+        "chroma": {
+          "Shade": 4179404226847325184
+        },
+        "sum": 25292601441782947840
+      },
+      "id": "FS17155",
+      "name": "FS17155",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            14757395258967651777
+          ]
+        },
+        "chroma": {
+          "Tint": 720586935663331328
+        },
+        "sum": 39763732281387458560
+      },
+      "id": "FS17178",
+      "name": "FS17178",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            14757395258967651777
+          ]
+        },
+        "chroma": {
+          "Shade": 720586935663331328
+        },
+        "sum": 32642588185548931072
+      },
+      "id": "FS17200",
+      "name": "FS17200",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            6510615555426898755
+          ]
+        },
+        "chroma": {
+          "Tint": 1224997790627665920
+        },
+        "sum": 48783735544407566336
+      },
+      "id": "FS17773",
+      "name": "FS17773",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            16909515400900427168
+          ]
+        },
+        "chroma": {
+          "Tint": 2594112968387993600
+        },
+        "sum": 48423442076575897600
+      },
+      "id": "FS17778",
+      "name": "FS17778",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            16999940616948013518
+          ]
+        },
+        "chroma": {
+          "Tint": 3674993371882993664
+        },
+        "sum": 47702855140912572416
+      },
+      "id": "FS17855",
+      "name": "FS17855",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            10540996613548347307
+          ]
+        },
+        "chroma": {
+          "Tint": 1008821709928665088
+        },
+        "sum": 51521965899928229888
+      },
+      "id": "FS17875",
+      "name": "FS17875",
+      "notes": "Insignia White",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            5675921253449027910
+          ]
+        },
+        "chroma": {
+          "Tint": 940422246894997504
+        },
+        "sum": 53097686863148281856
+      },
+      "id": "FS17877",
+      "name": "FS17877",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Secondary": "Yellow"
+        },
+        "chroma": {
+          "Tint": 1873526032724662272
+        },
+        "sum": 51738141980627226624
+      },
+      "id": "FS17886",
+      "name": "FS17886",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            16140901064495808511
+          ]
+        },
+        "chroma": {
+          "Tint": 576469548530667520
+        },
+        "sum": 54044020174749892608
+      },
+      "id": "FS17925",
+      "name": "FS17925",
+      "notes": "Insignia White",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    }
+  ]
+}

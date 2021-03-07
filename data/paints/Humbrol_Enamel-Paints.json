@@ -1,0 +1,203 @@
+{
+  "series_id": {
+    "proprietor": "Humbrol",
+    "series_name": "Humbrol Enamel Paints"
+  },
+  "paint_list": [
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            5270498306774146946
+          ]
+        },
+        "chroma": {
+          "Shade": 506381209866535936
+        },
+        "sum": 16710579925595711488
+      },
+      "id": "1",
+      "name": "Grey Primer",
+      "notes": "AA0014",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            7266899180552238494
+          ]
+        },
+        "chroma": {
+          "Tint": 2387225703656529920
+        },
+        "sum": 47599833727454451712
+      },
+      "id": "23",
+      "name": "Duck Egg Blue",
+      "notes": "AA0254",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            13000562490042921652
+          ]
+        },
+        "chroma": {
+          "Tint": 15191436295996101632
+        },
+        "sum": 33710520542543729664
+      },
+      "id": "24",
+      "name": "Trainer Yellow",
+      "notes": "AA0268",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            4340410370284600078
+          ]
+        },
+        "chroma": {
+          "Shade": 7378697629483821056
+        },
+        "sum": 17795682518166861824
+      },
+      "id": "25",
+      "name": "Blue",
+      "notes": "AA0271",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            10447713457676202431
+          ]
+        },
+        "chroma": {
+          "Shade": 8174439530702664192
+        },
+        "sum": 19097805629252240896
+      },
+      "id": "26",
+      "name": "Khaki",
+      "notes": "AA0285",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            15811494920322483470
+          ]
+        },
+        "chroma": {
+          "Shade": 506381209866536960
+        },
+        "sum": 16565899579919558656
+      },
+      "id": "27",
+      "name": "Sea Grey",
+      "notes": "AA0299",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Secondary": "Yellow"
+        },
+        "chroma": {
+          "Tint": 868082074056919040
+        },
+        "sum": 41233898517703702528
+      },
+      "id": "28",
+      "name": "Camouflage Grey",
+      "notes": "AA1496",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            7301836195843365540
+          ]
+        },
+        "chroma": {
+          "Shade": 3472328296227680256
+        },
+        "sum": 19821207357633007616
+      },
+      "id": "29",
+      "name": "Dark Earth",
+      "notes": "AA0312",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            8935141660703062055
+          ]
+        },
+        "chroma": {
+          "Shade": 4629771061636907520
+        },
+        "sum": 15119096123158024704
+      },
+      "id": "30",
+      "name": "Dark Green",
+      "notes": "AA0326",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    }
+  ]
+}

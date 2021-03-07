@@ -1,0 +1,3711 @@
+{
+  "series_id": {
+    "proprietor": "Vallejo",
+    "series_name": "Model Color Rev18-Baja"
+  },
+  "paint_list": [
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedMagenta",
+            7814245753446407350
+          ]
+        },
+        "chroma": {
+          "Shade": 10416984888683041280
+        },
+        "sum": 24595658764946070016
+      },
+      "id": "70.802",
+      "name": "Sunset Red",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedMagenta",
+            5124095576030437720
+          ]
+        },
+        "chroma": {
+          "Tint": 3906369333256139776
+        },
+        "sum": 30382872591992202240
+      },
+      "id": "70.803",
+      "name": "Brown Rose",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            4237765530446784879
+          ]
+        },
+        "chroma": {
+          "Tint": 5353172790017673216
+        },
+        "sum": 28936069135230667776
+      },
+      "id": "70.804",
+      "name": "Beige Red",
+      "notes": "FS31433-RAL3012",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            204963823041219432
+          ]
+        },
+        "chroma": {
+          "Tint": 6510615555426899968
+        },
+        "sum": 30889253801858739200
+      },
+      "id": "70.805",
+      "name": "German Orange",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            17979737894628298733
+          ]
+        },
+        "chroma": {
+          "Shade": 5714873654208056320
+        },
+        "sum": 34506262443762572288
+      },
+      "id": "70.806",
+      "name": "German Yellow",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            878416384462356344
+          ]
+        },
+        "chroma": {
+          "Shade": 3038287259199220736
+        },
+        "sum": 18591424419385705472
+      },
+      "id": "70.807",
+      "name": "Oxford Blue",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            18279046400312187911
+          ]
+        },
+        "chroma": {
+          "Shade": 7957419012188434432
+        },
+        "sum": 27561605851307212800
+      },
+      "id": "70.808",
+      "name": "Green Blue",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            6640827866535437641
+          ]
+        },
+        "chroma": {
+          "Shade": 7234017283807668224
+        },
+        "sum": 21991412542775309312
+      },
+      "id": "70.809",
+      "name": "Royal Blue",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueMagenta",
+            8737931403336103396
+          ]
+        },
+        "chroma": {
+          "Shade": 2748926567846913536
+        },
+        "sum": 16421219234243405312
+      },
+      "id": "70.810",
+      "name": "Royal Purple",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueMagenta",
+            2359467265241919957
+          ]
+        },
+        "chroma": {
+          "Tint": 6221254864074594304
+        },
+        "sum": 27633946024145290240
+      },
+      "id": "70.811",
+      "name": "Blue Violet",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedMagenta",
+            8138269444283623481
+          ]
+        },
+        "chroma": {
+          "Shade": 4919131752989214464
+        },
+        "sum": 13599952493558414080
+      },
+      "id": "70.812",
+      "name": "Violet Red",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedMagenta",
+            1676976733973593803
+          ]
+        },
+        "chroma": {
+          "Shade": 2387225703656529920
+        },
+        "sum": 14323354221939182080
+      },
+      "id": "70.814",
+      "name": "Burnt Red",
+      "notes": "RAL8012",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            4844599453701498990
+          ]
+        },
+        "chroma": {
+          "Tint": 7161677110969587712
+        },
+        "sum": 39642414715266015232
+      },
+      "id": "70.815",
+      "name": "Basic Skin Tone",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            5950562604422439537
+          ]
+        },
+        "chroma": {
+          "Shade": 2242545357980377088
+        },
+        "sum": 18591424419385705472
+      },
+      "id": "70.816",
+      "name": "Luftwaffe Uniform WWII",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedMagenta",
+            2202596307308602436
+          ]
+        },
+        "chroma": {
+          "Tint": 9693583160302273024
+        },
+        "sum": 22353113406965690880
+      },
+      "id": "70.817",
+      "name": "Scarlet",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            3526583425856240688
+          ]
+        },
+        "chroma": {
+          "Shade": 4919131752989213696
+        },
+        "sum": 19097805629252241408
+      },
+      "id": "70.818",
+      "name": "Red Leathe",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            9799832789158203502
+          ]
+        },
+        "chroma": {
+          "Tint": 4629771061636905984
+        },
+        "sum": 31829676048753736704
+      },
+      "id": "70.819",
+      "name": "Iraqi Sand",
+      "notes": "FS30475",
+      "finish": "Flat",
+      "transparency": "Transparent",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Secondary": "Yellow"
+        },
+        "chroma": {
+          "Tint": 1302123111085379584
+        },
+        "sum": 49046637184215984128
+      },
+      "id": "70.820",
+      "name": "Off-White",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            15931278972749154436
+          ]
+        },
+        "chroma": {
+          "Shade": 1591483802437686272
+        },
+        "sum": 26187142567383754752
+      },
+      "id": "70.821",
+      "name": "German C. Beige WWII",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedMagenta",
+            12297829382472976383
+          ]
+        },
+        "chroma": {
+          "Shade": 217020518514230272
+        },
+        "sum": 13165911456529954816
+      },
+      "id": "70.822",
+      "name": "German C. Black Brown",
+      "notes": "RLM61",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            6148914691236517205
+          ]
+        },
+        "chroma": {
+          "Shade": 868082074056920064
+        },
+        "sum": 14395694394777256960
+      },
+      "id": "70.823",
+      "name": "Luftwaffe Cam. Green",
+      "notes": "FS34095-RAL6020-RLM82",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            10642352350217052485
+          ]
+        },
+        "chroma": {
+          "Shade": 5642533481369979904
+        },
+        "sum": 23872257036565301248
+      },
+      "id": "70.824",
+      "name": "Ger. Cam. Orange Ochre",
+      "notes": "FS30266-ANA615",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            5088756985850908927
+          ]
+        },
+        "chroma": {
+          "Shade": 2097865012304224256
+        },
+        "sum": 20906309950204158976
+      },
+      "id": "70.825",
+      "name": "Ger. Cam. Pale Brown",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            8854437155380586028
+          ]
+        },
+        "chroma": {
+          "Shade": 1808504320951916544
+        },
+        "sum": 15480796987348408320
+      },
+      "id": "70.826",
+      "name": "Ger. Cam. Med. Brown",
+      "notes": "FS30097",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            13112745787335707828
+          ]
+        },
+        "chroma": {
+          "Shade": 6004234345560363008
+        },
+        "sum": 24161617727917607936
+      },
+      "id": "70.827",
+      "name": "Lime Green",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            1756832768924719300
+          ]
+        },
+        "chroma": {
+          "Tint": 9114861777597660160
+        },
+        "sum": 22787154443994151936
+      },
+      "id": "70.829",
+      "name": "Amaranth Red",
+      "notes": "FS31400",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Primary": "Green"
+        },
+        "chroma": {
+          "Shade": 289360691352306688
+        },
+        "sum": 18302063728033398784
+      },
+      "id": "70.830",
+      "name": "German Fieldgrey WWII",
+      "notes": "FS34086-RAL7009",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            3353953467947187606
+          ]
+        },
+        "chroma": {
+          "Shade": 2387225703656529920
+        },
+        "sum": 19097805629252241408
+      },
+      "id": "70.833",
+      "name": "Ger. Cam. Bright Green",
+      "notes": "RAL6025",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            1177451749385717360
+          ]
+        },
+        "chroma": {
+          "Tint": 6799976246779207680
+        },
+        "sum": 39136033505399478272
+      },
+      "id": "70.835",
+      "name": "Salmon Rose",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            7378697629483822734
+          ]
+        },
+        "chroma": {
+          "Shade": 1808504320951917568
+        },
+        "sum": 21846732197099155456
+      },
+      "id": "70.836",
+      "name": "London Grey",
+      "notes": "FS36118-ANA603",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            9915124939618888073
+          ]
+        },
+        "chroma": {
+          "Tint": 5787213827046133760
+        },
+        "sum": 44055165258388692992
+      },
+      "id": "70.837",
+      "name": "Pale Sand",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            10568447125562759766
+          ]
+        },
+        "chroma": {
+          "Shade": 6944656592455361024
+        },
+        "sum": 20689289431689928192
+      },
+      "id": "70.838",
+      "name": "Emerald",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            4407629114957148458
+          ]
+        },
+        "chroma": {
+          "Shade": 8174439530702662656
+        },
+        "sum": 22714814271156074496
+      },
+      "id": "70.839",
+      "name": "Ultramarine",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            15428185952557080719
+          ]
+        },
+        "chroma": {
+          "Shade": 7957419012188433920
+        },
+        "sum": 26982884468602599936
+      },
+      "id": "70.840",
+      "name": "Light Turquoise",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            11726858732572499017
+          ]
+        },
+        "chroma": {
+          "Tint": 10127624197330735104
+        },
+        "sum": 30455212764830279680
+      },
+      "id": "70.841",
+      "name": "Andrea Blue",
+      "notes": "RAL5012",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            9223372036854906367
+          ]
+        },
+        "chroma": {
+          "Tint": 144680345676154880
+        },
+        "sum": 52301944961929431040
+      },
+      "id": "70.842",
+      "name": "Gloss White",
+      "notes": "FS17925",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            6317378107434776137
+          ]
+        },
+        "chroma": {
+          "Tint": 5280832617179597824
+        },
+        "sum": 25102039974812606464
+      },
+      "id": "70.843",
+      "name": "Cork Brown",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            12600944895421315434
+          ]
+        },
+        "chroma": {
+          "Tint": 10272304543006886912
+        },
+        "sum": 35519024863495646208
+      },
+      "id": "70.844",
+      "name": "Deep Sky Blue",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            8105387547539046395
+          ]
+        },
+        "chroma": {
+          "Tint": 9548902814626120704
+        },
+        "sum": 35663705209171799040
+      },
+      "id": "70.845",
+      "name": "Sunny Skin Tone",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            1152921504606842895
+          ]
+        },
+        "chroma": {
+          "Shade": 2314885530818453504
+        },
+        "sum": 17651002172490708992
+      },
+      "id": "70.846",
+      "name": "Mahogany Brown",
+      "notes": "RAL8002",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            11386879057845402350
+          ]
+        },
+        "chroma": {
+          "Tint": 5859553999884211200
+        },
+        "sum": 34867963307952956416
+      },
+      "id": "70.847",
+      "name": "Dark Sand",
+      "notes": "RAL1001",
+      "finish": "Flat",
+      "transparency": "Transparent",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Primary": "Green"
+        },
+        "chroma": {
+          "Shade": 4340410370284600832
+        },
+        "sum": 14757395258967640064
+      },
+      "id": "70.850",
+      "name": "Medium Olive",
+      "notes": "ANA611",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            3447118842056835732
+          ]
+        },
+        "chroma": {
+          "Tint": 14323354221939181056
+        },
+        "sum": 26548843431574137344
+      },
+      "id": "70.851",
+      "name": "Bright Orange",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            10330176681277349781
+          ]
+        },
+        "chroma": {
+          "Shade": 9042521604759583232
+        },
+        "sum": 22353113406965690880
+      },
+      "id": "70.856",
+      "name": "Ochre Brown",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            14563219005560168469
+          ]
+        },
+        "chroma": {
+          "Shade": 4123389851770371072
+        },
+        "sum": 21919072369937232896
+      },
+      "id": "70.857",
+      "name": "Golden Olive",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            13131580527047477570
+          ]
+        },
+        "chroma": {
+          "Tint": 8536140394893045760
+        },
+        "sum": 41740279727570239488
+      },
+      "id": "70.858",
+      "name": "Ice Yellow",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedMagenta",
+            2515465100960397178
+          ]
+        },
+        "chroma": {
+          "Shade": 1591483802437686272
+        },
+        "sum": 12008468691120728064
+      },
+      "id": "70.859",
+      "name": "Black Red",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            8954730132868712800
+          ]
+        },
+        "chroma": {
+          "Shade": 7451037802321897472
+        },
+        "sum": 26693523777250291712
+      },
+      "id": "70.860",
+      "name": "Medium Flesh Tone",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            6148914691236517205
+          ]
+        },
+        "chroma": {
+          "Shade": 217020518514230016
+        },
+        "sum": 3761688987579986944
+      },
+      "id": "70.861",
+      "name": "Glossy Black",
+      "notes": "FS17038",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            8384883669867993112
+          ]
+        },
+        "chroma": {
+          "Shade": 795741901218843648
+        },
+        "sum": 14395694394777257984
+      },
+      "id": "70.862",
+      "name": "Black Grey",
+      "notes": "RAL7021",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            5270498306774160268
+          ]
+        },
+        "chroma": {
+          "Shade": 1012762419733072896
+        },
+        "sum": 18229723555195322368
+      },
+      "id": "70.866",
+      "name": "Grey Green",
+      "notes": "RLM66",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            10760600709663915082
+          ]
+        },
+        "chroma": {
+          "Shade": 868082074056920576
+        },
+        "sum": 15046755950319948288
+      },
+      "id": "70.867",
+      "name": "Dark Blue Grey",
+      "notes": "RLM74",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            5030930201920782488
+          ]
+        },
+        "chroma": {
+          "Shade": 1591483802437686272
+        },
+        "sum": 18085043209519168512
+      },
+      "id": "70.868",
+      "name": "Dark Sea Green",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            7027331075698882726
+          ]
+        },
+        "chroma": {
+          "Shade": 1519143629599608832
+        },
+        "sum": 21629711678584925184
+      },
+      "id": "70.869",
+      "name": "Basalt Grey",
+      "notes": "FS36152-RAL7012-RLM75",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            6917529027641090015
+          ]
+        },
+        "chroma": {
+          "Tint": 1157442765409226752
+        },
+        "sum": 27199904987116830720
+      },
+      "id": "70.870",
+      "name": "Medium Sea Grey",
+      "notes": "FS36270",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            5675921253449094349
+          ]
+        },
+        "chroma": {
+          "Shade": 940422246894996480
+        },
+        "sum": 15553137160186485760
+      },
+      "id": "70.871",
+      "name": "Leather Brown",
+      "notes": "FS30051-RAL8027",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            9223372036854785133
+          ]
+        },
+        "chroma": {
+          "Shade": 1012762419733072896
+        },
+        "sum": 14323354221939181568
+      },
+      "id": "70.872",
+      "name": "Chocolate Brown",
+      "notes": "FS30099",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            9223372036854783060
+          ]
+        },
+        "chroma": {
+          "Shade": 2604246222170759168
+        },
+        "sum": 19748867184794930176
+      },
+      "id": "70.873",
+      "name": "US Field Drab",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            8579880964516072636
+          ]
+        },
+        "chroma": {
+          "Shade": 3110627432037296128
+        },
+        "sum": 23221195481022612480
+      },
+      "id": "70.874",
+      "name": "Tan Earth",
+      "notes": "FS30219-ANA628",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            8548491156109303785
+          ]
+        },
+        "chroma": {
+          "Shade": 2965947086361144320
+        },
+        "sum": 24089277555079533568
+      },
+      "id": "70.875",
+      "name": "Beige Brown",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            5599904450947542704
+          ]
+        },
+        "chroma": {
+          "Tint": 4051049678932292608
+        },
+        "sum": 25029699801974528000
+      },
+      "id": "70.876",
+      "name": "Brown Sand",
+      "notes": "RLM79",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            10267527361781730943
+          ]
+        },
+        "chroma": {
+          "Shade": 7668058320836127232
+        },
+        "sum": 25608421184679140864
+      },
+      "id": "70.877",
+      "name": "Gold Brown",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Transparent",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            11956223010737675969
+          ]
+        },
+        "chroma": {
+          "Shade": 3906369333256140288
+        },
+        "sum": 20110568048985314816
+      },
+      "id": "70.879",
+      "name": "Green Brown",
+      "notes": "RAL8000",
+      "finish": "Flat",
+      "transparency": "Transparent",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            11293924943087480798
+          ]
+        },
+        "chroma": {
+          "Shade": 3544668469065757696
+        },
+        "sum": 20689289431689928704
+      },
+      "id": "70.880",
+      "name": "Khaki Grey",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Transparent",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            17985575471866807928
+          ]
+        },
+        "chroma": {
+          "Shade": 2893606913523066880
+        },
+        "sum": 19170145802090318848
+      },
+      "id": "70.881",
+      "name": "Yellow Green",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Transparent",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            14239591916547728473
+          ]
+        },
+        "chroma": {
+          "Shade": 4123389851770369024
+        },
+        "sum": 23365875826698765312
+      },
+      "id": "70.882",
+      "name": "Middle Stone",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Transparent",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            15987178197214954017
+          ]
+        },
+        "chroma": {
+          "Tint": 1085102592571150336
+        },
+        "sum": 40221136097970630656
+      },
+      "id": "70.883",
+      "name": "Silver Grey",
+      "notes": "FS37150-RAL9002",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            15811494920322481694
+          ]
+        },
+        "chroma": {
+          "Shade": 1519143629599609856
+        },
+        "sum": 30165852073477970944
+      },
+      "id": "70.884",
+      "name": "Stone Grey",
+      "notes": "FS36357",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            9661912274164611876
+          ]
+        },
+        "chroma": {
+          "Tint": 1517412850098833408
+        },
+        "sum": 32450352808616099840
+      },
+      "id": "70.885",
+      "name": "Pastel Green",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Transparent",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            10540996613548309879
+          ]
+        },
+        "chroma": {
+          "Shade": 506381209866536960
+        },
+        "sum": 22714814271156074496
+      },
+      "id": "70.886",
+      "name": "Green Grey",
+      "notes": "RLM2",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            15811494920322464819
+          ]
+        },
+        "chroma": {
+          "Shade": 1012762419733073920
+        },
+        "sum": 16638239752757635072
+      },
+      "id": "70.887",
+      "name": "US Olive Drab",
+      "notes": "FS34088-ANA613",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            12297829382473024738
+          ]
+        },
+        "chroma": {
+          "Shade": 651061555542689792
+        },
+        "sum": 15625477333024561152
+      },
+      "id": "70.888",
+      "name": "Olive Grey",
+      "notes": "FS34096-RAL6006",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            6148914691236488191
+          ]
+        },
+        "chroma": {
+          "Shade": 217020518514230272
+        },
+        "sum": 14829735431805718528
+      },
+      "id": "70.889",
+      "name": "Olive Brown",
+      "notes": "FS34084",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            12770822820260457265
+          ]
+        },
+        "chroma": {
+          "Shade": 940422246894996480
+        },
+        "sum": 15480796987348407296
+      },
+      "id": "70.890",
+      "name": "Refractive Green",
+      "notes": "FS34129-RAL6003",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            6498284844147679684
+          ]
+        },
+        "chroma": {
+          "Shade": 6365935209750748160
+        },
+        "sum": 23582896345212994560
+      },
+      "id": "70.891",
+      "name": "Intermediate Green",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Primary": "Green"
+        },
+        "chroma": {
+          "Shade": 434041037028459520
+        },
+        "sum": 14974415777481871360
+      },
+      "id": "70.892",
+      "name": "Yellow Olive",
+      "notes": "FS34083-RAL6008",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            11529215046068461599
+          ]
+        },
+        "chroma": {
+          "Shade": 578721382704613376
+        },
+        "sum": 16131858542891099136
+      },
+      "id": "70.893",
+      "name": "US Dark Green",
+      "notes": "FS34079",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            10248191152060858784
+          ]
+        },
+        "chroma": {
+          "Shade": 651061555542689792
+        },
+        "sum": 15336116641672255488
+      },
+      "id": "70.894",
+      "name": "Cam. Olive Green",
+      "notes": "RLM80",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            11650575204448135692
+          ]
+        },
+        "chroma": {
+          "Shade": 1374463283923457024
+        },
+        "sum": 18085043209519167488
+      },
+      "id": "70.895",
+      "name": "Gunship Green",
+      "notes": "FS34092",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            13835058055282147391
+          ]
+        },
+        "chroma": {
+          "Shade": 578721382704613376
+        },
+        "sum": 14468034567615335424
+      },
+      "id": "70.896",
+      "name": "Ger. C. Extra Dark Green",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            11529215046068494239
+          ]
+        },
+        "chroma": {
+          "Shade": 578721382704613376
+        },
+        "sum": 15914838024376867840
+      },
+      "id": "70.897",
+      "name": "Bronze Green",
+      "notes": "RAL7022-RLM70",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            8070450532247924751
+          ]
+        },
+        "chroma": {
+          "Shade": 1157442765409226752
+        },
+        "sum": 13816973012072644096
+      },
+      "id": "70.898",
+      "name": "Dark Sea Blue",
+      "notes": "FS35042-ANA607",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            8925843906633656180
+          ]
+        },
+        "chroma": {
+          "Shade": 2242545357980377344
+        },
+        "sum": 8536140394893047552
+      },
+      "id": "70.899",
+      "name": "Dark Prussian Blue",
+      "notes": "FS35048",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            7378697629483822386
+          ]
+        },
+        "chroma": {
+          "Shade": 2170205185142299648
+        },
+        "sum": 21485031332908770304
+      },
+      "id": "70.900",
+      "name": "French Mirage Blue",
+      "notes": "FS35164",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            11003321026423239706
+          ]
+        },
+        "chroma": {
+          "Shade": 4123389851770370048
+        },
+        "sum": 27633946024145287168
+      },
+      "id": "70.901",
+      "name": "Pastel Blue",
+      "notes": "RAL5024",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            6015242632731377871
+          ]
+        },
+        "chroma": {
+          "Tint": 6655295901103052800
+        },
+        "sum": 31178614493211045888
+      },
+      "id": "70.902",
+      "name": "Azure",
+      "notes": "FS35231",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            7633135478776367116
+          ]
+        },
+        "chroma": {
+          "Shade": 2097865012304223232
+        },
+        "sum": 22497793752641846272
+      },
+      "id": "70.903",
+      "name": "Intermediate Blue",
+      "notes": "FS36176",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            13461137567301569651
+          ]
+        },
+        "chroma": {
+          "Shade": 2676586395008837632
+        },
+        "sum": 26331822913059907584
+      },
+      "id": "70.904",
+      "name": "Dark Blue Grey",
+      "notes": "FS35189",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            9932862193535904682
+          ]
+        },
+        "chroma": {
+          "Shade": 1880844493789993984
+        },
+        "sum": 28285007579687977984
+      },
+      "id": "70.905",
+      "name": "Blue Grey Pale",
+      "notes": "FS35237",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Secondary": "Cyan"
+        },
+        "chroma": {
+          "Shade": 1808504320951918592
+        },
+        "sum": 33782860715381807104
+      },
+      "id": "70.906",
+      "name": "Pale Blue",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            12981042125943762125
+          ]
+        },
+        "chroma": {
+          "Tint": 1953184666628071424
+        },
+        "sum": 36531787283228721152
+      },
+      "id": "70.907",
+      "name": "Pale Grey Blue",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedMagenta",
+            1721696113546224179
+          ]
+        },
+        "chroma": {
+          "Shade": 10851025925711502080
+        },
+        "sum": 18374403900871474944
+      },
+      "id": "70.908",
+      "name": "Carmine Red",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedMagenta",
+            725433755707679305
+          ]
+        },
+        "chroma": {
+          "Tint": 12876550765177648640
+        },
+        "sum": 20761629604528006144
+      },
+      "id": "70.909",
+      "name": "Vermilion",
+      "notes": "FS31302-RAL3020",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            2662416670432305842
+          ]
+        },
+        "chroma": {
+          "Tint": 14033993530586873856
+        },
+        "sum": 23004174962508380672
+      },
+      "id": "70.910",
+      "name": "Orange Red",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            6181107961871263253
+          ]
+        },
+        "chroma": {
+          "Tint": 13816973012072644608
+        },
+        "sum": 30165852073477974016
+      },
+      "id": "70.911",
+      "name": "Light Orange",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            9448332330436600384
+          ]
+        },
+        "chroma": {
+          "Tint": 5931894172722287616
+        },
+        "sum": 30455212764830280704
+      },
+      "id": "70.912",
+      "name": "Tan Yellow",
+      "notes": "FS33245-RAL1011",
+      "finish": "Flat",
+      "transparency": "Transparent",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            10721184589848286732
+          ]
+        },
+        "chroma": {
+          "Shade": 8463800222054970368
+        },
+        "sum": 27923306715497595904
+      },
+      "id": "70.913",
+      "name": "Yellow Ochre",
+      "notes": "FS33434",
+      "finish": "Flat",
+      "transparency": "Transparent",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            10912158466138048087
+          ]
+        },
+        "chroma": {
+          "Shade": 5136152271503442944
+        },
+        "sum": 25970122048869526528
+      },
+      "id": "70.914",
+      "name": "Green Ochre",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Transparent",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            16777355469753939414
+          ]
+        },
+        "chroma": {
+          "Tint": 15987178197214942464
+        },
+        "sum": 36604127456066794240
+      },
+      "id": "70.915",
+      "name": "Deep Yellow",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            11329496360231063908
+          ]
+        },
+        "chroma": {
+          "Tint": 9187201950435737600
+        },
+        "sum": 35446684690657570816
+      },
+      "id": "70.916",
+      "name": "Sand Yellow",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            11790702397628786373
+          ]
+        },
+        "chroma": {
+          "Tint": 7016996765293435904
+        },
+        "sum": 36025406073362183168
+      },
+      "id": "70.917",
+      "name": "Beige",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Secondary": "Yellow"
+        },
+        "chroma": {
+          "Tint": 2965947086361143296
+        },
+        "sum": 48467915801511372800
+      },
+      "id": "70.918",
+      "name": "Ivory",
+      "notes": "RAL9001",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": null,
+        "chroma": {
+          "Neither": 0
+        },
+        "sum": 55340232221128654845
+      },
+      "id": "70.919",
+      "name": "Cold White",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            17475862806672210409
+          ]
+        },
+        "chroma": {
+          "Shade": 1374463283923457024
+        },
+        "sum": 18302063728033398784
+      },
+      "id": "70.920",
+      "name": "German Uniform",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            10405855631323340671
+          ]
+        },
+        "chroma": {
+          "Shade": 2821266740684990976
+        },
+        "sum": 17433981653976478208
+      },
+      "id": "70.921",
+      "name": "English Uniform",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            4760450083537950434
+          ]
+        },
+        "chroma": {
+          "Shade": 2242545357980376064
+        },
+        "sum": 18012703036681092096
+      },
+      "id": "70.922",
+      "name": "Uniform Green",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            12367703413055265334
+          ]
+        },
+        "chroma": {
+          "Shade": 6365935209750747136
+        },
+        "sum": 22787154443994150912
+      },
+      "id": "70.923",
+      "name": "Japanese Uniform WWII",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Transparent",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Secondary": "Yellow"
+        },
+        "chroma": {
+          "Shade": 1085102592571150336
+        },
+        "sum": 18446744073709552640
+      },
+      "id": "70.924",
+      "name": "Russian Uniform WWII",
+      "notes": "FS34127-RLM83",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            4955841691444358459
+          ]
+        },
+        "chroma": {
+          "Shade": 4846791580151135744
+        },
+        "sum": 13310591802206107136
+      },
+      "id": "70.925",
+      "name": "Blue",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedMagenta",
+            2108199322709661869
+          ]
+        },
+        "chroma": {
+          "Shade": 7595718147998050304
+        },
+        "sum": 15408456814510330368
+      },
+      "id": "70.926",
+      "name": "Red",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            8920966396302160224
+          ]
+        },
+        "chroma": {
+          "Tint": 8825501086245354496
+        },
+        "sum": 31540315357401428992
+      },
+      "id": "70.927",
+      "name": "Dark Flesh",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            5745707170499700755
+          ]
+        },
+        "chroma": {
+          "Tint": 4412750543122677760
+        },
+        "sum": 46153030270692917248
+      },
+      "id": "70.928",
+      "name": "Light Flesh",
+      "notes": "FS31670",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            6689478620136430868
+          ]
+        },
+        "chroma": {
+          "Shade": 6582955728264976384
+        },
+        "sum": 24161617727917608960
+      },
+      "id": "70.929",
+      "name": "Light Brown",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            6027154004281338236
+          ]
+        },
+        "chroma": {
+          "Shade": 7306357456645745152
+        },
+        "sum": 23365875826698765824
+      },
+      "id": "70.930",
+      "name": "Dark Blue",
+      "notes": "FS35095",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            658812288346776694
+          ]
+        },
+        "chroma": {
+          "Shade": 2025524839466146816
+        },
+        "sum": 17940362863843014656
+      },
+      "id": "70.940",
+      "name": "Saddle Brown",
+      "notes": "FS30111",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            7094901566811375276
+          ]
+        },
+        "chroma": {
+          "Shade": 940422246894997504
+        },
+        "sum": 15408456814510331904
+      },
+      "id": "70.941",
+      "name": "Burnt Umber",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            6498284844147679684
+          ]
+        },
+        "chroma": {
+          "Shade": 6365935209750748160
+        },
+        "sum": 23582896345212994560
+      },
+      "id": "70.942",
+      "name": "Light Green",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            7119795958273862991
+          ]
+        },
+        "chroma": {
+          "Tint": 4123389851770371072
+        },
+        "sum": 28285007579687976960
+      },
+      "id": "70.943",
+      "name": "Grey Blue",
+      "notes": "FS35177",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedMagenta",
+            2141139937127003004
+          ]
+        },
+        "chroma": {
+          "Tint": 8102099357864588288
+        },
+        "sum": 31612655530239504384
+      },
+      "id": "70.944",
+      "name": "Old Rose",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedMagenta",
+            1574722055072766237
+          ]
+        },
+        "chroma": {
+          "Shade": 11863788345444573952
+        },
+        "sum": 19387166320604546816
+      },
+      "id": "70.945",
+      "name": "Magenta",
+      "notes": "RAL4006",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedMagenta",
+            6068007918983405407
+          ]
+        },
+        "chroma": {
+          "Shade": 5497853135693826048
+        },
+        "sum": 19025465456414164992
+      },
+      "id": "70.946",
+      "name": "Dark Red",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedMagenta",
+            1956472856302527317
+          ]
+        },
+        "chroma": {
+          "Tint": 9548902814626120192
+        },
+        "sum": 20544609086013773824
+      },
+      "id": "70.947",
+      "name": "Dark Vermilion",
+      "notes": "FS31350-RAL3000",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            10135573666873381979
+          ]
+        },
+        "chroma": {
+          "Tint": 13165911456529951744
+        },
+        "sum": 34940303480791030784
+      },
+      "id": "70.948",
+      "name": "Golden Yellow",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            17508774036063303652
+          ]
+        },
+        "chroma": {
+          "Tint": 12804210592339571712
+        },
+        "sum": 39714754888104094720
+      },
+      "id": "70.949",
+      "name": "Light Yellow",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            7905747460161239070
+          ]
+        },
+        "chroma": {
+          "Shade": 506381209866535936
+        },
+        "sum": 8319119876378817024
+      },
+      "id": "70.950",
+      "name": "Black",
+      "notes": "FS37038-RAL9005-RLM22",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": null,
+        "chroma": {
+          "Neither": 0
+        },
+        "sum": 55340232221128654845
+      },
+      "id": "70.951",
+      "name": "White",
+      "notes": "FS37925-RAL9016-RLM21",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            18181958273608455997
+          ]
+        },
+        "chroma": {
+          "Tint": 15119096123158023680
+        },
+        "sum": 37399869357285636608
+      },
+      "id": "70.952",
+      "name": "Lemon Yellow",
+      "notes": "RAL1018",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            11427982913956650111
+          ]
+        },
+        "chroma": {
+          "Tint": 14829735431805715968
+        },
+        "sum": 33565840196867572224
+      },
+      "id": "70.953",
+      "name": "Flat Yellow",
+      "notes": "RLM4",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            14049555079395065853
+          ]
+        },
+        "chroma": {
+          "Tint": 12442509728149187584
+        },
+        "sum": 32770098295648734208
+      },
+      "id": "70.954",
+      "name": "Yellow Green",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            6481288458330383381
+          ]
+        },
+        "chroma": {
+          "Tint": 8029759185026510848
+        },
+        "sum": 34723282962276804608
+      },
+      "id": "70.955",
+      "name": "Flat Flesh",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            1010780497189564521
+          ]
+        },
+        "chroma": {
+          "Tint": 10561665234359193600
+        },
+        "sum": 23293535653860687872
+      },
+      "id": "70.956",
+      "name": "Clear Orange",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedMagenta",
+            1647030720866924355
+          ]
+        },
+        "chroma": {
+          "Shade": 8102099357864586752
+        },
+        "sum": 19459506493442625024
+      },
+      "id": "70.957",
+      "name": "Flat Red",
+      "notes": "ANA619",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedMagenta",
+            16699157793042331687
+          ]
+        },
+        "chroma": {
+          "Shade": 6872316419617284096
+        },
+        "sum": 34144561579572189184
+      },
+      "id": "70.958",
+      "name": "Pink",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueMagenta",
+            8893965892681389874
+          ]
+        },
+        "chroma": {
+          "Shade": 4051049678932294656
+        },
+        "sum": 22497793752641846272
+      },
+      "id": "70.959",
+      "name": "Purple",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueMagenta",
+            3320413933267719656
+          ]
+        },
+        "chroma": {
+          "Shade": 3617008641903834624
+        },
+        "sum": 17289301308300324352
+      },
+      "id": "70.960",
+      "name": "Violet",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            13197670556800331353
+          ]
+        },
+        "chroma": {
+          "Tint": 8897841259083430912
+        },
+        "sum": 41306238690541777920
+      },
+      "id": "70.961",
+      "name": "Sky Blue",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            6015242632731376020
+          ]
+        },
+        "chroma": {
+          "Shade": 6655295901103054848
+        },
+        "sum": 24450978419269916672
+      },
+      "id": "70.962",
+      "name": "Flat Blue",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            9331882296111892732
+          ]
+        },
+        "chroma": {
+          "Shade": 6148914691236517376
+        },
+        "sum": 20544609086013774336
+      },
+      "id": "70.963",
+      "name": "Medium Blue",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            8646911284551354359
+          ]
+        },
+        "chroma": {
+          "Shade": 2314885530818453504
+        },
+        "sum": 20761629604528005120
+      },
+      "id": "70.964",
+      "name": "Field Blue",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            7257735373262774440
+          ]
+        },
+        "chroma": {
+          "Shade": 4412750543122678272
+        },
+        "sum": 19821207357633009152
+      },
+      "id": "70.965",
+      "name": "Prussian Blue",
+      "notes": "RAL5000",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            12730851543827717166
+          ]
+        },
+        "chroma": {
+          "Shade": 5136152271503443968
+        },
+        "sum": 20833969777366081536
+      },
+      "id": "70.966",
+      "name": "Turquoise",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            7478409759611982864
+          ]
+        },
+        "chroma": {
+          "Shade": 2676586395008836608
+        },
+        "sum": 18519084246547628032
+      },
+      "id": "70.967",
+      "name": "Olive Green",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            1676976733973600996
+          ]
+        },
+        "chroma": {
+          "Shade": 1591483802437687296
+        },
+        "sum": 15625477333024562176
+      },
+      "id": "70.968",
+      "name": "Flat Green",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            11759799346989837298
+          ]
+        },
+        "chroma": {
+          "Shade": 5787213827046134272
+        },
+        "sum": 19242485974928395776
+      },
+      "id": "70.969",
+      "name": "Park Green Flat",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            10900348770828375590
+          ]
+        },
+        "chroma": {
+          "Shade": 3182967604875374080
+        },
+        "sum": 16348879061405327872
+      },
+      "id": "70.970",
+      "name": "Deep Green",
+      "notes": "FS34090",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            7094901566811375276
+          ]
+        },
+        "chroma": {
+          "Tint": 940422246894997504
+        },
+        "sum": 36459447110390642688
+      },
+      "id": "70.971",
+      "name": "Green Grey",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            14305638261244137501
+          ]
+        },
+        "chroma": {
+          "Shade": 3544668469065758720
+        },
+        "sum": 29948831554963740672
+      },
+      "id": "70.972",
+      "name": "Light Green Blue",
+      "notes": "RLM78",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            16971004547812771609
+          ]
+        },
+        "chroma": {
+          "Tint": 1808504320951916544
+        },
+        "sum": 35591365036333723648
+      },
+      "id": "70.973",
+      "name": "Light Sea Grey",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Transparent",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Primary": "Green"
+        },
+        "chroma": {
+          "Tint": 2531906049332684800
+        },
+        "sum": 29008409308068745216
+      },
+      "id": "70.974",
+      "name": "Green Sky",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            9223372036854783967
+          ]
+        },
+        "chroma": {
+          "Shade": 578721382704612864
+        },
+        "sum": 12804210592339571200
+      },
+      "id": "70.975",
+      "name": "Military Green",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            12297829382473036559
+          ]
+        },
+        "chroma": {
+          "Tint": 5859553999884210176
+        },
+        "sum": 34072221406734112768
+      },
+      "id": "70.976",
+      "name": "Buff",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Transparent",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            9807129760706346867
+          ]
+        },
+        "chroma": {
+          "Tint": 5714873654208056320
+        },
+        "sum": 28285007579687980032
+      },
+      "id": "70.977",
+      "name": "Desert Yellow",
+      "notes": "FS30257",
+      "finish": "Flat",
+      "transparency": "Transparent",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            16909515400900427391
+          ]
+        },
+        "chroma": {
+          "Shade": 4340410370284599296
+        },
+        "sum": 23510556172374919168
+      },
+      "id": "70.978",
+      "name": "Dark Yellow",
+      "notes": "RAL7028",
+      "finish": "Flat",
+      "transparency": "Transparent",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            13835058055282180031
+          ]
+        },
+        "chroma": {
+          "Shade": 289360691352306688
+        },
+        "sum": 14395694394777257984
+      },
+      "id": "70.979",
+      "name": "Ger. Cam. Dark Green",
+      "notes": "FS34052-RAL6007",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
+            13835058055282147391
+          ]
+        },
+        "chroma": {
+          "Shade": 868082074056920064
+        },
+        "sum": 13238251629368031744
+      },
+      "id": "70.980",
+      "name": "Black Green",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            6248090734643557465
+          ]
+        },
+        "chroma": {
+          "Shade": 8970181431921506304
+        },
+        "sum": 23727576690889148416
+      },
+      "id": "70.981",
+      "name": "Orange Brown",
+      "notes": "RAL8023",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedMagenta",
+            922337203685479212
+          ]
+        },
+        "chroma": {
+          "Shade": 5787213827046133760
+        },
+        "sum": 15191436295996100096
+      },
+      "id": "70.982",
+      "name": "Cavalry Brown",
+      "notes": "FS30109",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            8344955652392419167
+          ]
+        },
+        "chroma": {
+          "Shade": 3038287259199219712
+        },
+        "sum": 17216961135462248448
+      },
+      "id": "70.983",
+      "name": "Flat Earth",
+      "notes": "FS30145",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            2732850973882891341
+          ]
+        },
+        "chroma": {
+          "Shade": 1953184666628070400
+        },
+        "sum": 14395694394777257472
+      },
+      "id": "70.984",
+      "name": "Flat Brown",
+      "notes": "FS30108-RAL8011",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            1418980313362269724
+          ]
+        },
+        "chroma": {
+          "Shade": 2821266740684990464
+        },
+        "sum": 8897841259083431168
+      },
+      "id": "70.985",
+      "name": "Hull Red",
+      "notes": "RAL8017",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenYellow",
+            11068046444225751858
+          ]
+        },
+        "chroma": {
+          "Tint": 723401728380766208
+        },
+        "sum": 35663705209171800064
+      },
+      "id": "70.986",
+      "name": "Deck Tan",
+      "notes": "FS36440",
+      "finish": "Flat",
+      "transparency": "Transparent",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            10145709240540250777
+          ]
+        },
+        "chroma": {
+          "Shade": 1446803456761532416
+        },
+        "sum": 28067987061173747712
+      },
+      "id": "70.987",
+      "name": "Medium Grey",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Transparent",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "RedYellow",
+            14630176334321363554
+          ]
+        },
+        "chroma": {
+          "Shade": 2097865012304223232
+        },
+        "sum": 22859494616832227328
+      },
+      "id": "70.988",
+      "name": "Khaki",
+      "notes": "FS30277",
+      "finish": "Flat",
+      "transparency": "Transparent",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            6588122883467707663
+          ]
+        },
+        "chroma": {
+          "Tint": 1012762419733073920
+        },
+        "sum": 34144561579572191232
+      },
+      "id": "70.989",
+      "name": "Sky Grey",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            6385411410130221679
+          ]
+        },
+        "chroma": {
+          "Tint": 1880844493789995008
+        },
+        "sum": 30744573456182585344
+      },
+      "id": "70.990",
+      "name": "Light Grey",
+      "notes": "FS36375-RAL7001",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            4919131752989212603
+          ]
+        },
+        "chroma": {
+          "Tint": 1085102592571150336
+        },
+        "sum": 25463740839002986496
+      },
+      "id": "70.991",
+      "name": "Dark Sea Grey",
+      "notes": "FS36231",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            7378697629483820646
+          ]
+        },
+        "chroma": {
+          "Shade": 1808504320951915520
+        },
+        "sum": 23148855308184534016
+      },
+      "id": "70.992",
+      "name": "Neutral Grey",
+      "notes": "FS36173",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Secondary": "Cyan"
+        },
+        "chroma": {
+          "Tint": 144680345676154880
+        },
+        "sum": 51072162023682131968
+      },
+      "id": "70.993",
+      "name": "White Grey",
+      "notes": "",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            7595718147998056086
+          ]
+        },
+        "chroma": {
+          "Shade": 1229782938247303168
+        },
+        "sum": 16276538888567251968
+      },
+      "id": "70.994",
+      "name": "Dark Grey",
+      "notes": "FS36076",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "BlueCyan",
+            4919131752989203899
+          ]
+        },
+        "chroma": {
+          "Shade": 1085102592571150336
+        },
+        "sum": 14178673876263028224
+      },
+      "id": "70.995",
+      "name": "German Grey",
+      "notes": "RAL7016",
+      "finish": "Flat",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    }
+  ]
+}

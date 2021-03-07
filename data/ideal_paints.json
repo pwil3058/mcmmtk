@@ -1,0 +1,156 @@
+{
+  "series_id": {
+    "proprietor": "Nature/Physics",
+    "series_name": "Ideal Paint Series"
+  },
+  "paint_list": [
+    {
+      "colour": {
+        "hue": null,
+        "chroma": {
+          "Neither": 0
+        },
+        "sum": 0
+      },
+      "id": "Black",
+      "name": "Black",
+      "notes": "Ideal",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Primary": "Blue"
+        },
+        "chroma": {
+          "Neither": 18446744073709551615
+        },
+        "sum": 18446744073709551615
+      },
+      "id": "Blue",
+      "name": "Blue",
+      "notes": "Ideal",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Secondary": "Cyan"
+        },
+        "chroma": {
+          "Neither": 18446744073709551615
+        },
+        "sum": 36893488147419103230
+      },
+      "id": "Cyan",
+      "name": "Cyan",
+      "notes": "Ideal",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Primary": "Green"
+        },
+        "chroma": {
+          "Neither": 18446744073709551615
+        },
+        "sum": 18446744073709551615
+      },
+      "id": "Green",
+      "name": "Green",
+      "notes": "Ideal",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Secondary": "Magenta"
+        },
+        "chroma": {
+          "Neither": 18446744073709551615
+        },
+        "sum": 36893488147419103230
+      },
+      "id": "Magenta",
+      "name": "Magenta",
+      "notes": "Ideal",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Primary": "Red"
+        },
+        "chroma": {
+          "Neither": 18446744073709551615
+        },
+        "sum": 18446744073709551615
+      },
+      "id": "Red",
+      "name": "Red",
+      "notes": "Ideal",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": null,
+        "chroma": {
+          "Neither": 0
+        },
+        "sum": 55340232221128654845
+      },
+      "id": "White",
+      "name": "White",
+      "notes": "Ideal",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Secondary": "Yellow"
+        },
+        "chroma": {
+          "Neither": 18446744073709551615
+        },
+        "sum": 36893488147419103230
+      },
+      "id": "Yellow",
+      "name": "Yellow",
+      "notes": "Ideal",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    }
+  ]
+}

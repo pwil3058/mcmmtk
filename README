@@ -11,27 +11,18 @@ this time.
 
 REQUIREMENTS:
 
-There are two versions of this software: a Python3 script and a Rust
-compilable program.
-
-The Python3 version of the software requires:
- - Python 3.4.3 or later
- - PyGObject 3.22 or later
-
-The Rust version requires rustc 1.26.2 or later.
+Requires rustc 1.26.2 or later.
 
 INSTALLATION:
 
 It is NOT necessary to install this software in order to use it.  All
-that is necessary for the Python3 version to be usable is for the base
-directory to be in the user's PATH environment variable.  For the Rust
-version all that is required is for the .target/release and/or
-.target/debug (as appropriate) to be in the user's PATH environment
+that is necessary  is for the ./.target/release and/or
+./.target/debug (as appropriate) to be in the user's PATH environment
 variable.
 
 USAGE:
 
-The software's GUI (mcmmtk.py or mcmmtk_rs) has 3 selectable components:
+The software's GUI (mcmmtk_rs) has 2 selectable components:
 
 1. The Paint Mixer is the component that (once the user
 has specified a colour to be matched and selected some paints for use)
@@ -43,7 +34,7 @@ finished mixing the colours that they require they may print out a
 report to be used as a reference while painting the model for which the
 colours were mixed.
 
-2. The Paint Series Editor is the component that enables the
+2. The Paint Series/Standards Editor is the component that enables the
 modeller create/modify sets of paints for use in the mixer.
 The recommended method is to produce a "sampler" of the actual paints
 to be used on a suitable medium (preferably airbrushed), take a digital
@@ -59,10 +50,6 @@ with this use in mind and colours are frequently modified to accentuate
 the difference between colours.
 NB the provided sample is hand painted and should make it clear why an
 air brushed version is preferred.
-
-3. The Paint Standards Editor is the component that enables the
-modeller create/modify paint standards for use specifiyng target
-colours in the mixer.
 
 PAINT SERIES:
 
@@ -87,8 +74,7 @@ to its accuracy is made (caveat emptor).
 
 INTERNATIONALIZATION:
 
-The Python3 code is extensively hooked for i18n but (at the moment)
-there is no localization available for languages other than English.
+None.
 
 BUGS:
 
