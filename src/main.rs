@@ -11,6 +11,7 @@ use pw_gix::{
 
 mod config;
 mod mcmmtk;
+mod mcmmtk_icon;
 
 fn main() {
     if let Err(err) = gtk::init() {
@@ -19,7 +20,9 @@ fn main() {
     recollections::init(&config::recollection_file_path());
     let win = gtk::Window::new(gtk::WindowType::Toplevel);
     win.set_geometry_from_recollections("main_window", (600, 400));
-    if let Some(icon) = icon::mcmmtkrs_pixbuf(64) {
+    if let Some(icon) = mcmmtk_icon::sized_pixbuf(64) {
+        win.set_icon(Some(&icon));
+    } else if let Some(icon) = icon::mcmmtkrs_pixbuf(64) {
         win.set_icon(Some(&icon));
     }
     win.set_title("Modellers Colour Mixing/Matching Tool Kit");
@@ -57,6 +60,7 @@ mod icon {
         "YYYYYY__",
     ];
 
+    #[allow(dead_code)]
     pub fn mcmmtkrs_pixbuf(size: i32) -> Option<gdk_pixbuf::Pixbuf> {
         gdk_pixbuf::Pixbuf::from_xpm_data(MCMMTKRS_XPM).scale_simple(
             size,
@@ -65,7 +69,8 @@ mod icon {
         )
     }
 
-    pub fn _mcmmtkrs_image(size: i32) -> Option<gtk::Image> {
+    #[allow(dead_code)]
+    pub fn mcmmtkrs_image(size: i32) -> Option<gtk::Image> {
         if let Some(pixbuf) = mcmmtkrs_pixbuf(size) {
             Some(gtk::Image::from_pixbuf(Some(&pixbuf)))
         } else {
