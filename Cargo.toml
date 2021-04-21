@@ -13,13 +13,13 @@ pw_pathux = { git = "https://github.com/pwil3058/rs_pw_pathux.git" }
 
 
 [dependencies.apaint]
-git = "https://github.com/pwil3058/rs_apaint.git"
-version = "*"
-#path = "/home/peter/SRC/GITHUB/RUST/CRATES/rs_apaint.git/apaint"
+#git = "https://github.com/pwil3058/rs_apaint.git"
+#version = "*"
+path = "/home/peter/SRC/GITHUB/RUST/CRATES/rs_apaint.git/apaint"
 features = ["targeted_mixtures"]
 
 [dependencies.apaint_gtk]
-git = "https://github.com/pwil3058/rs_apaint.git"
-version = "*"
-#path = "/home/peter/SRC/GITHUB/RUST/CRATES/rs_apaint.git/apaint_gtk"
+#git = "https://github.com/pwil3058/rs_apaint.git"
+#version = "*"
+path = "/home/peter/SRC/GITHUB/RUST/CRATES/rs_apaint.git/apaint_gtk"
 features = ["targeted_mixtures"]
