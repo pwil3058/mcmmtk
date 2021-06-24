@@ -58,9 +58,9 @@ impl ModellersColourMixerMatcherTK {
         mcmmtk.vbox.pack_start(&hbox, false, false, 0);
 
         let stack = gtk::StackBuilder::new().build();
-        stack.add_titled(&mcmmtk.mixer.pwo(), "mixer", "Mixer");
+        stack.add_titled(mcmmtk.mixer.pwo(), "mixer", "Mixer");
         stack.add_titled(
-            &mcmmtk.factory.pwo(),
+            mcmmtk.factory.pwo(),
             "factory",
             "Paint/Standard Editor/Factory",
         );
@@ -141,7 +141,7 @@ fn launch_image_viewer() {
     window.set_title("mcmmtk_gtk: Image Viewer");
 
     let view = PixbufViewBuilder::new().load_last_image(true).build();
-    window.add(&view.pwo());
+    window.add(view.pwo());
     window.show_all();
 
     window.present();

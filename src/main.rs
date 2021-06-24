@@ -27,7 +27,7 @@ fn main() {
     }
     win.set_title("Modellers Colour Mixing/Matching Tool Kit");
     let mcmmtk = mcmmtk::ModellersColourMixerMatcherTK::new();
-    win.add(&mcmmtk.pwo());
+    win.add(mcmmtk.pwo());
     let mcmmtk_c = Rc::clone(&mcmmtk);
     win.connect_delete_event(move |_, _| {
         if mcmmtk_c.ok_to_quit() {
