@@ -71,10 +71,6 @@ mod icon {
 
     #[allow(dead_code)]
     pub fn mcmmtkrs_image(size: i32) -> Option<gtk::Image> {
-        if let Some(pixbuf) = mcmmtkrs_pixbuf(size) {
-            Some(gtk::Image::from_pixbuf(Some(&pixbuf)))
-        } else {
-            None
-        }
+        mcmmtkrs_pixbuf(size).map(|pixbuf| gtk::Image::from_pixbuf(Some(&pixbuf)))
     }
 }

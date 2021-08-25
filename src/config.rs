@@ -12,7 +12,7 @@ const DEFAULT_CONFIG_DIR_PATH: &str = "~/.config/mcmmtk_gtk";
 const DCDP_OVERRIDE_ENVAR: &str = "MCMMTK_GTK_CONFIG_DIR";
 
 fn abs_default_config_dir_path() -> PathBuf {
-    expand_home_dir_or_mine(&Path::new(DEFAULT_CONFIG_DIR_PATH))
+    expand_home_dir_or_mine(Path::new(DEFAULT_CONFIG_DIR_PATH))
 }
 
 pub fn config_dir_path() -> PathBuf {
@@ -21,7 +21,7 @@ pub fn config_dir_path() -> PathBuf {
             if dir_path.is_empty() {
                 abs_default_config_dir_path()
             } else if dir_path.starts_with('~') {
-                expand_home_dir_or_mine(&Path::new(&dir_path))
+                expand_home_dir_or_mine(Path::new(&dir_path))
             } else {
                 dir_path.into()
             }
