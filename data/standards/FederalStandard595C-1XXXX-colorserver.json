@@ -2754,6 +2754,26 @@
         "hue": {
           "Sextant": [
             "GreenCyan",
+            12297829382473034411
+          ]
+        },
+        "c_prop": 651061555542690057,
+        "sum": 43838144739874463838
+      },
+      "id": "FS16495",
+      "name": "FS16495",
+      "notes": "",
+      "finish": "Gloss",
+      "transparency": "Opaque",
+      "permanence": "Permanent",
+      "fluorescence": "NonFluorescent",
+      "metallicness": "NonMetallic"
+    },
+    {
+      "colour": {
+        "hue": {
+          "Sextant": [
+            "GreenCyan",
             3689348814741899837
           ]
         },
