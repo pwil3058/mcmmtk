@@ -1,20 +1,18 @@
 {
   "series_id": {
-    "proprietor": "Nature/Physics",
-    "series_name": "Ideal Paint Series"
+    "proprietor": "Theory",
+    "series_name": "Ideal Paint Colours"
   },
   "paint_list": [
     {
       "colour": {
         "hue": null,
-        "chroma": {
-          "Neither": 0
-        },
+        "c_prop": 0,
         "sum": 0
       },
       "id": "Black",
       "name": "Black",
-      "notes": "Ideal",
+      "notes": "",
       "finish": "Gloss",
       "transparency": "Opaque",
       "permanence": "Permanent",
@@ -26,14 +24,12 @@
         "hue": {
           "Primary": "Blue"
         },
-        "chroma": {
-          "Neither": 18446744073709551615
-        },
+        "c_prop": 18446744073709551615,
         "sum": 18446744073709551615
       },
       "id": "Blue",
       "name": "Blue",
-      "notes": "Ideal",
+      "notes": "",
       "finish": "Gloss",
       "transparency": "Opaque",
       "permanence": "Permanent",
@@ -45,14 +41,12 @@
         "hue": {
           "Secondary": "Cyan"
         },
-        "chroma": {
-          "Neither": 18446744073709551615
-        },
-        "sum": 36893488147419103230
+        "c_prop": 9223512776490647552,
+        "sum": 46116719444638007293
       },
       "id": "Cyan",
       "name": "Cyan",
-      "notes": "Ideal",
+      "notes": "",
       "finish": "Gloss",
       "transparency": "Opaque",
       "permanence": "Permanent",
@@ -64,14 +58,12 @@
         "hue": {
           "Primary": "Green"
         },
-        "chroma": {
-          "Neither": 18446744073709551615
-        },
+        "c_prop": 18446744073709551615,
         "sum": 18446744073709551615
       },
       "id": "Green",
       "name": "Green",
-      "notes": "Ideal",
+      "notes": "",
       "finish": "Gloss",
       "transparency": "Opaque",
       "permanence": "Permanent",
@@ -83,14 +75,12 @@
         "hue": {
           "Secondary": "Magenta"
         },
-        "chroma": {
-          "Neither": 18446744073709551615
-        },
+        "c_prop": 18446744073709551615,
         "sum": 36893488147419103230
       },
       "id": "Magenta",
       "name": "Magenta",
-      "notes": "Ideal",
+      "notes": "",
       "finish": "Gloss",
       "transparency": "Opaque",
       "permanence": "Permanent",
@@ -102,14 +92,12 @@
         "hue": {
           "Primary": "Red"
         },
-        "chroma": {
-          "Neither": 18446744073709551615
-        },
+        "c_prop": 18446744073709551615,
         "sum": 18446744073709551615
       },
       "id": "Red",
       "name": "Red",
-      "notes": "Ideal",
+      "notes": "",
       "finish": "Gloss",
       "transparency": "Opaque",
       "permanence": "Permanent",
@@ -119,14 +107,12 @@
     {
       "colour": {
         "hue": null,
-        "chroma": {
-          "Neither": 0
-        },
+        "c_prop": 0,
         "sum": 55340232221128654845
       },
       "id": "White",
       "name": "White",
-      "notes": "Ideal",
+      "notes": "",
       "finish": "Gloss",
       "transparency": "Opaque",
       "permanence": "Permanent",
@@ -138,14 +124,12 @@
         "hue": {
           "Secondary": "Yellow"
         },
-        "chroma": {
-          "Neither": 18446744073709551615
-        },
+        "c_prop": 18446744073709551615,
         "sum": 36893488147419103230
       },
       "id": "Yellow",
       "name": "Yellow",
-      "notes": "Ideal",
+      "notes": "",
       "finish": "Gloss",
       "transparency": "Opaque",
       "permanence": "Permanent",
