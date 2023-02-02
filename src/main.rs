@@ -15,9 +15,9 @@ mod mcmmtk_icon;
 
 fn main() {
     if let Err(err) = gtk::init() {
-        panic!("GTK failed to initialize! {}.", err);
+        panic!("GTK failed to initialize! {err}.");
     };
-    recollections::init(&config::recollection_file_path());
+    recollections::init(config::recollection_file_path());
     let win = gtk::Window::new(gtk::WindowType::Toplevel);
     win.set_geometry_from_recollections("main_window", (600, 400));
     if let Some(icon) = mcmmtk_icon::sized_pixbuf(64) {
@@ -31,9 +31,9 @@ fn main() {
     let mcmmtk_c = Rc::clone(&mcmmtk);
     win.connect_delete_event(move |_, _| {
         if mcmmtk_c.ok_to_quit() {
-            gtk::Inhibit(false)
+            Inhibit(false)
         } else {
-            gtk::Inhibit(true)
+            Inhibit(true)
         }
     });
     win.connect_destroy(|_| gtk::main_quit());
@@ -71,10 +71,6 @@ mod icon {
 
     #[allow(dead_code)]
     pub fn mcmmtkrs_image(size: i32) -> Option<gtk::Image> {
-        if let Some(pixbuf) = mcmmtkrs_pixbuf(size) {
-            Some(gtk::Image::from_pixbuf(Some(&pixbuf)))
-        } else {
-            None
-        }
+        mcmmtkrs_pixbuf(size).map(|pixbuf| gtk::Image::from_pixbuf(Some(&pixbuf)))
     }
 }
