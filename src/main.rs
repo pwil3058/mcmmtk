@@ -2,7 +2,7 @@
 
 use std::rc::Rc;
 
-use pw_gix::{
+use pw_gtk_ext::{
     gtk::{self, prelude::*},
     gtkx::window::RememberGeometry,
     recollections,
@@ -42,7 +42,7 @@ fn main() {
 }
 
 mod icon {
-    use pw_gix::{gdk_pixbuf, gtk};
+    use pw_gtk_ext::{gdk_pixbuf, gtk};
 
     // XPM
     static MCMMTKRS_XPM: &[&str] = &[

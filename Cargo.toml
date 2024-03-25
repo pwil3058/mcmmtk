@@ -8,18 +8,23 @@ edition = "2021"
 lazy_static = "0.2.8"
 
 colour_math = { git = "https://github.com/pwil3058/rs_colour_math.git" }
-pw_gix = { git = "https://github.com/pwil3058/rs_pw_gix.git" }
+#colour_math = {path = "../rs_colour_math/colour_math"}
+#pw_gix = { git = "https://github.com/pwil3058/rs_pw_gix.git" }
+pw_gtk_ext = { git = "https://github.com/pwil3058/rs_pw_gix.git" }
+#pw_gtk_ext = {path = "../rs_pw_gix/pw_gtk_ext"}
 pw_pathux = { git = "https://github.com/pwil3058/rs_pw_pathux.git" }
 
 
 [dependencies.apaint]
 git = "https://github.com/pwil3058/rs_apaint.git"
+#path = "../rs_apaint/apaint"
 #version = "*"
 #path = "/home/peter/SRC/GITHUB/RUST/CRATES/rs_apaint.git/apaint"
 features = ["targeted_mixtures"]
 
 [dependencies.apaint_gtk]
 git = "https://github.com/pwil3058/rs_apaint.git"
+#path = "../rs_apaint/apaint_gtk"
 #version = "*"
 #path = "/home/peter/SRC/GITHUB/RUST/CRATES/rs_apaint.git/apaint_gtk"
 features = ["targeted_mixtures"]

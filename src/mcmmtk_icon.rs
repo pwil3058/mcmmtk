@@ -8511,7 +8511,7 @@ pub static XPM: &[&str] = &[
 "                                                                                                                                                                                          )YqX)Y)Y)Y)Y)Y)YqX)Y'Y)YqX)YqXrXqXrXrXhY9YqY{YvXjY]Y^Y^Y/Y/YzXrYrYrYrY                                                                                                                                    sYtYuYvYnYoYwY                                                                                                              ",
 ];
 
-use pw_gix::{gdk_pixbuf, gtk};
+use pw_gtk_ext::{gdk_pixbuf, gtk};
 
 #[allow(dead_code)]
 pub fn pixbuf() -> gdk_pixbuf::Pixbuf {

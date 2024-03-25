@@ -2,7 +2,7 @@
 
 use std::{process::Command, rc::Rc};
 
-use pw_gix::{
+use pw_gtk_ext::{
     gdk_pixbufx::viewer::PixbufViewBuilder,
     gtk::{self, prelude::*},
     gtkx::window::RememberGeometry,
@@ -10,9 +10,10 @@ use pw_gix::{
     wrapper::*,
 };
 
+use colour_math::ScalarAttribute;
+
 use apaint_gtk::{
     characteristics::CharacteristicType,
-    colour::ScalarAttribute,
     factory::{BasicPaintFactory, BasicPaintFactoryBuilder},
     mixer::palette::{PalettePaintMixer, PalettePaintMixerBuilder},
     //mixer::targeted::{TargetedPaintMixer, TargetedPaintMixerBuilder},
